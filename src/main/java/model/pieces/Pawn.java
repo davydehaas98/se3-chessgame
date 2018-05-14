@@ -10,9 +10,9 @@ public class Pawn extends Piece {
     public Pawn(Player player, Color color, Point currentPosition) {
         super(Type.PAWN, player, color, currentPosition);
         if (getColor() == Color.BLACK) {
-            setImage("/resources/imgBlackPawn");
+            setImage("/images/BlackPawn.png");
         } else {
-            setImage("/resources/imgWhitePawn");
+            setImage("/images/WhitePawn.png");
         }
     }
 

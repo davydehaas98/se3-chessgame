@@ -10,9 +10,9 @@ public class Bishop extends Piece {
     public Bishop(Player player, Color color, Point currentPosition) {
         super(Type.BISHOP, player, color, currentPosition);
         if (getColor() == Color.BLACK) {
-            setImage("/resources/imgBlackBishop");
+            setImage("/images/BlackBishop.png");
         } else {
-            setImage("/resources/imgWhiteBishop");
+            setImage("/images/WhiteBishop.png");
         }
     }
 

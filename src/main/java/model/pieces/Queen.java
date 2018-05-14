@@ -10,9 +10,9 @@ public class Queen extends Piece {
     public Queen(Player player, Color color, Point currentPosition) {
         super(Type.QUEEN, player, color, currentPosition);
         if (getColor() == Color.BLACK) {
-            setImage("/resources/imgBlackQueen");
+            setImage("/images/BlackQueen.png");
         } else {
-            setImage("/resources/imgWhiteQueen");
+            setImage("/images/WhiteQueen.png");
         }
     }
 

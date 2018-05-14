@@ -10,9 +10,9 @@ public class King extends Piece {
     public King(Player player, Color color, Point currentPosition) {
         super(Type.KING, player, color, currentPosition);
         if (getColor() == Color.BLACK) {
-            setImage("/resources/imgBlackKing");
+            setImage("/images/BlackKing.png");
         } else {
-            setImage("/resources/imgWhiteKing");
+            setImage("/images/WhiteKing.png");
         }
     }
 

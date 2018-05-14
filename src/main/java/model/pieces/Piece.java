@@ -17,7 +17,7 @@ public abstract class Piece {
     private String image;
     private ArrayList<Point> legalMoves;
 
-    public Piece(Type type, Player player, model.Color color, Point currentPosition) {
+    public Piece(Type type, Player player, Color color, Point currentPosition) {
         this.type = type;
         this.player = player;
         this.color = color;

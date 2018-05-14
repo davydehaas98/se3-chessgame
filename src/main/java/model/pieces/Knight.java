@@ -10,9 +10,9 @@ public class Knight extends Piece {
     public Knight(Player player, Color color, Point currentPosition) {
         super(Type.KNIGHT, player, color, currentPosition);
         if (getColor() == Color.BLACK) {
-            setImage("/resources/imgBlackKnight");
+            setImage("/images/BlackKnight.png");
         } else {
-            setImage("/resources/imgWhiteKnight");
+            setImage("/images/WhiteKnight.png");
         }
     }
 
