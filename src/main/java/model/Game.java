@@ -1,6 +1,6 @@
+package model;
+
 import model.*;
-import model.Color;
-import model.Event;
 import model.pieces.*;
 
 import java.awt.*;

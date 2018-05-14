@@ -2,13 +2,12 @@ package model.pieces;
 
 import model.Color;
 import model.Tile;
-import model.pieces.Piece;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public final class Rules {
-    public static ArrayList<Point> pawnRules(Tile[][] board, Piece piece) {
+final class Rules {
+    static ArrayList<Point> pawnRules(Tile[][] board, Piece piece) {
         ArrayList<Point> moves = new ArrayList<Point>();
         int x = piece.getCurrentPosition().x;
         int y = piece.getCurrentPosition().y;
@@ -47,49 +46,49 @@ public final class Rules {
         return moves;
     }
 
-    public static ArrayList<Point> rookRules(Tile[][] board, Piece piece) {
+    static ArrayList<Point> rookRules(Tile[][] board, Piece piece) {
         ArrayList<Point> moves = new ArrayList<Point>();
         int x = piece.getCurrentPosition().x;
         int y = piece.getCurrentPosition().y;
         //Vertical Down
-        for (int down = y + 1; down < 8; down++) {
-            if (board[x][down].getPiece() == null) {
-                moves.add(new Point(x, down));
-            } else if (board[x][down].getPiece().getColor() != piece.getColor()) {
-                moves.add(new Point(x, down));
+        for (int row = y + 1; row < 8; row++) {
+            if (board[x][row].getPiece() == null) {
+                moves.add(new Point(x, row));
+            } else if (board[x][row].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(x, row));
                 break;
             } else {
                 break;
             }
         }
         //Vertical Up
-        for (int up = y - 1; up > -1; up--) {
-            if (board[x][up].getPiece() == null) {
-                moves.add(new Point(x, up));
-            } else if (board[x][up].getPiece().getColor() != piece.getColor()) {
-                moves.add(new Point(x, up));
+        for (int row = y - 1; row > -1; row--) {
+            if (board[x][row].getPiece() == null) {
+                moves.add(new Point(x, row));
+            } else if (board[x][row].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(x, row));
                 break;
             } else {
                 break;
             }
         }
         //Horizontal Right
-        for (int right = x + 1; right < 8; right++) {
-            if (board[right][y].getPiece() == null) {
-                moves.add(new Point(right, y));
-            } else if (board[right][y].getPiece().getColor() != piece.getColor()) {
-                moves.add(new Point(right, y));
+        for (int column = x + 1; column < 8; column++) {
+            if (board[column][y].getPiece() == null) {
+                moves.add(new Point(column, y));
+            } else if (board[column][y].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(column, y));
                 break;
             } else {
                 break;
             }
         }
         //Horizontal Left
-        for (int left = x - 1; left > -1; left--) {
-            if (board[left][y].getPiece() == null) {
-                moves.add(new Point(left, y));
-            } else if (board[left][y].getPiece().getColor() != piece.getColor()) {
-                moves.add(new Point(left, y));
+        for (int column = x - 1; column > -1; column--) {
+            if (board[column][y].getPiece() == null) {
+                moves.add(new Point(column, y));
+            } else if (board[column][y].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(column, y));
                 break;
             } else {
                 break;
@@ -98,21 +97,85 @@ public final class Rules {
         return moves;
     }
 
-    public static ArrayList<Point> knightRules(Tile[][] board, Piece piece) {
-        return null;
+    static ArrayList<Point> knightRules(Tile[][] board, Piece piece) {
+        int[][] offsets = {{-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}};
+        return offsetsIterator(offsets, board, piece);
     }
 
-    public static ArrayList<Point> bishopRules(Tile[][] board, Piece piece){
-        return null;
-    }
-
-    public static ArrayList<Point> queenRules(Tile[][] board, Piece piece){
-        ArrayList<Point> moves = rookRules(board,piece);
-        moves.addAll(bishopRules(board,piece));
+    static ArrayList<Point> bishopRules(Tile[][] board, Piece piece) {
+        ArrayList<Point> moves = new ArrayList<Point>();
+        int x = piece.getCurrentPosition().x;
+        int y = piece.getCurrentPosition().y;
+        //Diagonal LeftUp
+        for (int row = x - 1, column = y - 1; row > -1 && column > -1; row--, column--) {
+            if (board[row][column].getPiece() == null) {
+                moves.add(new Point(row, column));
+            } else if (board[row][column].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(row, column));
+                break;
+            } else {
+                break;
+            }
+        }
+        //Diagonal LeftDown
+        for (int row = x - 1, column = y + 1; row > -1 && column < 8; row--, column++) {
+            if (board[row][column].getPiece() == null) {
+                moves.add(new Point(row, column));
+            } else if (board[row][column].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(row, column));
+                break;
+            } else {
+                break;
+            }
+        }
+        //Diagonal RightUp
+        for (int row = x + 1, colomn = y - 1; row < 8 && colomn > -1; row++, colomn--) {
+            if (board[row][colomn].getPiece() == null) {
+                moves.add(new Point(row, colomn));
+            } else if (board[row][colomn].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(row, colomn));
+                break;
+            } else {
+                break;
+            }
+        }
+        //Diagonal RightDown
+        for (int row = x + 1, column = y + 1; row < 8 && column < 8; row++, column++) {
+            if (board[row][column].getPiece() == null) {
+                moves.add(new Point(row, column));
+            } else if (board[row][column].getPiece().getColor() != piece.getColor()) {
+                moves.add(new Point(row, column));
+                break;
+            } else {
+                break;
+            }
+        }
         return moves;
     }
 
-    public static ArrayList<Point> kingRules(Tile[][] board, Piece piece){
-        return null;
+    static ArrayList<Point> queenRules(Tile[][] board, Piece piece) {
+        ArrayList<Point> moves = rookRules(board, piece);
+        moves.addAll(bishopRules(board, piece));
+        return moves;
+    }
+
+    static ArrayList<Point> kingRules(Tile[][] board, Piece piece) {
+        int[][] offsets = {{-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, +1}, {0, +1}, {-1, +1}, {-1, 0}};
+        return offsetsIterator(offsets, board, piece);
+    }
+
+    private static ArrayList<Point> offsetsIterator(int[][] offsets, Tile[][] board, Piece piece) {
+        ArrayList<Point> moves = new ArrayList<Point>();
+        int x = piece.getCurrentPosition().x;
+        int y = piece.getCurrentPosition().y;
+        for (int[] offset : offsets) {
+            Tile tile = board[offset[0] + x][offset[1] + y];
+            if (tile != null) {
+                if (tile.getPiece() == null || tile.getPiece().getColor() != piece.getColor()) {
+                    moves.add(tile.getPosition());
+                }
+            }
+        }
+        return moves;
     }
 }
