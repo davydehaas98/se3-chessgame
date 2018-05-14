@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="chessgameapp.MainController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane fx:id="apMain" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chessgameapp.MainController">
+   <children>
+      <GridPane fx:id="gridpaneChessBoard" layoutX="14.0" layoutY="14.0" prefHeight="161.0" prefWidth="235.0">
 
+      </GridPane>
+   </children>
 </AnchorPane>

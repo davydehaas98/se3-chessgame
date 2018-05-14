@@ -18,8 +18,8 @@ public class Main extends Application {
         primaryStage.setTitle("Chessgame");
         primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(event -> Platform.exit());
-        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getClassLoader().getResource("chessgame.fxml"))));
-        primaryStage.getIcons().add(new Image("images/chessgameIcon.png"));
+        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getClassLoader().getResource("ChessGame.fxml"))));
+        primaryStage.getIcons().add(new Image("images/ChessGameIcon.png"));
         primaryStage.show();
     }
 }
