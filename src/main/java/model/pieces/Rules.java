@@ -1,6 +1,6 @@
 package model.pieces;
 
-import model.Color;
+import model.enums.Color;
 import model.Tile;
 
 import java.awt.*;

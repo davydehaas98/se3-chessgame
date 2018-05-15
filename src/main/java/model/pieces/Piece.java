@@ -1,9 +1,9 @@
 package model.pieces;
 
-import model.Color;
+import model.enums.Color;
 import model.Player;
 import model.Tile;
-import model.Type;
+import model.enums.Type;
 
 import java.awt.*;
 import java.util.ArrayList;

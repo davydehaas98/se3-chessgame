@@ -1,5 +1,7 @@
 package model;
 
+import model.enums.Color;
+
 public class Player {
     private int id;
     private String name;

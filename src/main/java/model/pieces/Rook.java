@@ -1,7 +1,8 @@
 package model.pieces;
 
 import model.*;
-import model.Color;
+import model.enums.Color;
+import model.enums.Type;
 
 import java.awt.*;
 import java.util.ArrayList;
