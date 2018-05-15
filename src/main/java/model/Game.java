@@ -1,10 +1,11 @@
 package model;
 
+import model.enums.Color;
 import model.pieces.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Game {
+public class Game implements IGame{
     private Tile[][] board;
     private Player blackPlayer;
     private Player whitePlayer;
@@ -13,8 +14,8 @@ public class Game {
     private ArrayList<Event> events;
 
     public void startGame() {
-        blackPlayer = new Player("Black",Color.BLACK);
-        whitePlayer = new Player("White", Color.WHITE);
+        blackPlayer = new Player("Black", model.enums.Color.BLACK);
+        whitePlayer = new Player("White", model.enums.Color.WHITE);
         turn = 1;
         setBoard();
 //        while (!isCheckmate() || turn < 10){
@@ -42,13 +43,13 @@ public class Game {
         }
         //Set Pawns
         for (int x = 0; x < 8; x++) {
-            board[x][1].placePiece(new Pawn(blackPlayer, Color.BLACK, new Point(x, 1)));
-            board[x][6].placePiece(new Pawn(whitePlayer, Color.WHITE, new Point(x, 6)));
+            board[x][1].placePiece(new Pawn(blackPlayer, model.enums.Color.BLACK, new Point(x, 1)));
+            //board[x][6].placePiece(new Pawn(whitePlayer, Color.WHITE, new Point(x, 6)));
         }
         //Set Black Pieces
-        setPiecesOnBoard(blackPlayer, Color.BLACK, 0);
+        setPiecesOnBoard(blackPlayer, model.enums.Color.BLACK, 0);
         //Set White Pieces
-        setPiecesOnBoard(whitePlayer, Color.WHITE, 7);
+        setPiecesOnBoard(whitePlayer, model.enums.Color.WHITE, 7);
     }
     private void setPiecesOnBoard(Player player, Color color, int y){
         board[0][y].placePiece(new Rook(player, color, new Point(0, y)));
