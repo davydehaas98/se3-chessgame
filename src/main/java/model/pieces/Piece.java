@@ -22,6 +22,8 @@ public abstract class Piece {
         this.player = player;
         this.color = color;
         this.currentPosition = currentPosition;
+        this.moveHistory = new ArrayList<>();
+        this.legalMoves = new ArrayList<>();
     }
 
     public Type getType() {

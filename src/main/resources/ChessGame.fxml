@@ -3,9 +3,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane fx:id="apMain" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chessgameapp.MainController">
+<AnchorPane fx:id="apMain" prefHeight="420.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chessgameapp.MainController">
    <children>
-      <GridPane fx:id="gridpaneChessBoard" layoutX="14.0" layoutY="14.0" prefHeight="161.0" prefWidth="235.0">
+      <GridPane fx:id="gridpaneChessBoard" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="400.0">
 
       </GridPane>
    </children>

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 final class Rules {
     static ArrayList<Point> pawnRules(Tile[][] board, Piece piece) {
-        ArrayList<Point> moves = new ArrayList<Point>();
+        ArrayList<Point> moves = new ArrayList<>();
         int x = piece.getCurrentPosition().x;
         int y = piece.getCurrentPosition().y;
         switch (piece.getColor()) {
@@ -21,13 +21,20 @@ final class Rules {
                     }
                 }
                 //Diagonal
-                if (board[x + 1][y + 1].getPiece().getColor() == Color.WHITE) {
-                    moves.add(new Point(x + 1, y + 1));
+                try {
+                    if (board[x + 1][y + 1].getPiece().getColor() == Color.WHITE) {
+                        moves.add(new Point(x + 1, y + 1));
+                    }
+                } catch (Exception exc) {
                 }
-                if (board[x - 1][y + 1].getPiece().getColor() == Color.WHITE) {
-                    moves.add(new Point(x - 1, y + 1));
+                try {
+                    if (board[x - 1][y + 1].getPiece().getColor() == Color.WHITE) {
+                        moves.add(new Point(x - 1, y + 1));
+                    }
+                } catch (Exception exc) {
+                    return moves;
                 }
-            default:
+            case WHITE:
                 //Vertical
                 if (board[x][y - 1].getPiece() == null) {
                     moves.add(new Point(x, y - 1));
@@ -36,11 +43,17 @@ final class Rules {
                     }
                 }
                 //Diagonal
-                if (board[x + 1][y - 1].getPiece().getColor() == Color.BLACK) {
-                    moves.add(new Point(x + 1, y - 1));
+                try {
+                    if (board[x + 1][y - 1].getPiece().getColor() == Color.BLACK) {
+                        moves.add(new Point(x + 1, y - 1));
+                    }
+                } catch (Exception exc) {
                 }
-                if (board[x - 1][y - 1].getPiece().getColor() == Color.BLACK) {
-                    moves.add(new Point(x - 1, y - 1));
+                try {
+                    if (board[x - 1][y - 1] != null && board[x - 1][y - 1].getPiece().getColor() == Color.BLACK) {
+                        moves.add(new Point(x - 1, y - 1));
+                    }
+                } catch (Exception exc) {
                 }
         }
         return moves;
@@ -165,15 +178,17 @@ final class Rules {
     }
 
     private static ArrayList<Point> offsetsIterator(int[][] offsets, Tile[][] board, Piece piece) {
-        ArrayList<Point> moves = new ArrayList<Point>();
+        ArrayList<Point> moves = new ArrayList<>();
         int x = piece.getCurrentPosition().x;
         int y = piece.getCurrentPosition().y;
         for (int[] offset : offsets) {
-            Tile tile = board[offset[0] + x][offset[1] + y];
-            if (tile != null) {
+            try {
+                Tile tile = board[(x + offset[0])][(y + offset[1])];
                 if (tile.getPiece() == null || tile.getPiece().getColor() != piece.getColor()) {
                     moves.add(tile.getPosition());
                 }
+            } catch (Exception exc) {
+
             }
         }
         return moves;
