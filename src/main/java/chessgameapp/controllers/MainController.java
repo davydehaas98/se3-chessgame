@@ -1,10 +1,9 @@
-package chessgameapp;
+package chessgameapp.controllers;
 
-import javafx.collections.ObservableList;
-import javafx.event.Event;
+import chessgameclient.interfaces.IGameClient;
+import chessgameshared.interfaces.IClientGUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,19 +16,25 @@ import javafx.scene.input.MouseEvent;
 import model.pieces.Piece;
 
 import java.awt.*;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class MainController extends BaseController implements IClientGUI {
     Game game;
     @FXML
     private GridPane gridpaneChessBoard;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        game = new Game();
-        game.startGame();
-        loadTiles();
+    MainController(IGameClient gameClient){
+        super(gameClient);
+    }
+
+    public void register(){
+        String name = "Davy";
+        if(name.equals("")){
+            //TODO
+        }
+        else{
+            //TODO
+            getGameClient().registerPlayer(name);
+        }
     }
 
     private void loadTiles() {

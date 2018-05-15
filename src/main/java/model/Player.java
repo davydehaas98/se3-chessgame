@@ -2,16 +2,16 @@ package model;
 
 import model.enums.Color;
 
-public class Player {
-    private int id;
+public class Player implements IPlayer{
     private String name;
+    private String sessionId;
     private Color color;
     private int wins;
     private int losses;
     private int draws;
 
-    Player(int id, String name, Color color, int wins, int losses, int draws) {
-        this.id = id;
+    Player(String sessionId, String name, Color color, int wins, int losses, int draws) {
+        this.sessionId = sessionId;
         this.name = name;
         this.wins = wins;
         this.losses = losses;
@@ -22,8 +22,20 @@ public class Player {
         this.name = name;
         this.color = color;
     }
+    Player(String name, String sessionId){
+        this.name = name;
+        this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
 
     public String getName() {
         return name;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }
