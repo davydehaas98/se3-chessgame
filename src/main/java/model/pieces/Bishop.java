@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Bishop extends Piece {
-    public Bishop(Player player, Color color, Point currentPosition) {
-        super(Type.BISHOP, player, color, currentPosition);
+    public Bishop( Color color, Point currentPosition) {
+        super(Type.BISHOP, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackBishop.png");
         } else {

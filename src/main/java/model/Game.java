@@ -1,8 +1,10 @@
 package model;
 
-import chessgameserver.IServerMessageGenerator;
+import chessgameserver.interfaces.IServerMessageGenerator;
 import model.enums.Color;
 import model.enums.GameState;
+import model.interfaces.IGame;
+import model.interfaces.IPlayer;
 import model.pieces.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,7 +26,8 @@ public class Game implements IGame, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-
+        o.deleteObserver(this);
+        gameState = GameState.ROUNDACTIVE;
     }
 
     public void registerNewPlayer(String name, String sessionId){
@@ -34,6 +37,12 @@ public class Game implements IGame, Observer {
                 return;
             }
             players.add(new Player(name,sessionId));
+            messageGenerator.notifyRegisterResult(sessionId, true);
+            messageGenerator.notifyPlayerAdded(sessionId, name);
+            checkStartingCondition();
+        }
+        else{
+            messageGenerator.notifyRegisterResult(sessionId, false);
         }
 
     }
@@ -62,8 +71,6 @@ public class Game implements IGame, Observer {
         }
     }
     public void startGame() {
-        new Player("Black", model.enums.Color.BLACK);
-        new Player("White", model.enums.Color.WHITE);
         turn = 1;
         setBoard();
 //        while (!isCheckmate() || turn < 10){
@@ -91,23 +98,23 @@ public class Game implements IGame, Observer {
         }
         //Set Pawns
         for (int x = 0; x < 8; x++) {
-            //board[x][1].placePiece(new Pawn(blackPlayer, model.enums.Color.BLACK, new Point(x, 1)));
-            //board[x][6].placePiece(new Pawn(whitePlayer, Color.WHITE, new Point(x, 6)));
+            board[x][1].placePiece(new Pawn(Color.BLACK, new Point(x, 1)));
+            board[x][6].placePiece(new Pawn(Color.WHITE, new Point(x, 6)));
         }
         //Set Black Pieces
-        //setPiecesOnBoard(blackPlayer, model.enums.Color.BLACK, 0);
+        setPiecesOnBoard(Color.BLACK, 0);
         //Set White Pieces
-        //setPiecesOnBoard(whitePlayer, model.enums.Color.WHITE, 7);
+        setPiecesOnBoard(Color.WHITE, 7);
     }
-    private void setPiecesOnBoard(Player player, Color color, int y){
-        board[0][y].placePiece(new Rook(player, color, new Point(0, y)));
-        board[1][y].placePiece(new Knight(player, color, new Point(1, y)));
-        board[2][y].placePiece(new Bishop(player, color, new Point(2, y)));
-        board[3][y].placePiece(new Queen(player, color, new Point(3, y)));
-        board[4][y].placePiece(new King(player, color, new Point(4, y)));
-        board[5][y].placePiece(new Bishop(player, color, new Point(5, y)));
-        board[6][y].placePiece(new Knight(player, color, new Point(6,y)));
-        board[7][y].placePiece(new Rook(player, color, new Point(7, y)));
+    private void setPiecesOnBoard(Color color, int y){
+        board[0][y].placePiece(new Rook(color, new Point(0, y)));
+        board[1][y].placePiece(new Knight(color, new Point(1, y)));
+        board[2][y].placePiece(new Bishop(color, new Point(2, y)));
+        board[3][y].placePiece(new Queen(color, new Point(3, y)));
+        board[4][y].placePiece(new King(color, new Point(4, y)));
+        board[5][y].placePiece(new Bishop(color, new Point(5, y)));
+        board[6][y].placePiece(new Knight(color, new Point(6,y)));
+        board[7][y].placePiece(new Rook(color, new Point(7, y)));
     }
     public Piece getChessPiece(int row, int column){
         return board[row][column].getPiece();

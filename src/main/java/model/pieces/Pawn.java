@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Pawn extends Piece {
-    public Pawn(Player player, Color color, Point currentPosition) {
-        super(Type.PAWN, player, color, currentPosition);
+    public Pawn( Color color, Point currentPosition) {
+        super(Type.PAWN, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackPawn.png");
         } else {

@@ -1,6 +1,6 @@
-package chessgameserver;
+package chessgameserver.interfaces;
 
-import model.IGame;
+import model.interfaces.IGame;
 
 public interface IServerMessageProcessor {
     void processMessage(String sessionId, String type, String data);

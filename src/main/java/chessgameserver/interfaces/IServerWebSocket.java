@@ -1,4 +1,4 @@
-package chessgameserver;
+package chessgameserver.interfaces;
 
 public interface IServerWebSocket {
     void sendTo(String sessionId, Object object);

@@ -2,7 +2,6 @@ package chessgameshared;
 
 import chessgameshared.interfaces.IEncapsulatingMessageGenerator;
 import chessgameshared.messages.EncapsulatingMessage;
-import model.enums.MessageType;
 import com.google.gson.Gson;
 
 public class EncapsulatingMessageGenerator implements IEncapsulatingMessageGenerator {
@@ -10,7 +9,7 @@ public class EncapsulatingMessageGenerator implements IEncapsulatingMessageGener
 
     public EncapsulatingMessage generateMessage(Object content) {
         String messageForServerJson = gson.toJson(content);
-        MessageType type = MessageType.valueOf(content.getClass().toGenericString());
+        String type = content.getClass().toGenericString();
         return new EncapsulatingMessage(type, messageForServerJson);
     }
     public String generateMessageString(Object content){

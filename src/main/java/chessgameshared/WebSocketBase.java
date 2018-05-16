@@ -10,17 +10,20 @@ public abstract class WebSocketBase implements IWebSocket {
     private IEncapsulatingMessageGenerator encapsulatingMessageGenerator;
     private Gson gson;
 
-    public IEncapsulatingMessageGenerator getEncapsulatingMessageGenerator() {
-        return encapsulatingMessageGenerator;
-    }
 
     public WebSocketBase() {
         encapsulatingMessageGenerator = new EncapsulatingMessageGenerator();
         gson = new Gson();
     }
-    public Gson getGson(){
+
+    public IEncapsulatingMessageGenerator getEncapsulatingMessageGenerator() {
+        return encapsulatingMessageGenerator;
+    }
+
+    public Gson getGson() {
         return gson;
     }
+
     public IMessageProcessor getHandler() {
         return handler;
     }

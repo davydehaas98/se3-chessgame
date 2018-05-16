@@ -3,8 +3,7 @@ package chessgameshared;
 import chessgameshared.interfaces.IMessageHandlerFactory;
 import chessgameshared.interfaces.IMessageProcessor;
 import com.google.gson.Gson;
-import model.IGame;
-import model.enums.MessageType;
+import model.interfaces.IGame;
 
 public abstract class MessageProcessorBase implements IMessageProcessor {
     private IGame game;

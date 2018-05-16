@@ -1,6 +1,11 @@
 package chessgameclient.interfaces;
 
-public interface IGameClient {
-    void registerPlayer(String name);
+import chessgameshared.interfaces.IClientGUI;
 
+public interface IGameClient {
+    void registerClientGUI(IClientGUI ClientGUI);
+    void registerPlayer(String name);
+    void handlePlayerRegistrationResponse(boolean succes);
+    void handlePlayerRegistered(String name);
+    void processRoundStarted();
 }

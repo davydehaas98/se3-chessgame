@@ -1,7 +1,6 @@
 package chessgameshared.interfaces;
 
-import model.IGame;
-import model.enums.MessageType;
+import model.interfaces.IGame;
 
 public interface IMessageProcessor {
     void processMessage(String sessionId, String type, String data);

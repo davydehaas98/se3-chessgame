@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Knight extends Piece {
-    public Knight(Player player, Color color, Point currentPosition) {
-        super(Type.KNIGHT, player, color, currentPosition);
+    public Knight(Color color, Point currentPosition) {
+        super(Type.KNIGHT, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackKnight.png");
         } else {

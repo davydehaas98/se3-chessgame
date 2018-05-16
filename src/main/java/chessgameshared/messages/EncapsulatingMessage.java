@@ -1,11 +1,10 @@
 package chessgameshared.messages;
 
-import model.enums.MessageType;
 public class EncapsulatingMessage {
-    private MessageType messageType;
+    private String messageType;
     private String messageData;
 
-    public EncapsulatingMessage(MessageType type, String data) {
+    public EncapsulatingMessage(String type, String data) {
         this.messageType = type;
         this.messageData = data;
     }
@@ -14,7 +13,7 @@ public class EncapsulatingMessage {
         return messageData;
     }
 
-    public MessageType getMessageType() {
+    public String getMessageType() {
         return messageType;
     }
 }

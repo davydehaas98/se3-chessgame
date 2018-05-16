@@ -5,4 +5,8 @@ public class RegistrationResultMessage {
     public RegistrationResultMessage(boolean result){
         this.result = result;
     }
+
+    public boolean isResult() {
+        return result;
+    }
 }

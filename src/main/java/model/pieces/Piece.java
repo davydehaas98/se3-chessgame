@@ -10,16 +10,14 @@ import java.util.ArrayList;
 
 public abstract class Piece {
     private final Type type;
-    private final Player player;
     private final Color color;
     private Point currentPosition;
     private ArrayList<Point> moveHistory;
     private String image;
     private ArrayList<Point> legalMoves;
 
-    public Piece(Type type, Player player, Color color, Point currentPosition) {
+    public Piece(Type type, Color color, Point currentPosition) {
         this.type = type;
-        this.player = player;
         this.color = color;
         this.currentPosition = currentPosition;
         this.moveHistory = new ArrayList<>();
@@ -28,10 +26,6 @@ public abstract class Piece {
 
     public Type getType() {
         return type;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     public Color getColor() {

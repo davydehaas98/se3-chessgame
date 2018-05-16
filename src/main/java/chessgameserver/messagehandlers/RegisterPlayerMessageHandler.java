@@ -2,7 +2,7 @@ package chessgameserver.messagehandlers;
 
 import chessgameshared.MessageHandler;
 import chessgameshared.messages.RegisterPlayerMessage;
-import model.IGame;
+import model.interfaces.IGame;
 
 public class RegisterPlayerMessageHandler extends MessageHandler<RegisterPlayerMessage> {
     public RegisterPlayerMessageHandler(IGame game){

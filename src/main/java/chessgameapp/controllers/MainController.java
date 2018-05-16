@@ -2,9 +2,13 @@ package chessgameapp.controllers;
 
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.interfaces.IClientGUI;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -18,23 +22,43 @@ import model.pieces.Piece;
 import java.awt.*;
 
 public class MainController extends BaseController implements IClientGUI {
-    Game game;
+    @FXML
+    private TextField tbUserName;
+    @FXML
+    private Button btnRegister;
     @FXML
     private GridPane gridpaneChessBoard;
 
-    MainController(IGameClient gameClient){
-        super(gameClient);
-    }
+    private Game game;
 
-    public void register(){
-        String name = "Davy";
-        if(name.equals("")){
+    public MainController(IGameClient gameClient) {
+        super(gameClient);
+        getGameClient().registerClientGUI(this);
+    }
+    public void register() {
+        String name = tbUserName.getText();
+        if (name.equals("")) {
             //TODO
-        }
-        else{
+        } else {
             //TODO
             getGameClient().registerPlayer(name);
         }
+    }
+    public void processRegistrationResponse(boolean response){
+        Platform.runLater(()-> {
+            if(response){
+                tbUserName.setDisable(true);
+                btnRegister.setDisable(true);
+                showAlert("Registration", "You are now registered!");
+            }
+            else{
+                showAlert("Registration", "Try again :(");
+            }
+        });
+    }
+
+    public void processPlayerRegistered(String name) {
+        Platform.runLater(() -> showAlert("Player has registered!", "name: " + name));
     }
 
     private void loadTiles() {
@@ -91,5 +115,12 @@ public class MainController extends BaseController implements IClientGUI {
             }
             darkTile = !darkTile;
         }
+    }
+
+    private void showAlert(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

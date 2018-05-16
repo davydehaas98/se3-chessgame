@@ -5,4 +5,8 @@ public class PlayerHasRegisteredMessage {
     public PlayerHasRegisteredMessage(String name){
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

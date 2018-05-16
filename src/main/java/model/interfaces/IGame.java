@@ -1,5 +1,6 @@
-package model;
+package model.interfaces;
 
+import model.Tile;
 import model.pieces.Piece;
 
 public interface IGame {

@@ -5,7 +5,6 @@ import chessgameclient.interfaces.IGameClient;
 import chessgameshared.MessageProcessorBase;
 import chessgameshared.interfaces.IMessageHandler;
 import chessgameshared.interfaces.IMessageHandlerFactory;
-import model.enums.MessageType;
 
 public class ClientMessageProcessor extends MessageProcessorBase implements IClientMessageProcessor {
     private IGameClient gameClient;
@@ -25,7 +24,7 @@ public class ClientMessageProcessor extends MessageProcessorBase implements ICli
 
     @Override
     public void processMessage(String sessionId, String type, String data) {
-        MessageType messageType = MessageType.valueOf(type.split("\\.")[type.split("\\.").length - 1]);
+        String messageType = type.split("\\.")[type.split("\\.").length - 1];
         IMessageHandler handler = getMessageHandlerFactory().getHandler(messageType, gameClient);
         handler.handleMessage(data, sessionId);
     }

@@ -6,6 +6,7 @@ import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
 import chessgameshared.messages.EncapsulatingMessage;
+import javafx.application.Platform;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.net.URI;
 public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     private static final String serverURI = "ws://localhost:8008/chessgame/";
     private Session session;
-    IClientMessageProcessor handler;
+    private IClientMessageProcessor handler;
     private static ClientWebSocket instance = null;
 
     public static ClientWebSocket getInstance() {
@@ -63,26 +64,29 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        received(message, session.getId());
+        onMessageReceived(message, session.getId());
     }
 
     @OnError
     public void onError(Session session, Throwable cause) {
         Logger.getInstance().log(cause.getMessage(), LogLevel.ERROR);
     }
-
-    public void received(String message, String sessionId) {
+    @Override
+    public void onMessageReceived(String message, String sessionId) {
         EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
-        handler.processMessage(sessionId, encapMessage.getMessageType().toString(), encapMessage.getMessageData());
+        handler.processMessage(sessionId, encapMessage.getMessageType(), encapMessage.getMessageData());
+    }
+    @Override
+    public void onMessageSend(Object object) {
+        String message = getEncapsulatingMessageGenerator().generateMessageString(object);
+        sendMessageToServer(message);
     }
 
-    @Override
-    public void send(Object object) {
-        String message = getEncapsulatingMessageGenerator().generateMessageString(object);
+    private void sendMessageToServer(String message) {
         try {
             session.getBasicRemote().sendText(message);
-        } catch (IOException exc) {
-            Logger.getInstance().log(exc);
+        } catch (IOException ex) {
+            Logger.getInstance().log(ex);
         }
     }
 }

@@ -1,9 +1,9 @@
 package chessgameclient.interfaces;
 
 public interface IClientWebSocket {
+    void setMessageHandler(IClientMessageProcessor handler);
     void start();
     void stop();
-    void send(Object object);
-    void setMessageHandler(IClientMessageProcessor handler);
-    void received(String message, String sessionId);
+    void onMessageReceived(String message, String sessionId);
+    void onMessageSend(Object object);
 }

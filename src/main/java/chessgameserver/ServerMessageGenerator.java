@@ -1,8 +1,10 @@
 package chessgameserver;
 
+import chessgameserver.interfaces.IServerMessageGenerator;
+import chessgameserver.interfaces.IServerWebSocket;
 import chessgameshared.messages.*;
 
-public class ServerMessageGenerator implements IServerMessageGenerator{
+public class ServerMessageGenerator implements IServerMessageGenerator {
     private IServerWebSocket serverWebSocket;
     public ServerMessageGenerator(IServerWebSocket serverWebSocket){
         this.serverWebSocket = serverWebSocket;
@@ -10,12 +12,10 @@ public class ServerMessageGenerator implements IServerMessageGenerator{
 
     @Override
     public void notifyRegisterResult(String sessionId, boolean succes) {
-        RegistrationResultMessage message = new RegistrationResultMessage(succes);
-        serverWebSocket.sendTo(sessionId, message);
+        serverWebSocket.sendTo(sessionId, new RegistrationResultMessage(succes));
     }
     public void notifyPlayerAdded(String sessionId, String playerName) {
-        PlayerHasRegisteredMessage message = new PlayerHasRegisteredMessage(playerName);
-        serverWebSocket.sendToOthers(sessionId, message);
+        serverWebSocket.sendToOthers(sessionId, new PlayerHasRegisteredMessage(playerName));
     }
     public void notifyStartGame(){
         serverWebSocket.broadcast(new StartGameMessage());

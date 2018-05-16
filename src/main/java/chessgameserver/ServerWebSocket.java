@@ -1,5 +1,6 @@
 package chessgameserver;
 
+import chessgameserver.interfaces.IServerWebSocket;
 import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
@@ -30,7 +31,7 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     public void onMessage(String message, Session session) {
         String sessionId = session.getId();
         EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
-        getHandler().processMessage(sessionId, encapMessage.getMessageType().toString(), encapMessage.getMessageData());
+        getHandler().processMessage(sessionId, encapMessage.getMessageType(), encapMessage.getMessageData());
     }
 
     @OnOpen

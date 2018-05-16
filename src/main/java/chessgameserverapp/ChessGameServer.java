@@ -1,6 +1,6 @@
 package chessgameserverapp;
 
-import chessgameserver.IServerMessageGenerator;
+import chessgameserver.interfaces.IServerMessageGenerator;
 import chessgameserver.ServerMessageGenerator;
 import chessgameserver.ServerMessageProcessor;
 import chessgameserver.ServerWebSocket;

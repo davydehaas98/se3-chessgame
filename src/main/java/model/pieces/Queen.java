@@ -8,8 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Queen extends Piece {
-    public Queen(Player player, Color color, Point currentPosition) {
-        super(Type.QUEEN, player, color, currentPosition);
+    public Queen(Color color, Point currentPosition) {
+        super(Type.QUEEN, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackQueen.png");
         } else {

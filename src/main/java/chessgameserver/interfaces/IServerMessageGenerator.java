@@ -1,4 +1,4 @@
-package chessgameserver;
+package chessgameserver.interfaces;
 
 public interface IServerMessageGenerator {
     void notifyRegisterResult(String sessionId, boolean succes);
