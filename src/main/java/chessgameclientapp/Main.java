@@ -1,6 +1,5 @@
-package chessgameapp;
+package chessgameclientapp;
 
-import chessgameapp.controllers.MainController;
 import chessgameclient.ClientMessageGenerator;
 import chessgameclient.ClientMessageProcessor;
 import chessgameclient.ClientWebSocket;
@@ -13,11 +12,8 @@ import chessgameclient.messagehandlers.ClientMessageHandlerFactory;
 import chessgameshared.interfaces.IMessageHandlerFactory;
 import chessgameshared.logging.Logger;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.lang.reflect.Constructor;
@@ -63,7 +59,6 @@ FXMLLoader loader = new FXMLLoader(getClass().getResource("/ChessGame.fxml"));
         primaryStage.setScene(new Scene(loader.load()));
         primaryStage.setTitle("Chessgame");
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image("images/ChessGameIcon.png"));
         primaryStage.show();
     }
 }

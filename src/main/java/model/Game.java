@@ -20,8 +20,12 @@ public class Game implements IGame, Observer {
     private Tile[][] board;
     private ArrayList<Event> events;
 
-    public Game(IServerMessageGenerator messageGenerator){
+    public Game(IServerMessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
+    }
+
+    public int getNumberOfPlayers() {
+        return players.size();
     }
 
     @Override
@@ -30,22 +34,22 @@ public class Game implements IGame, Observer {
         gameState = GameState.ROUNDACTIVE;
     }
 
-    public void registerNewPlayer(String name, String sessionId){
-        if(players.size() < 2){
-            if(checkPlayerNameAlreadyExists(name)){
-                messageGenerator.notifyRegisterResult(sessionId,false);
+    public void registerNewPlayer(String name, String sessionId) {
+        if (players.size() < 2) {
+            if (checkPlayerNameAlreadyExists(name)) {
+                messageGenerator.notifyRegisterResult(sessionId, false);
                 return;
             }
-            players.add(new Player(name,sessionId));
+            players.add(new Player(name, sessionId));
             messageGenerator.notifyRegisterResult(sessionId, true);
             messageGenerator.notifyPlayerAdded(sessionId, name);
             checkStartingCondition();
-        }
-        else{
+        } else {
             messageGenerator.notifyRegisterResult(sessionId, false);
         }
 
     }
+
     private boolean checkPlayerNameAlreadyExists(String name) {
         for (IPlayer player : players)
             if (player.getName().equals(name)) {
@@ -53,40 +57,45 @@ public class Game implements IGame, Observer {
             }
         return false;
     }
-    public void processClientDisconnect(String sessionId)
-    {
-        for(IPlayer pl : players)
-            if(pl.getSessionId().equals(sessionId)) {
+
+    public void processClientDisconnect(String sessionId) {
+        for (IPlayer pl : players)
+            if (pl.getSessionId().equals(sessionId)) {
                 players.remove(pl);
             }
 
-        if(gameState != GameState.WAITINGFORPLAYERS)
-        {
+        if (gameState != GameState.WAITINGFORPLAYERS) {
             gameState = GameState.WAITINGFORPLAYERS;
         }
     }
-    private void checkStartingCondition(){
-        if(players.size() == 2){
+
+    private void checkStartingCondition() {
+        if (players.size() == 2) {
             startGame();
         }
     }
+
     public void startGame() {
         turn = 1;
         setBoard();
-//        while (!isCheckmate() || turn < 10){
-//
-//        }
-//        endGame();
+        while (!isCheckmate() || turn < 10) {
+
+        }
+        endGame();
     }
-    private void endGame(){
+
+    private void endGame() {
 
     }
-    private boolean isCheck(){
+
+    private boolean isCheck() {
         return false;
     }
-    private boolean isCheckmate(){
+
+    private boolean isCheckmate() {
         return false;
     }
+
     private void setBoard() {
         board = new Tile[8][8];
         String files = "abcdefgh";
@@ -106,17 +115,19 @@ public class Game implements IGame, Observer {
         //Set White Pieces
         setPiecesOnBoard(Color.WHITE, 7);
     }
-    private void setPiecesOnBoard(Color color, int y){
+
+    private void setPiecesOnBoard(Color color, int y) {
         board[0][y].placePiece(new Rook(color, new Point(0, y)));
         board[1][y].placePiece(new Knight(color, new Point(1, y)));
         board[2][y].placePiece(new Bishop(color, new Point(2, y)));
         board[3][y].placePiece(new Queen(color, new Point(3, y)));
         board[4][y].placePiece(new King(color, new Point(4, y)));
         board[5][y].placePiece(new Bishop(color, new Point(5, y)));
-        board[6][y].placePiece(new Knight(color, new Point(6,y)));
+        board[6][y].placePiece(new Knight(color, new Point(6, y)));
         board[7][y].placePiece(new Rook(color, new Point(7, y)));
     }
-    public Piece getChessPiece(int row, int column){
+
+    public Piece getChessPiece(int row, int column) {
         return board[row][column].getPiece();
     }
 

@@ -36,7 +36,12 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
 
     @OnOpen
     public void onOpen(Session session) {
-        sessions.add(session);
+        if(sessions.size() < 2) {
+            System.out.println("[Connected] SessionId: " + session.getId());
+            sessions.add(session);
+        }else{
+            System.out.println("[The maximum amount of sessions has already been reached]");
+        }
     }
 
     @OnClose

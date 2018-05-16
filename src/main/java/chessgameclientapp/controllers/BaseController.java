@@ -1,4 +1,4 @@
-package chessgameapp.controllers;
+package chessgameclientapp.controllers;
 
 import chessgameclient.interfaces.IGameClient;
 
