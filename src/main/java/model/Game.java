@@ -76,16 +76,19 @@ public class Game implements IGame, Observer {
     }
 
     public void startGame() {
+        gameState = GameState.ROUNDACTIVE;
+        messageGenerator.notifyStartGame();
         turn = 1;
         setBoard();
-        while (!isCheckmate() || turn < 10) {
-
-        }
-        endGame();
+        messageGenerator.notifyUpdateBoard(board);
+//        while (!isCheckmate() || turn < 10) {
+//
+//        }
+//        endGame();
     }
 
     private void endGame() {
-
+        messageGenerator.notifyEndGame();
     }
 
     private boolean isCheck() {

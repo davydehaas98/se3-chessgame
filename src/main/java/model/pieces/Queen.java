@@ -2,14 +2,14 @@ package model.pieces;
 
 import model.*;
 import model.enums.Color;
-import model.enums.Type;
+import model.enums.PieceType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Queen extends Piece {
     public Queen(Color color, Point currentPosition) {
-        super(Type.QUEEN, color, currentPosition);
+        super(PieceType.QUEEN, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackQueen.png");
         } else {

@@ -3,7 +3,9 @@ package chessgameshared;
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.interfaces.IMessageHandler;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.interfaces.IGame;
+import model.pieces.*;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,11 +16,25 @@ public abstract class MessageHandler<T> implements IMessageHandler {
     private IGameClient gameClient;
     public MessageHandler(IGameClient gameClient){
         this.gameClient = gameClient;
-        gson = new Gson();
+        RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
+                .registerSubtype(Pawn.class, "Pawn")
+                .registerSubtype(Rook.class, "Rook")
+                .registerSubtype(Knight.class, "Knight")
+                .registerSubtype(Bishop.class, "Bishop")
+                .registerSubtype(King.class, "King")
+                .registerSubtype(Queen.class, "Queen");
+        gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
     }
     public MessageHandler(IGame game){
         this.game = game;
-        gson = new Gson();
+        RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
+                .registerSubtype(Pawn.class, "Pawn")
+                .registerSubtype(Rook.class, "Rook")
+                .registerSubtype(Knight.class, "Knight")
+                .registerSubtype(Bishop.class, "Bishop")
+                .registerSubtype(King.class, "King")
+                .registerSubtype(Queen.class, "Queen");
+        gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
     }
 
     public IGame getGame() {

@@ -1,31 +1,30 @@
 package model.pieces;
 
 import model.enums.Color;
-import model.Player;
 import model.Tile;
-import model.enums.Type;
+import model.enums.PieceType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Piece {
-    private final Type type;
+    private final PieceType pieceType;
     private final Color color;
     private Point currentPosition;
     private ArrayList<Point> moveHistory;
     private String image;
     private ArrayList<Point> legalMoves;
 
-    public Piece(Type type, Color color, Point currentPosition) {
-        this.type = type;
+    public Piece(PieceType pieceType, Color color, Point currentPosition) {
+        this.pieceType = pieceType;
         this.color = color;
         this.currentPosition = currentPosition;
         this.moveHistory = new ArrayList<>();
         this.legalMoves = new ArrayList<>();
     }
 
-    public Type getType() {
-        return type;
+    public PieceType getPieceType() {
+        return pieceType;
     }
 
     public Color getColor() {

@@ -3,7 +3,9 @@ package chessgameshared;
 import chessgameshared.interfaces.IMessageHandlerFactory;
 import chessgameshared.interfaces.IMessageProcessor;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.interfaces.IGame;
+import model.pieces.*;
 
 public abstract class MessageProcessorBase implements IMessageProcessor {
     private IGame game;
@@ -12,7 +14,14 @@ public abstract class MessageProcessorBase implements IMessageProcessor {
 
     public MessageProcessorBase(IMessageHandlerFactory messageHandlerFactory){
         this.messageHandlerFactory = messageHandlerFactory;
-        gson = new Gson();
+        RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
+                .registerSubtype(Pawn.class, "Pawn")
+                .registerSubtype(Rook.class, "Rook")
+                .registerSubtype(Knight.class, "Knight")
+                .registerSubtype(Bishop.class, "Bishop")
+                .registerSubtype(King.class, "King")
+                .registerSubtype(Queen.class, "Queen");
+        gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
     }
 
     public IGame getGame() {

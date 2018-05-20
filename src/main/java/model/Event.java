@@ -18,6 +18,6 @@ public class Event {
     }
 
     public String getInfo() {
-        return String.format("[%s]:[%s] player: %s played %s from %s to %s.", turn, time.toString(), player.getName(), from.getPiece().getType().toString(), from.getName(), to.getName());
+        return String.format("[%s]:[%s] player: %s played %s from %s to %s.", turn, time.toString(), player.getName(), from.getPiece().getPieceType().toString(), from.getName(), to.getName());
     }
 }

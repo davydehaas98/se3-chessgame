@@ -2,14 +2,14 @@ package model.pieces;
 
 import model.*;
 import model.enums.Color;
-import model.enums.Type;
+import model.enums.PieceType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Knight extends Piece {
     public Knight(Color color, Point currentPosition) {
-        super(Type.KNIGHT, color, currentPosition);
+        super(PieceType.KNIGHT, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackKnight.png");
         } else {

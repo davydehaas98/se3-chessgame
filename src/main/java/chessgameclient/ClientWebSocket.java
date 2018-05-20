@@ -6,7 +6,6 @@ import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
 import chessgameshared.messages.EncapsulatingMessage;
-import javafx.application.Platform;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void stop() {
         try {
             if (session != null) {
-                session.close();
+                session = null;
             }
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
@@ -59,7 +58,13 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
 
     @OnClose
     public void onClose(CloseReason reason) {
-        session = null;
+        try {
+            session.close();
+            session = null;
+            System.out.println("Disconnected: " + reason);
+        }catch (IOException exc){
+            Logger.getInstance().log(exc);
+        }
     }
 
     @OnMessage

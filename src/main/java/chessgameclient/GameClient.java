@@ -3,6 +3,8 @@ package chessgameclient;
 import chessgameclient.interfaces.IClientMessageGenerator;
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.interfaces.IClientGUI;
+import model.Tile;
+import model.pieces.Piece;
 
 public class GameClient implements IGameClient {
     private IClientMessageGenerator messageGenerator;
@@ -16,7 +18,6 @@ public class GameClient implements IGameClient {
         this.clientGUI = clientGUI;
     }
 
-    @Override
     public void registerPlayer(String name) {
         messageGenerator.registerPlayerOnServer(name);
     }
@@ -25,12 +26,19 @@ public class GameClient implements IGameClient {
         clientGUI.processRegistrationResponse(success);
     }
 
-    public void handlePlayerRegistered(String name) {
-        clientGUI.processPlayerRegistered(name);
+    public void handleAnotherPlayerRegistered(String name) {
+        clientGUI.processAnotherPlayerRegistered(name);
     }
 
-    @Override
-    public void processRoundStarted() {
+    public void handleRoundStarted() {
+        clientGUI.processGameStarted();
+    }
 
+    public void handleGameEnded() {
+        clientGUI.processGameEnded();
+    }
+
+    public void handleUpdateBoard(Tile[][] board) {
+        clientGUI.processUpdateBoard(board);
     }
 }

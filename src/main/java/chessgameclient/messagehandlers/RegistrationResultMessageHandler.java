@@ -5,7 +5,7 @@ import chessgameshared.MessageHandler;
 import chessgameshared.messages.RegistrationResultMessage;
 
 public class RegistrationResultMessageHandler extends MessageHandler<RegistrationResultMessage> {
-    public RegistrationResultMessageHandler(IGameClient gameClient){
+    public RegistrationResultMessageHandler(IGameClient gameClient) {
         super(gameClient);
     }
 
