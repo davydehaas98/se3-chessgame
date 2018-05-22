@@ -12,29 +12,26 @@ public class Player implements IPlayer {
     private int draws;
 
     Player(String name, String sessionId, Color color, int wins, int losses, int draws) {
-        this.sessionId = sessionId;
         this.name = name;
+        this.sessionId = sessionId;
+        this.color = color;
         this.wins = wins;
         this.losses = losses;
         this.draws = draws;
     }
 
-    Player(String name, Color color) {
-        this.name = name;
-        this.color = color;
-    }
-
-    Player(String name, String sessionId) {
+    Player(String name, String sessionId, Color color) {
         this.name = name;
         this.sessionId = sessionId;
-    }
-
-    public String getSessionId() {
-        return sessionId;
+        this.color = color;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 
     public Color getColor() {

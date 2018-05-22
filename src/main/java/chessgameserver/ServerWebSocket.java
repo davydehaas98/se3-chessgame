@@ -47,6 +47,7 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     @OnClose
     public void onClose(CloseReason reason, Session session) {
         getHandler().handleDisconnect(session.getId());
+        System.out.println("[Disconnect] SessionId: " + session.getId());
         sessions.remove(session);
     }
 

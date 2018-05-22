@@ -21,19 +21,13 @@ final class Rules {
                     }
                 }
                 //Diagonal
-                try {
-                    if (board[x + 1][y + 1].getPiece().getColor() == Color.WHITE) {
-                        moves.add(new Point(x + 1, y + 1));
-                    }
-                } catch (Exception exc) {
+                if (board[x + 1][y + 1].getPiece() != null && board[x + 1][y + 1].getPiece().getColor() == Color.WHITE) {
+                    moves.add(new Point(x + 1, y + 1));
                 }
-                try {
-                    if (board[x - 1][y + 1].getPiece().getColor() == Color.WHITE) {
-                        moves.add(new Point(x - 1, y + 1));
-                    }
-                } catch (Exception exc) {
-                    return moves;
+                if (board[x - 1][y + 1].getPiece() != null && board[x - 1][y + 1].getPiece().getColor() == Color.WHITE) {
+                    moves.add(new Point(x - 1, y + 1));
                 }
+                break;
             case WHITE:
                 //Vertical
                 if (board[x][y - 1].getPiece() == null) {
@@ -43,18 +37,19 @@ final class Rules {
                     }
                 }
                 //Diagonal
-                try {
-                    if (board[x + 1][y - 1].getPiece().getColor() == Color.BLACK) {
-                        moves.add(new Point(x + 1, y - 1));
-                    }
-                } catch (Exception exc) {
+                if (board[x + 1][y - 1].getPiece() != null && board[x + 1][y - 1].getPiece().getColor() == Color.BLACK) {
+                    moves.add(new Point(x + 1, y - 1));
                 }
-                try {
-                    if (board[x - 1][y - 1] != null && board[x - 1][y - 1].getPiece().getColor() == Color.BLACK) {
-                        moves.add(new Point(x - 1, y - 1));
-                    }
-                } catch (Exception exc) {
+                if (board[x - 1][y - 1].getPiece() != null && board[x - 1][y - 1].getPiece().getColor() == Color.BLACK) {
+                    moves.add(new Point(x - 1, y - 1));
                 }
+                break;
+        }
+        if (board[x - 1][y].getPiece() != null && board[x - 1][y].getPiece().getColor() != piece.getColor()) {
+            moves.add(new Point(x - 1, y));
+        }
+        if (board[x + 1][y].getPiece() != null && board[x + 1][y].getPiece().getColor() != piece.getColor()) {
+            moves.add(new Point(x + 1, y));
         }
         return moves;
     }

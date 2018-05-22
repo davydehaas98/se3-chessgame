@@ -18,6 +18,6 @@ public class ServerMessageProcessor extends MessageProcessorBase {
 
     @Override
     public void handleDisconnect(String sessionId) {
-        getGame().processClientDisconnect(sessionId);
+        getGame().processPlayerDisconnect(sessionId);
     }
 }

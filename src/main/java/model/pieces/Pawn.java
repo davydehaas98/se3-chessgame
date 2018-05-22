@@ -12,7 +12,7 @@ public class Pawn extends Piece {
         super(PieceType.PAWN, color, currentPosition);
         if (getColor() == Color.BLACK) {
             setImage("/images/BlackPawn.png");
-        } else {
+        } else if (getColor() == Color.WHITE){
             setImage("/images/WhitePawn.png");
         }
     }

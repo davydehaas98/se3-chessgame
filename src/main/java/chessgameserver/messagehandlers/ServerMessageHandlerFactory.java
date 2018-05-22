@@ -11,6 +11,10 @@ public class ServerMessageHandlerFactory implements IMessageHandlerFactory {
         switch (MessageType.valueOf(type)){
             case RegisterPlayerMessage:
                 return new RegisterPlayerMessageHandler(igame);
+            case MakeMoveMessage:
+                return new MakeMoveMessageHandler(igame);
+            case PlayerDisconnectMessage:
+                return new PlayerDisconnectMessageHandler(igame);
             default: return null;
         }
     }

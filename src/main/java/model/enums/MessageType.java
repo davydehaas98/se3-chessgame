@@ -3,5 +3,7 @@ package model.enums;
 public enum MessageType {
     RegisterPlayerMessage, RegistrationResultMessage,
     UpdateBoardMessage, AnotherPlayerRegistered,
-    StartGameMessage, EndGameMessage
+    StartGameMessage, EndGameMessage,
+    MakeMoveMessage, NextTurnMessage,
+    PlayerDisconnectMessage
 }

@@ -6,6 +6,7 @@ import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
 import chessgameshared.messages.EncapsulatingMessage;
+import chessgameshared.messages.PlayerDisconnectMessage;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -44,7 +45,9 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void stop() {
         try {
             if (session != null) {
-                session = null;
+                sendMessageToServer(getEncapsulatingMessageGenerator().generateMessageString(new PlayerDisconnectMessage(session.getId())));
+                System.out.println(session.getId() + " has been disconnected");
+                session.close();
             }
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
@@ -53,18 +56,14 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
 
     @OnOpen
     public void onOpen(Session session) {
+        System.out.println("[Connect session] " + session.getRequestURI());
         this.session = session;
     }
 
     @OnClose
     public void onClose(CloseReason reason) {
-        try {
-            session.close();
-            session = null;
-            System.out.println("Disconnected: " + reason);
-        }catch (IOException exc){
-            Logger.getInstance().log(exc);
-        }
+        session = null;
+        System.out.println("[Disconnected] " + reason);
     }
 
     @OnMessage

@@ -11,6 +11,6 @@ public class RegistrationResultMessageHandler extends MessageHandler<Registratio
 
     @Override
     public void handleMessageInternal(RegistrationResultMessage message, String sessionId) {
-        getGameClient().handlePlayerRegistrationResponse(message.isResult());
+        getGameClient().handleRegistrationResult(message.isResult(), message.getColor());
     }
 }

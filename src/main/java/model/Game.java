@@ -3,25 +3,29 @@ package model;
 import chessgameserver.interfaces.IServerMessageGenerator;
 import model.enums.Color;
 import model.enums.GameState;
+import model.enums.PieceType;
 import model.interfaces.IGame;
 import model.interfaces.IPlayer;
 import model.pieces.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
 public class Game implements IGame, Observer {
-    private ArrayList<IPlayer> players = new ArrayList<>();
+    private ArrayList<IPlayer> players;
     private IServerMessageGenerator messageGenerator;
     private GameState gameState = GameState.WAITINGFORPLAYERS;
     private int turn = 0;
+    private Color turnColor = Color.WHITE;
 
     private Tile[][] board;
     private ArrayList<Event> events;
 
     public Game(IServerMessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
+        players = new ArrayList<>();
     }
 
     public int getNumberOfPlayers() {
@@ -37,17 +41,21 @@ public class Game implements IGame, Observer {
     public void registerNewPlayer(String name, String sessionId) {
         if (players.size() < 2) {
             if (checkPlayerNameAlreadyExists(name)) {
-                messageGenerator.notifyRegisterResult(sessionId, false);
+                messageGenerator.notifyRegistrationResult(sessionId, false, null);
                 return;
             }
-            players.add(new Player(name, sessionId));
-            messageGenerator.notifyRegisterResult(sessionId, true);
+            if (players.size() < 1) {
+                players.add(new Player(name, sessionId, Color.WHITE));
+                messageGenerator.notifyRegistrationResult(sessionId, true, Color.WHITE);
+            } else if (players.size() == 1) {
+                players.add(new Player(name, sessionId, Color.BLACK));
+                messageGenerator.notifyRegistrationResult(sessionId, true, Color.BLACK);
+            }
             messageGenerator.notifyPlayerAdded(sessionId, name);
             checkStartingCondition();
         } else {
-            messageGenerator.notifyRegisterResult(sessionId, false);
+            messageGenerator.notifyRegistrationResult(sessionId, false, null);
         }
-
     }
 
     private boolean checkPlayerNameAlreadyExists(String name) {
@@ -58,7 +66,7 @@ public class Game implements IGame, Observer {
         return false;
     }
 
-    public void processClientDisconnect(String sessionId) {
+    public void processPlayerDisconnect(String sessionId) {
         for (IPlayer pl : players)
             if (pl.getSessionId().equals(sessionId)) {
                 players.remove(pl);
@@ -81,21 +89,53 @@ public class Game implements IGame, Observer {
         turn = 1;
         setBoard();
         messageGenerator.notifyUpdateBoard(board);
-//        while (!isCheckmate() || turn < 10) {
-//
-//        }
-//        endGame();
+    }
+
+    public void makeMove(String from, String to) {
+        Tile tileFrom = null;
+        Tile tileTo = null;
+        for (Tile[] tilesRow : board) {
+            for (Tile tile : tilesRow) {
+                if (Objects.equals(tile.getName(), from)) {
+                    tileFrom = tile;
+                } else if (Objects.equals(tile.getName(), to)) {
+                    tileTo = tile;
+                }
+            }
+        }
+        try {
+            tileTo.placePiece(tileFrom.getPiece());
+            tileFrom.removePiece();
+        } catch (NullPointerException exc) {
+            exc.printStackTrace();
+        }
+        messageGenerator.notifyUpdateBoard(board);
+        turn++;
+        if (turn % 2 == 0) {
+            turnColor = Color.WHITE;
+        } else {
+            turnColor = Color.BLACK;
+        }
+        messageGenerator.notifyNextTurn(turn, turnColor);
     }
 
     private void endGame() {
         messageGenerator.notifyEndGame();
     }
 
-    private boolean isCheck() {
+    private boolean isCheck(Tile[][] board) {
         return false;
     }
 
-    private boolean isCheckmate() {
+    private boolean isCheckmate(Tile[][] board) {
+        for(Tile [] tilesRow : board){
+            for(Tile tile : tilesRow){
+                Piece piece = tile.getPiece();
+                if(piece.getPieceType() == PieceType.KING && piece.getColor() == Color.BLACK){
+                    return piece.getLegalMoves(board).size() < 1;
+                }
+            }
+        }
         return false;
     }
 
