@@ -29,6 +29,7 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
+        System.out.println(message);
         String sessionId = session.getId();
         EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
         getHandler().processMessage(sessionId, encapMessage.getMessageType(), encapMessage.getMessageData());

@@ -1,6 +1,6 @@
 package model.pieces;
 
-import model.enums.Color;
+import model.enums.TeamColor;
 import model.Tile;
 import model.enums.PieceType;
 
@@ -9,15 +9,15 @@ import java.util.ArrayList;
 
 public abstract class Piece {
     private final PieceType pieceType;
-    private final Color color;
+    private final TeamColor teamColor;
     private Point currentPosition;
     private ArrayList<Point> moveHistory;
     private String image;
     private ArrayList<Point> legalMoves;
 
-    public Piece(PieceType pieceType, Color color, Point currentPosition) {
+    public Piece(PieceType pieceType, TeamColor teamColor, Point currentPosition) {
         this.pieceType = pieceType;
-        this.color = color;
+        this.teamColor = teamColor;
         this.currentPosition = currentPosition;
         this.moveHistory = new ArrayList<>();
         this.legalMoves = new ArrayList<>();
@@ -27,8 +27,8 @@ public abstract class Piece {
         return pieceType;
     }
 
-    public Color getColor() {
-        return color;
+    public TeamColor getTeamColor() {
+        return teamColor;
     }
 
     public Point getCurrentPosition() {
@@ -57,6 +57,10 @@ public abstract class Piece {
 
     public void addMoveToHistory(Point point) {
         moveHistory.add(point);
+    }
+
+    public ArrayList<Point> getMoveHistory() {
+        return moveHistory;
     }
 
     public abstract ArrayList<Point> getLegalMoves(Tile[][] board);

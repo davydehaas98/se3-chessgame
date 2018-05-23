@@ -1,20 +1,16 @@
 package model.pieces;
 
 import model.*;
-import model.enums.Color;
+import model.enums.TeamColor;
 import model.enums.PieceType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Bishop extends Piece {
-    public Bishop( Color color, Point currentPosition) {
-        super(PieceType.BISHOP, color, currentPosition);
-        if (getColor() == Color.BLACK) {
-            setImage("/images/BlackBishop.png");
-        } else {
-            setImage("/images/WhiteBishop.png");
-        }
+    public Bishop(TeamColor teamColor, Point currentPosition) {
+        super(PieceType.BISHOP, teamColor, currentPosition);
+        setImage(String.format("/images/%sBishop.png", teamColor));
     }
 
     public ArrayList<Point> getLegalMoves(Tile[][] board) {

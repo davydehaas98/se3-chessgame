@@ -1,13 +1,13 @@
 package chessgameserver.interfaces;
 
 import model.Tile;
-import model.enums.Color;
+import model.enums.TeamColor;
 
 public interface IServerMessageGenerator {
-    void notifyRegistrationResult(String sessionId, boolean succes, Color color);
+    void notifyRegistrationResult(String sessionId, TeamColor teamColor);
     void notifyPlayerAdded(String sessionId, String name);
     void notifyStartGame();
     void notifyEndGame();
     void notifyUpdateBoard(Tile[][] board);
-    void notifyNextTurn(int turn, Color turnColor);
+    void notifyNextTurn(int turn, TeamColor turnTeamColor);
 }

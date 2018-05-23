@@ -1,7 +1,7 @@
 package model;
 
 import chessgameserver.interfaces.IServerMessageGenerator;
-import model.enums.Color;
+import model.enums.TeamColor;
 import model.enums.GameState;
 import model.enums.PieceType;
 import model.interfaces.IGame;
@@ -17,8 +17,7 @@ public class Game implements IGame, Observer {
     private ArrayList<IPlayer> players;
     private IServerMessageGenerator messageGenerator;
     private GameState gameState = GameState.WAITINGFORPLAYERS;
-    private int turn = 0;
-    private Color turnColor = Color.WHITE;
+    private int turn = 1;
 
     private Tile[][] board;
     private ArrayList<Event> events;
@@ -41,20 +40,20 @@ public class Game implements IGame, Observer {
     public void registerNewPlayer(String name, String sessionId) {
         if (players.size() < 2) {
             if (checkPlayerNameAlreadyExists(name)) {
-                messageGenerator.notifyRegistrationResult(sessionId, false, null);
+                messageGenerator.notifyRegistrationResult(sessionId, null);
                 return;
             }
             if (players.size() < 1) {
-                players.add(new Player(name, sessionId, Color.WHITE));
-                messageGenerator.notifyRegistrationResult(sessionId, true, Color.WHITE);
+                players.add(new Player(name, sessionId, TeamColor.WHITE));
+                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.WHITE);
             } else if (players.size() == 1) {
-                players.add(new Player(name, sessionId, Color.BLACK));
-                messageGenerator.notifyRegistrationResult(sessionId, true, Color.BLACK);
+                players.add(new Player(name, sessionId, TeamColor.BLACK));
+                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.BLACK);
             }
             messageGenerator.notifyPlayerAdded(sessionId, name);
             checkStartingCondition();
         } else {
-            messageGenerator.notifyRegistrationResult(sessionId, false, null);
+            messageGenerator.notifyRegistrationResult(sessionId, null);
         }
     }
 
@@ -86,8 +85,8 @@ public class Game implements IGame, Observer {
     public void startGame() {
         gameState = GameState.ROUNDACTIVE;
         messageGenerator.notifyStartGame();
-        turn = 1;
         setBoard();
+        messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
         messageGenerator.notifyUpdateBoard(board);
     }
 
@@ -109,14 +108,13 @@ public class Game implements IGame, Observer {
         } catch (NullPointerException exc) {
             exc.printStackTrace();
         }
-        messageGenerator.notifyUpdateBoard(board);
         turn++;
         if (turn % 2 == 0) {
-            turnColor = Color.WHITE;
+            messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
         } else {
-            turnColor = Color.BLACK;
+            messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
         }
-        messageGenerator.notifyNextTurn(turn, turnColor);
+        messageGenerator.notifyUpdateBoard(board);
     }
 
     private void endGame() {
@@ -128,14 +126,14 @@ public class Game implements IGame, Observer {
     }
 
     private boolean isCheckmate(Tile[][] board) {
-        for(Tile [] tilesRow : board){
-            for(Tile tile : tilesRow){
-                Piece piece = tile.getPiece();
-                if(piece.getPieceType() == PieceType.KING && piece.getColor() == Color.BLACK){
-                    return piece.getLegalMoves(board).size() < 1;
-                }
-            }
-        }
+//        for(Tile [] tilesRow : board){
+//            for(Tile tile : tilesRow){
+//                Piece piece = tile.getPiece();
+//                if(piece.getPieceType() == PieceType.KING && piece.getTeamColor() == TeamColor.BLACK){
+//                    return piece.getLegalMoves(board).size() < 1;
+//                }
+//            }
+//        }
         return false;
     }
 
@@ -150,24 +148,24 @@ public class Game implements IGame, Observer {
         }
         //Set Pawns
         for (int x = 0; x < 8; x++) {
-            board[x][1].placePiece(new Pawn(Color.BLACK, new Point(x, 1)));
-            board[x][6].placePiece(new Pawn(Color.WHITE, new Point(x, 6)));
+            board[x][1].placePiece(new Pawn(TeamColor.BLACK, new Point(x, 1)));
+            board[x][6].placePiece(new Pawn(TeamColor.WHITE, new Point(x, 6)));
         }
         //Set Black Pieces
-        setPiecesOnBoard(Color.BLACK, 0);
+        setPiecesOnBoard(TeamColor.BLACK, 0);
         //Set White Pieces
-        setPiecesOnBoard(Color.WHITE, 7);
+        setPiecesOnBoard(TeamColor.WHITE, 7);
     }
 
-    private void setPiecesOnBoard(Color color, int y) {
-        board[0][y].placePiece(new Rook(color, new Point(0, y)));
-        board[1][y].placePiece(new Knight(color, new Point(1, y)));
-        board[2][y].placePiece(new Bishop(color, new Point(2, y)));
-        board[3][y].placePiece(new Queen(color, new Point(3, y)));
-        board[4][y].placePiece(new King(color, new Point(4, y)));
-        board[5][y].placePiece(new Bishop(color, new Point(5, y)));
-        board[6][y].placePiece(new Knight(color, new Point(6, y)));
-        board[7][y].placePiece(new Rook(color, new Point(7, y)));
+    private void setPiecesOnBoard(TeamColor teamColor, int y) {
+        board[0][y].placePiece(new Rook(teamColor, new Point(0, y)));
+        board[1][y].placePiece(new Knight(teamColor, new Point(1, y)));
+        board[2][y].placePiece(new Bishop(teamColor, new Point(2, y)));
+        board[3][y].placePiece(new Queen(teamColor, new Point(3, y)));
+        board[4][y].placePiece(new King(teamColor, new Point(4, y)));
+        board[5][y].placePiece(new Bishop(teamColor, new Point(5, y)));
+        board[6][y].placePiece(new Knight(teamColor, new Point(6, y)));
+        board[7][y].placePiece(new Rook(teamColor, new Point(7, y)));
     }
 
     public Piece getChessPiece(int row, int column) {

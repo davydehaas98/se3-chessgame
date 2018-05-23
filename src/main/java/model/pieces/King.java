@@ -1,20 +1,16 @@
 package model.pieces;
 
 import model.*;
-import model.enums.Color;
+import model.enums.TeamColor;
 import model.enums.PieceType;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class King extends Piece {
-    public King(Color color, Point currentPosition) {
-        super(PieceType.KING, color, currentPosition);
-        if (getColor() == Color.BLACK) {
-            setImage("/images/BlackKing.png");
-        } else {
-            setImage("/images/WhiteKing.png");
-        }
+    public King(TeamColor teamColor, Point currentPosition) {
+        super(PieceType.KING, teamColor, currentPosition);
+        setImage(String.format("/images/%sKing.png", teamColor));
     }
 
     public ArrayList<Point> getLegalMoves(Tile[][] board) {

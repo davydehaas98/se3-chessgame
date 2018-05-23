@@ -1,5 +1,5 @@
 package model.enums;
 
-public enum Color {
+public enum TeamColor {
     BLACK, WHITE
 }

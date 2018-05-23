@@ -4,7 +4,7 @@ import chessgameserver.interfaces.IServerMessageGenerator;
 import chessgameserver.interfaces.IServerWebSocket;
 import chessgameshared.messages.*;
 import model.Tile;
-import model.enums.Color;
+import model.enums.TeamColor;
 
 public class ServerMessageGenerator implements IServerMessageGenerator {
     private IServerWebSocket serverWebSocket;
@@ -17,8 +17,8 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
         serverWebSocket.sendToOthers(sessionId, new AnotherPlayerRegisteredMessage(playerName));
     }
 
-    public void notifyRegistrationResult(String sessionId, boolean succes, Color color) {
-        serverWebSocket.sendTo(sessionId, new RegistrationResultMessage(succes, color));
+    public void notifyRegistrationResult(String sessionId, TeamColor teamColor) {
+        serverWebSocket.sendTo(sessionId, new RegistrationResultMessage(teamColor));
     }
 
     public void notifyStartGame() {
@@ -33,7 +33,7 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
         serverWebSocket.broadcast(new UpdateBoardMessage(board));
     }
 
-    public void notifyNextTurn(int turn, Color turnColor) {
-        serverWebSocket.broadcast(new NextTurnMessage(turn, turnColor));
+    public void notifyNextTurn(int turn, TeamColor turnTeamColor) {
+        serverWebSocket.broadcast(new NextTurnMessage(turn, turnTeamColor));
     }
 }

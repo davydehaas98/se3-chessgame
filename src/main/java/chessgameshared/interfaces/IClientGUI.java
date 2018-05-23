@@ -1,13 +1,13 @@
 package chessgameshared.interfaces;
 
 import model.Tile;
-import model.enums.Color;
+import model.enums.TeamColor;
 
 public interface IClientGUI {
     void processAnotherPlayerRegistered(String name);
-    void processRegistrationResult(boolean succes, Color color);
+    void processRegistrationResult(TeamColor teamColor);
     void processGameStarted();
     void processGameEnded();
-    void processNextTurn(int turn, Color turnColor);
+    void processNextTurn(int turn, TeamColor turnTeamColor);
     void processUpdateBoard(Tile[][] board);
 }

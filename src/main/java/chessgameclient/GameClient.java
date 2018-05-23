@@ -4,7 +4,7 @@ import chessgameclient.interfaces.IClientMessageGenerator;
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.interfaces.IClientGUI;
 import model.Tile;
-import model.enums.Color;
+import model.enums.TeamColor;
 
 public class GameClient implements IGameClient {
     private IClientMessageGenerator messageGenerator;
@@ -22,8 +22,8 @@ public class GameClient implements IGameClient {
         messageGenerator.registerPlayerOnServer(name);
     }
 
-    public void handleRegistrationResult(boolean success, Color color) {
-        clientGUI.processRegistrationResult(success, color);
+    public void handleRegistrationResult(TeamColor teamColor) {
+        clientGUI.processRegistrationResult(teamColor);
     }
 
     public void handleAnotherPlayerRegistered(String name) {
@@ -44,5 +44,5 @@ public class GameClient implements IGameClient {
 
     public void makeMove(String from, String to){ messageGenerator.makeMove(from,to);}
 
-    public void handleNextTurn(int turn, Color turnColor){clientGUI.processNextTurn(turn, turnColor);}
+    public void handleNextTurn(int turn, TeamColor turnTeamColor){clientGUI.processNextTurn(turn, turnTeamColor);}
 }

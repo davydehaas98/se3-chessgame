@@ -1,20 +1,20 @@
 package chessgameshared.messages;
 
-import model.enums.Color;
+import model.enums.TeamColor;
 
 public class NextTurnMessage {
     private int turn;
-    private Color turnColor;
-    public NextTurnMessage(int turn, Color turnColor) {
+    private TeamColor turnTeamColor;
+    public NextTurnMessage(int turn, TeamColor turnTeamColor) {
         this.turn = turn;
-        this.turnColor = turnColor;
+        this.turnTeamColor = turnTeamColor;
     }
 
     public int getTurn() {
         return turn;
     }
 
-    public Color getTurnColor() {
-        return turnColor;
+    public TeamColor getTurnTeamColor() {
+        return turnTeamColor;
     }
 }

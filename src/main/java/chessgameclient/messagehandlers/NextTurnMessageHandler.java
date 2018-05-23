@@ -2,7 +2,6 @@ package chessgameclient.messagehandlers;
 
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.MessageHandler;
-import chessgameshared.interfaces.IMessageHandler;
 import chessgameshared.messages.NextTurnMessage;
 
 public class NextTurnMessageHandler extends MessageHandler<NextTurnMessage> {
@@ -12,6 +11,6 @@ public class NextTurnMessageHandler extends MessageHandler<NextTurnMessage> {
 
     @Override
     public void handleMessageInternal(NextTurnMessage message, String sessionId) {
-        getGameClient().handleNextTurn(message.getTurn(), message.getTurnColor());
+        getGameClient().handleNextTurn(message.getTurn(), message.getTurnTeamColor());
     }
 }
