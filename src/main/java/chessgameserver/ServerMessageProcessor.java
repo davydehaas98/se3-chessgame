@@ -1,10 +1,11 @@
 package chessgameserver;
 
+import chessgameserver.interfaces.IServerMessageProcessor;
 import chessgameshared.MessageProcessorBase;
 import chessgameshared.interfaces.IMessageHandler;
 import chessgameshared.interfaces.IMessageHandlerFactory;
 
-public class ServerMessageProcessor extends MessageProcessorBase {
+public class ServerMessageProcessor extends MessageProcessorBase implements IServerMessageProcessor {
     public ServerMessageProcessor(IMessageHandlerFactory messageHandlerFactory){
         super(messageHandlerFactory);
     }

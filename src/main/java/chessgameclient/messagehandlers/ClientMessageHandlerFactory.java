@@ -6,6 +6,9 @@ import chessgameclient.interfaces.IGameClient;
 import model.enums.MessageType;
 
 public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
+    //This Class handles the message send from the Server to the Client
+    //For every type of message this class will return the corresponding handler
+    //In every handler the handleMessageInternal Method is different
     public IMessageHandler getHandler(String type, Object gameClient){
         IGameClient igameClient = (IGameClient) gameClient;
         switch (MessageType.valueOf(type)){

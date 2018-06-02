@@ -115,7 +115,7 @@ final class Rules {
     }
 
     static ArrayList<Point> bishopRules(Tile[][] board, Piece piece) {
-        ArrayList<Point> moves = new ArrayList<Point>();
+        ArrayList<Point> moves = new ArrayList<>();
         int x = piece.getCurrentPosition().x;
         int y = piece.getCurrentPosition().y;
         //Diagonal LeftUp

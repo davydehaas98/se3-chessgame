@@ -26,7 +26,6 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
         return instance;
     }
 
-    @Override
     public void setMessageHandler(IClientMessageProcessor handler) {
         this.handler = handler;
     }
@@ -45,7 +44,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void stop() {
         try {
             if (session != null) {
-                sendMessageToServer(getEncapsulatingMessageGenerator().generateMessageString(new PlayerDisconnectMessage(session.getId())));
+                sendMessageToServer(getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(new PlayerDisconnectMessage(session.getId())));
                 System.out.println(session.getId() + " has been disconnected");
                 session.close();
             }
@@ -56,8 +55,8 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("[Connect session] " + session.getRequestURI());
         this.session = session;
+        System.out.println("[Connect session] " + session.getRequestURI());
     }
 
     @OnClose
@@ -75,14 +74,14 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void onError(Session session, Throwable cause) {
         Logger.getInstance().log(cause.getMessage(), LogLevel.ERROR);
     }
-    @Override
+
     public void onMessageReceived(String message, String sessionId) {
         EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
         handler.processMessage(sessionId, encapMessage.getMessageType(), encapMessage.getMessageData());
     }
-    @Override
+
     public void onMessageSend(Object object) {
-        String message = getEncapsulatingMessageGenerator().generateMessageString(object);
+        String message = getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(object);
         sendMessageToServer(message);
     }
 

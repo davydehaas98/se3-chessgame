@@ -8,12 +8,11 @@ import model.interfaces.IGame;
 import model.interfaces.IPlayer;
 import model.pieces.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Observable;
-import java.util.Observer;
+import java.time.Instant;
+import java.util.*;
 
-public class Game implements IGame, Observer {
+public class Game implements IGame {
+    //private HashMap<String, Player> players;
     private ArrayList<IPlayer> players;
     private IServerMessageGenerator messageGenerator;
     private GameState gameState = GameState.WAITINGFORPLAYERS;
@@ -25,101 +24,19 @@ public class Game implements IGame, Observer {
     public Game(IServerMessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
         players = new ArrayList<>();
+        //players = new HashMap<>();
     }
+
+//    @Override
+//    public void update(Observable o, Object arg) {
+//        o.deleteObserver(this);
+//        gameState = GameState.ROUNDACTIVE;
+//    }
 
     public int getNumberOfPlayers() {
         return players.size();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        o.deleteObserver(this);
-        gameState = GameState.ROUNDACTIVE;
-    }
-
-    public void registerNewPlayer(String name, String sessionId) {
-        if (players.size() < 2) {
-            if (checkPlayerNameAlreadyExists(name)) {
-                messageGenerator.notifyRegistrationResult(sessionId, null);
-                return;
-            }
-            if (players.size() < 1) {
-                players.add(new Player(name, sessionId, TeamColor.WHITE));
-                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.WHITE);
-            } else if (players.size() == 1) {
-                players.add(new Player(name, sessionId, TeamColor.BLACK));
-                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.BLACK);
-            }
-            messageGenerator.notifyPlayerAdded(sessionId, name);
-            checkStartingCondition();
-        } else {
-            messageGenerator.notifyRegistrationResult(sessionId, null);
-        }
-    }
-
-    private boolean checkPlayerNameAlreadyExists(String name) {
-        for (IPlayer player : players)
-            if (player.getName().equals(name)) {
-                return true;
-            }
-        return false;
-    }
-
-    public void processPlayerDisconnect(String sessionId) {
-        for (IPlayer pl : players)
-            if (pl.getSessionId().equals(sessionId)) {
-                players.remove(pl);
-            }
-
-        if (gameState != GameState.WAITINGFORPLAYERS) {
-            gameState = GameState.WAITINGFORPLAYERS;
-        }
-    }
-
-    private void checkStartingCondition() {
-        if (players.size() == 2) {
-            startGame();
-        }
-    }
-
-    public void startGame() {
-        gameState = GameState.ROUNDACTIVE;
-        messageGenerator.notifyStartGame();
-        setBoard();
-        messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
-        messageGenerator.notifyUpdateBoard(board);
-    }
-
-    public void makeMove(String from, String to) {
-        Tile tileFrom = null;
-        Tile tileTo = null;
-        for (Tile[] tilesRow : board) {
-            for (Tile tile : tilesRow) {
-                if (Objects.equals(tile.getName(), from)) {
-                    tileFrom = tile;
-                } else if (Objects.equals(tile.getName(), to)) {
-                    tileTo = tile;
-                }
-            }
-        }
-        try {
-            tileTo.placePiece(tileFrom.getPiece());
-            tileFrom.removePiece();
-        } catch (NullPointerException exc) {
-            exc.printStackTrace();
-        }
-        turn++;
-        if (turn % 2 == 0) {
-            messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
-        } else {
-            messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
-        }
-        messageGenerator.notifyUpdateBoard(board);
-    }
-
-    private void endGame() {
-        messageGenerator.notifyEndGame();
-    }
 
     private boolean isCheck(Tile[][] board) {
         return false;
@@ -174,5 +91,91 @@ public class Game implements IGame, Observer {
 
     public Tile[][] getBoard() {
         return board;
+    }
+    public void registerNewPlayer(String name, String sessionId) {
+        if (players.size() < 2) {
+            //TODO Database Connection
+            if (checkPlayerNameAlreadyExists(name)) {
+                messageGenerator.notifyRegistrationResult(sessionId, null);
+                return;
+            }
+            if (players.size() < 1) {
+                players.add(new Player(name, sessionId, TeamColor.WHITE, 0, 0, 0, 500));
+                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.WHITE);
+                messageGenerator.notifyUpdateBoard(board);
+            } else if (players.size() == 1) {
+                players.add(new Player(name, sessionId, TeamColor.BLACK, 0,0,0,500));
+                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.BLACK);
+            }
+            messageGenerator.notifyPlayerAdded(sessionId, name);
+            checkStartingCondition();
+        } else {
+            messageGenerator.notifyRegistrationResult(sessionId, null);
+        }
+    }
+
+    private boolean checkPlayerNameAlreadyExists(String name) {
+        for (IPlayer player : players)
+            if (player.getName().equals(name)) {
+                return true;
+            }
+        return false;
+    }
+
+    public void processPlayerDisconnect(String sessionId) {
+        for (IPlayer pl : players)
+            if (pl.getSessionId().equals(sessionId)) {
+                players.remove(pl);
+            }
+
+        if (gameState != GameState.WAITINGFORPLAYERS) {
+            gameState = GameState.WAITINGFORPLAYERS;
+        }
+    }
+
+    private void checkStartingCondition() {
+        if (players.size() == 2) {
+            startGame();
+        }
+    }
+
+    public void startGame() {
+        gameState = GameState.ROUNDACTIVE;
+        messageGenerator.notifyStartGame();
+        messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
+        setBoard();
+        messageGenerator.notifyUpdateBoard(board);
+    }
+
+    public void makeMove(String from, String to) {
+        Tile tileFrom = null;
+        Tile tileTo = null;
+        for (Tile[] tilesRow : board) {
+            for (Tile tile : tilesRow) {
+                if (Objects.equals(tile.getName(), from)) {
+                    tileFrom = tile;
+                } else if (Objects.equals(tile.getName(), to)) {
+                    tileTo = tile;
+                }
+            }
+        }
+        try {
+            tileTo.placePiece(tileFrom.getPiece());
+            tileFrom.removePiece();
+        } catch (NullPointerException exc) {
+            exc.printStackTrace();
+        }
+        turn++;
+        if (turn % 2 == 0) {
+            messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
+        } else {
+            messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
+        }
+        messageGenerator.notifyNewEvent(new Event(players.forEach(player -> ); tileFrom.getPiece().getTeamColor() ,tileFrom, tileTo, turn, Instant.now()));
+        messageGenerator.notifyUpdateBoard(board);
+    }
+
+    private void endGame() {
+        messageGenerator.notifyEndGame();
     }
 }

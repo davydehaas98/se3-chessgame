@@ -1,6 +1,6 @@
 package chessgameshared;
 
-import chessgameshared.interfaces.IEncapsulatingMessageGenerator;
+import chessgameshared.interfaces.IEncapsulatedMessageGenerator;
 import chessgameshared.interfaces.IMessageProcessor;
 import chessgameshared.interfaces.IWebSocket;
 import com.google.gson.Gson;
@@ -9,12 +9,12 @@ import model.pieces.*;
 
 public abstract class WebSocketBase implements IWebSocket {
     private IMessageProcessor handler;
-    private IEncapsulatingMessageGenerator encapsulatingMessageGenerator;
+    private IEncapsulatedMessageGenerator encapsulatedMessageGenerator;
     private Gson gson;
 
 
     public WebSocketBase() {
-        encapsulatingMessageGenerator = new EncapsulatingMessageGenerator();
+        encapsulatedMessageGenerator = new EncapsulatedMessageGenerator();
         RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
                 .registerSubtype(Pawn.class, "Pawn")
                 .registerSubtype(Rook.class, "Rook")
@@ -25,8 +25,8 @@ public abstract class WebSocketBase implements IWebSocket {
         gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
     }
 
-    public IEncapsulatingMessageGenerator getEncapsulatingMessageGenerator() {
-        return encapsulatingMessageGenerator;
+    public IEncapsulatedMessageGenerator getEncapsulatedMessageGenerator() {
+        return encapsulatedMessageGenerator;
     }
 
     public Gson getGson() {

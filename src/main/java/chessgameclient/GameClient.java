@@ -42,7 +42,11 @@ public class GameClient implements IGameClient {
         clientGUI.processUpdateBoard(board);
     }
 
-    public void makeMove(String from, String to){ messageGenerator.makeMove(from,to);}
+    public void makeMove(String from, String to) {
+        messageGenerator.makeMove(from, to);
+    }
 
-    public void handleNextTurn(int turn, TeamColor turnTeamColor){clientGUI.processNextTurn(turn, turnTeamColor);}
+    public void handleNextTurn(int turn, TeamColor turnTeamColor) {
+        clientGUI.processNextTurn(turn, turnTeamColor);
+    }
 }

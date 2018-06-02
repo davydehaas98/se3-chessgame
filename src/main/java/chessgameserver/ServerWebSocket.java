@@ -30,9 +30,8 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     @OnMessage
     public void onMessage(String message, Session session) {
         System.out.println(message);
-        String sessionId = session.getId();
         EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
-        getHandler().processMessage(sessionId, encapMessage.getMessageType(), encapMessage.getMessageData());
+        getHandler().processMessage(session.getId(), encapMessage.getMessageType(), encapMessage.getMessageData());
     }
 
     @OnOpen
@@ -58,7 +57,7 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     }
 
     public void sendTo(String sessionId, Object object) {
-        String EncapMessage = getEncapsulatingMessageGenerator().generateMessageString(object);
+        String EncapMessage = getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(object);
         try {
             getSessionFromId(sessionId).getBasicRemote().sendText(EncapMessage);
         } catch (IOException exc) {
@@ -74,14 +73,12 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
         return null;
     }
 
-    @Override
     public void broadcast(Object object) {
         for (Session session : sessions) {
             sendTo(session.getId(), object);
         }
     }
 
-    @Override
     public void sendToOthers(String sessionId, Object object) {
         for (Session session : sessions) {
             if (!session.getId().equals(sessionId)) {

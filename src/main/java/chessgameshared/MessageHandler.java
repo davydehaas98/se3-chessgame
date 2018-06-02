@@ -14,7 +14,8 @@ public abstract class MessageHandler<T> implements IMessageHandler {
     private Gson gson;
     private IGame game;
     private IGameClient gameClient;
-    public MessageHandler(IGameClient gameClient){
+
+    public MessageHandler(IGameClient gameClient) {
         this.gameClient = gameClient;
         RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
                 .registerSubtype(Pawn.class, "Pawn")
@@ -25,7 +26,8 @@ public abstract class MessageHandler<T> implements IMessageHandler {
                 .registerSubtype(Queen.class, "Queen");
         gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
     }
-    public MessageHandler(IGame game){
+
+    public MessageHandler(IGame game) {
         this.game = game;
         RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
                 .registerSubtype(Pawn.class, "Pawn")
@@ -44,10 +46,12 @@ public abstract class MessageHandler<T> implements IMessageHandler {
     public IGameClient getGameClient() {
         return gameClient;
     }
-    public void handleMessage(String data, String sessionId){
-        Type type = ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        T message = gson.fromJson(data,type);
+
+    public void handleMessage(String data, String sessionId) {
+        Type type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        T message = gson.fromJson(data, type);
         handleMessageInternal(message, sessionId);
     }
+
     public abstract void handleMessageInternal(T message, String sessionId);
 }

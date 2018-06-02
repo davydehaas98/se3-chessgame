@@ -26,11 +26,11 @@ public class Main extends Application {
         IClientMessageGenerator clientMessageGenerator = new ClientMessageGenerator(clientWebSocket);
 
         IGameClient gameClient = new GameClient(clientMessageGenerator);
-        IMessageHandlerFactory factory = new ClientMessageHandlerFactory();
-        IClientMessageProcessor handler = new ClientMessageProcessor(factory);
-        clientWebSocket.setMessageHandler(handler);
+        IMessageHandlerFactory clientMessageHandlerFactory = new ClientMessageHandlerFactory();
+        IClientMessageProcessor clientMessageProcessor = new ClientMessageProcessor(clientMessageHandlerFactory);
+        clientWebSocket.setMessageHandler(clientMessageProcessor);
         clientWebSocket.start();
-        handler.registerGameClient(gameClient);
+        clientMessageProcessor.registerGameClient(gameClient);
 /*
                 USE REFLECTION FOR DEPENDENCY INJECTION:
                 INJECT EVERY CONTROLLER INSTANCE, WHICH IS CREATED DYNAMICALLY WHILE LOADING THE FXML,

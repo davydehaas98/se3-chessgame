@@ -1,12 +1,12 @@
 package chessgameshared;
 
-import chessgameshared.interfaces.IEncapsulatingMessageGenerator;
+import chessgameshared.interfaces.IEncapsulatedMessageGenerator;
 import chessgameshared.messages.EncapsulatingMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.pieces.*;
 
-public class EncapsulatingMessageGenerator implements IEncapsulatingMessageGenerator {
+public class EncapsulatedMessageGenerator implements IEncapsulatedMessageGenerator {
     RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
             .registerSubtype(Pawn.class, "Pawn")
             .registerSubtype(Rook.class, "Rook")
@@ -17,13 +17,13 @@ public class EncapsulatingMessageGenerator implements IEncapsulatingMessageGener
     private Gson gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
 
 
-    public EncapsulatingMessage generateMessage(Object content) {
-        String messageForServerJson = gson.toJson(content);
+    public EncapsulatingMessage generateEncapsulatedMessage(Object content) {
         String type = content.getClass().toGenericString();
+        String messageForServerJson = gson.toJson(content);
         return new EncapsulatingMessage(type, messageForServerJson);
     }
-    public String generateMessageString(Object content){
-        EncapsulatingMessage message = generateMessage(content);
+    public String generateEncapsulatedMessageString(Object content){
+        EncapsulatingMessage message = generateEncapsulatedMessage(content);
         return gson.toJson(message);
     }
 }

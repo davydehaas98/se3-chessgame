@@ -10,20 +10,16 @@ public class Player implements IPlayer {
     private int wins;
     private int losses;
     private int draws;
+    private int ranking;
 
-    Player(String name, String sessionId, TeamColor teamColor, int wins, int losses, int draws) {
+    Player(String name, String sessionId, TeamColor teamColor, int wins, int losses, int draws, int ranking) {
         this.name = name;
         this.sessionId = sessionId;
         this.teamColor = teamColor;
         this.wins = wins;
         this.losses = losses;
         this.draws = draws;
-    }
-
-    Player(String name, String sessionId, TeamColor teamColor) {
-        this.name = name;
-        this.sessionId = sessionId;
-        this.teamColor = teamColor;
+        this.ranking = ranking;
     }
 
     public String getName() {

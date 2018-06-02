@@ -3,10 +3,8 @@ package chessgameclientapp.controllers;
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.interfaces.IClientGUI;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,21 +12,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import model.Tile;
 import model.enums.TeamColor;
 import model.pieces.Piece;
 
 import java.awt.*;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 public class ChessGameController extends BaseController implements IClientGUI {
     public GridPane ChessBoard;
     public TextField tbUserName;
     public Button btnRegister;
     public Label lblPlayerTeamColor;
+    public Label lblTurn;
+    public ListView lvMadeMoves;
     private TeamColor playerTeamColor;
     private TeamColor turnTeamColor;
 
@@ -76,54 +73,65 @@ public class ChessGameController extends BaseController implements IClientGUI {
 
     public void processNextTurn(int turn, TeamColor turnTeamColor) {
         this.turnTeamColor = turnTeamColor;
-        System.out.println("Turn " + turn + " TeamColor: " + turnTeamColor);
+        lblTurn.setText("Turn " + turn + " | " + turnTeamColor);
     }
 
     private void resetStrokes() {
-        for (Node boardNode : ChessBoard.getChildren()) {
-            if (boardNode instanceof Rectangle) {
-                boardNode.setStyle("-fx-stroke: black; -fx-stroke-width: 2");
+        ChessBoard.getChildren().forEach(node -> {
+            if (node instanceof Rectangle) {
+                node.setStyle("-fx-stroke: black; -fx-stroke-width: 2");
             }
-        }
+        });
+    }
+
+    private void resetClickableRectangles() {
+        ChessBoard.getChildren().forEach(node -> {
+            if (node instanceof Rectangle) {
+                node.setOnMouseClicked(null);
+            }
+        });
     }
 
     public void processUpdateBoard(Tile[][] board) {
-        for (Tile[] tileRow : board) {
-            for (Tile tile : tileRow) {
-                Piece pieceOnTile = tile.getPiece();
-                ChessBoard.getChildren().forEach(node -> {
-                    //Loop through each childnode
-                    if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == playerTeamColor && turnTeamColor == playerTeamColor) {
-                        //Set all legal moves of the corresponding rectangle that contains a piece
-                        colorEveryLegalMove(node, pieceOnTile, board);
-                    }
-                    else if (node instanceof ImageView && Objects.equals(node.getId(), tile.getName())) {
-                        //Set the pieceImage on the corresponding Rectangle
-                        if (pieceOnTile != null) {
-                            ((ImageView)node).setImage(new Image(pieceOnTile.getImage()));
-                        } else {
-                            ((ImageView)node).setImage(null);
+        Platform.runLater(() -> {
+            for (Tile[] tileRow : board) {
+                for (Tile tile : tileRow) {
+                    Piece pieceOnTile = tile.getPiece();
+                    ChessBoard.getChildren().forEach(node -> {
+                        //Loop through each childnode
+                        if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == playerTeamColor && turnTeamColor == playerTeamColor) {
+                            //Set all legal moves of the corresponding rectangle that contains a piece
+                            setClickEventLegalMove(node, pieceOnTile, board);
+                        } else if (node instanceof ImageView && node.getId().equals(tile.getName())) {
+                            //Set the pieceImage on the corresponding Rectangle
+                            if (pieceOnTile != null) {
+                                ((ImageView) node).setImage(new Image(pieceOnTile.getImage()));
+                            } else {
+                                ((ImageView) node).setImage(null);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
-        }
+        });
     }
 
-    private void colorEveryLegalMove(Node selectedRectangle, Piece selectedPiece, Tile[][] board) {
+    private void setClickEventLegalMove(Node selectedRectangle, Piece selectedPiece, Tile[][] board) {
         selectedRectangle.setOnMouseClicked(event -> {
             resetStrokes();
             for (Point legalMove : selectedPiece.getLegalMoves(board)) {
                 //Loop through every legal move
                 for (Node node : ChessBoard.getChildren()) {
+                    //Match the node column and row with the x and the y of the legal move
                     if (node instanceof Rectangle && ChessBoard.getColumnIndex(node) == legalMove.x && ChessBoard.getRowIndex(node) == legalMove.y) {
-                        //Match the node column and row with the x and the y of the legalmove
+                        //Create a MouseClick event on the Rectangle
                         node.setOnMouseClicked(event1 -> Platform.runLater(() -> {
-                            //Send the move of the selected piece with the node where it will be placed to the server
-                            getGameClient().makeMove(selectedRectangle.getId(), node.getId());
-                            System.out.println("Move from " + node.getId() + " to " + node.getId());
+                            //Reset all Rectangle click events
+                            resetClickableRectangles();
                             //Reset all the strokes to black
                             resetStrokes();
+                            //Send the move of the selected piece with the node where it will be placed to the server
+                            getGameClient().makeMove(selectedRectangle.getId(), node.getId());
                         }));
                         //Show all the legal moves options in color
                         node.setStyle("-fx-stroke: limegreen;");
@@ -132,6 +140,7 @@ public class ChessGameController extends BaseController implements IClientGUI {
             }
         });
     }
+
     private void loadTiles() {
         boolean darkTile = true;
         String files = "abcdefgh";

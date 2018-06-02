@@ -4,9 +4,9 @@ public class EncapsulatingMessage {
     private String messageType;
     private String messageData;
 
-    public EncapsulatingMessage(String type, String data) {
-        this.messageType = type;
-        this.messageData = data;
+    public EncapsulatingMessage(String messageType, String messageData) {
+        this.messageType = messageType;
+        this.messageData = messageData;
     }
 
     public String getMessageData() {
