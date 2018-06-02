@@ -73,7 +73,9 @@ public class ChessGameController extends BaseController implements IClientGUI {
 
     public void processNextTurn(int turn, TeamColor turnTeamColor) {
         this.turnTeamColor = turnTeamColor;
-        lblTurn.setText("Turn " + turn + " | " + turnTeamColor);
+        Platform.runLater(()->{
+            lblTurn.setText("Turn " + turn + " | " + turnTeamColor);
+        });
     }
 
     private void resetStrokes() {
@@ -93,7 +95,6 @@ public class ChessGameController extends BaseController implements IClientGUI {
     }
 
     public void processUpdateBoard(Tile[][] board) {
-        Platform.runLater(() -> {
             for (Tile[] tileRow : board) {
                 for (Tile tile : tileRow) {
                     Piece pieceOnTile = tile.getPiece();
@@ -113,7 +114,6 @@ public class ChessGameController extends BaseController implements IClientGUI {
                     });
                 }
             }
-        });
     }
 
     private void setClickEventLegalMove(Node selectedRectangle, Piece selectedPiece, Tile[][] board) {

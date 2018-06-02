@@ -171,7 +171,7 @@ public class Game implements IGame {
         } else {
             messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
         }
-        messageGenerator.notifyNewEvent(new Event(players.forEach(player -> ); tileFrom.getPiece().getTeamColor() ,tileFrom, tileTo, turn, Instant.now()));
+        //messageGenerator.notifyNewEvent(new Event(players.forEach(player -> ); tileFrom.getPiece().getTeamColor() ,tileFrom, tileTo, turn, Instant.now()));
         messageGenerator.notifyUpdateBoard(board);
     }
 
