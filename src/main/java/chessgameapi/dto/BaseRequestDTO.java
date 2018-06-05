@@ -1,4 +1,4 @@
-package chessgamerestshared;
+package chessgameapi.dto;
 
 public class BaseRequestDTO {
 }

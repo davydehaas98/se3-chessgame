@@ -1,4 +1,4 @@
-package chessgamerestserver;
+package chessgameapi;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;

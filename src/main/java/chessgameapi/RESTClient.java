@@ -1,6 +1,6 @@
-package chessgamerestclient;
+package chessgameapi;
 
-import chessgamerestshared.BaseRequestDTO;
+import chessgameapi.dto.BaseRequestDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.apache.http.HttpEntity;

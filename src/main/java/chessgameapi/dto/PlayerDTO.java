@@ -1,4 +1,4 @@
-package chessgamerestshared;
+package chessgameapi.dto;
 
 import java.util.Date;
 

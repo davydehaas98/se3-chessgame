@@ -12,11 +12,11 @@ public class Player extends Entity implements IPlayer {
     private int draws;
     private int ranking;
 
-    Player(String name, String password){
+    public Player(String name, String password){
         this.name = name;
         this.password = password;
     }
-    Player(String name, int wins, int losses, int draws, int ranking) {
+    public Player(String name, int wins, int losses, int draws, int ranking) {
         this.name = name;
         this.wins = wins;
         this.losses = losses;

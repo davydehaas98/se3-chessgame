@@ -1,4 +1,6 @@
-package chessgamerestshared;
+package chessgameapi;
+
+import chessgameapi.dto.PlayerDTO;
 
 import java.util.List;
 
