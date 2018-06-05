@@ -191,19 +191,15 @@ final class Rules {
                 case BLACK:
                     if (xcheck > 0 && board[xcheck - 1][ycheck + 1].getPiece() != null && board[xcheck - 1][ycheck + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
                         legalMoves.remove(checkingMove);
-                        break;
                     } else if (xcheck < 7 && board[xcheck + 1][ycheck + 1].getPiece() != null && board[xcheck + 1][ycheck + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
                         legalMoves.remove(checkingMove);
-                        break;
                     }
                     break;
                 case WHITE:
                     if (xcheck > 0 && board[xcheck - 1][ycheck - 1].getPiece() != null && board[xcheck - 1][ycheck - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
                         legalMoves.remove(checkingMove);
-                        break;
                     } else if (xcheck < 7 && board[xcheck + 1][ycheck - 1].getPiece() != null && board[xcheck + 1][ycheck - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
                         legalMoves.remove(checkingMove);
-                        break;
                     }
                     break;
             }
@@ -215,7 +211,6 @@ final class Rules {
                         if (pieceOnTile != null && !pieceOnTile.getPieceType().equals(PieceType.PAWN) && !pieceOnTile.getPieceType().equals(PieceType.KING)) {
                             if (!pieceOnTile.getTeamColor().equals(piece.getTeamColor()) && pieceOnTile.getLegalMoves(board).contains(checkingMove)) {
                                 legalMoves.remove(checkingMove);
-                                break;
                             }
                         }
                     }

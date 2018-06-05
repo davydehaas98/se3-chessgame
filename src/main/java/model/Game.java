@@ -10,28 +10,21 @@ import model.pieces.*;
 import java.awt.*;
 import java.time.Instant;
 import java.util.*;
+import java.util.List;
 
 public class Game implements IGame {
-    //private HashMap<String, Player> players;
-    private ArrayList<IPlayer> players;
+    private HashMap<String, IPlayer> players;
     private IServerMessageGenerator messageGenerator;
     private GameState gameState = GameState.WAITINGFORPLAYERS;
     private int turn = 1;
 
     private Tile[][] board;
-    private ArrayList<Event> events;
+    private List<Event> events;
 
     public Game(IServerMessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
-        players = new ArrayList<>();
-        //players = new HashMap<>();
+        players = new HashMap<>();
     }
-
-//    @Override
-//    public void update(Observable o, Object arg) {
-//        o.deleteObserver(this);
-//        gameState = GameState.ROUNDACTIVE;
-//    }
 
     public int getNumberOfPlayers() {
         return players.size();
@@ -92,6 +85,7 @@ public class Game implements IGame {
     public Tile[][] getBoard() {
         return board;
     }
+
     public void registerNewPlayer(String name, String sessionId) {
         if (players.size() < 2) {
             //TODO Database Connection
@@ -100,11 +94,11 @@ public class Game implements IGame {
                 return;
             }
             if (players.size() < 1) {
-                players.add(new Player(name, sessionId, TeamColor.WHITE, 0, 0, 0, 500));
+                players.put(sessionId, new Player(name, TeamColor.WHITE, 0, 0, 0, 500));
                 messageGenerator.notifyRegistrationResult(sessionId, TeamColor.WHITE);
                 messageGenerator.notifyUpdateBoard(board);
             } else if (players.size() == 1) {
-                players.add(new Player(name, sessionId, TeamColor.BLACK, 0,0,0,500));
+                players.put(sessionId, new Player(name, TeamColor.BLACK, 0, 0, 0, 500));
                 messageGenerator.notifyRegistrationResult(sessionId, TeamColor.BLACK);
             }
             messageGenerator.notifyPlayerAdded(sessionId, name);
@@ -115,7 +109,7 @@ public class Game implements IGame {
     }
 
     private boolean checkPlayerNameAlreadyExists(String name) {
-        for (IPlayer player : players)
+        for (IPlayer player : players.values())
             if (player.getName().equals(name)) {
                 return true;
             }
@@ -123,11 +117,11 @@ public class Game implements IGame {
     }
 
     public void processPlayerDisconnect(String sessionId) {
-        for (IPlayer pl : players)
-            if (pl.getSessionId().equals(sessionId)) {
-                players.remove(pl);
+        for (String key : players.keySet()) {
+            if (key.equals(sessionId)) {
+                players.remove(sessionId);
             }
-
+        }
         if (gameState != GameState.WAITINGFORPLAYERS) {
             gameState = GameState.WAITINGFORPLAYERS;
         }
@@ -159,20 +153,18 @@ public class Game implements IGame {
                 }
             }
         }
-        try {
+        if (tileFrom != null && tileTo != null) {
             tileTo.placePiece(tileFrom.getPiece());
             tileFrom.removePiece();
-        } catch (NullPointerException exc) {
-            exc.printStackTrace();
+            turn++;
+            if (turn % 2 == 0) {
+                messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
+            } else {
+                messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
+            }
+            //messageGenerator.notifyNewEvent(new Event(players.forEach(player -> ); tileFrom.getPiece().getTeamColor() ,tileFrom, tileTo, turn, Instant.now()));
+            messageGenerator.notifyUpdateBoard(board);
         }
-        turn++;
-        if (turn % 2 == 0) {
-            messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
-        } else {
-            messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
-        }
-        //messageGenerator.notifyNewEvent(new Event(players.forEach(player -> ); tileFrom.getPiece().getTeamColor() ,tileFrom, tileTo, turn, Instant.now()));
-        messageGenerator.notifyUpdateBoard(board);
     }
 
     private void endGame() {
