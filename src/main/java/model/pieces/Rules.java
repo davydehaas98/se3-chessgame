@@ -1,8 +1,9 @@
 package model.pieces;
 
-import model.enums.TeamColor;
 import model.Tile;
 import model.enums.PieceType;
+import model.enums.TeamColor;
+
 import java.awt.*;
 import java.util.ArrayList;
 

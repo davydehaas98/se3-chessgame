@@ -5,5 +5,5 @@ public enum MessageType {
     UpdateBoardMessage, AnotherPlayerRegistered,
     StartGameMessage, EndGameMessage,
     MakeMoveMessage, NextTurnMessage,
-    PlayerDisconnectMessage
+    PlayerDisconnectMessage, NewEventMessage
 }

@@ -6,11 +6,11 @@ import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
 import chessgameshared.messages.EncapsulatingMessage;
 
+import javax.inject.Singleton;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.inject.Singleton;
 
 @Singleton
 @ServerEndpoint(value="/chessgame/")

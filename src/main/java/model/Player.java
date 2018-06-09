@@ -1,9 +1,8 @@
 package model;
 
 import model.enums.TeamColor;
-import model.interfaces.IPlayer;
 
-public class Player extends Entity implements IPlayer {
+public class Player extends Entity {
     private String name;
     private String password;
     private TeamColor teamColor;

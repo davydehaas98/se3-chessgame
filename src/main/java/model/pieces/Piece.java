@@ -1,8 +1,8 @@
 package model.pieces;
 
-import model.enums.TeamColor;
 import model.Tile;
 import model.enums.PieceType;
+import model.enums.TeamColor;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -45,10 +45,6 @@ public abstract class Piece {
 
     void setImage(String image) {
         this.image = image;
-    }
-
-    public void setLegalMoves(ArrayList<Point> legalMoves) {
-        this.legalMoves = legalMoves;
     }
 
     public boolean hasMoved() {

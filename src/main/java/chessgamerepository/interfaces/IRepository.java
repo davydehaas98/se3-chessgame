@@ -1,4 +1,4 @@
-package chessgamerepository;
+package chessgamerepository.interfaces;
 
 import java.util.List;
 

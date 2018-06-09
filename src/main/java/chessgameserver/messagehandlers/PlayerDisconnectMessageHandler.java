@@ -5,11 +5,11 @@ import chessgameshared.messages.PlayerDisconnectMessage;
 import model.interfaces.IGame;
 
 public class PlayerDisconnectMessageHandler extends MessageHandler<PlayerDisconnectMessage> {
-    public PlayerDisconnectMessageHandler(IGame game) {
+    PlayerDisconnectMessageHandler(IGame game) {
         super(game);
     }
 
     public void handleMessageInternal(PlayerDisconnectMessage message, String sessionId) {
-        getGame().processPlayerDisconnect(message.getSessionId());
+        getGame().processPlayerDisconnect(sessionId);
     }
 }

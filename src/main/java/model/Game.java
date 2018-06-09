@@ -1,22 +1,24 @@
 package model;
 
+import chessgameapi.RESTClient;
 import chessgameserver.interfaces.IServerMessageGenerator;
-import model.enums.TeamColor;
 import model.enums.GameState;
-import model.enums.PieceType;
+import model.enums.TeamColor;
 import model.interfaces.IGame;
-import model.interfaces.IPlayer;
 import model.pieces.*;
+
 import java.awt.*;
 import java.time.Instant;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Game implements IGame {
-    private HashMap<String, IPlayer> players;
     private IServerMessageGenerator messageGenerator;
-    private GameState gameState = GameState.WAITINGFORPLAYERS;
-    private int turn = 1;
+    private HashMap<String, Player> players;
+    private GameState gameState;
+    private int turn;
 
     private Tile[][] board;
     private List<Event> events;
@@ -24,12 +26,12 @@ public class Game implements IGame {
     public Game(IServerMessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
         players = new HashMap<>();
+        gameState = GameState.WAITINGFORPLAYERS;
     }
 
     public int getNumberOfPlayers() {
         return players.size();
     }
-
 
     private boolean isCheck(Tile[][] board) {
         return false;
@@ -86,30 +88,48 @@ public class Game implements IGame {
         return board;
     }
 
+    @Override
+    public void registerPlayer(String name, String password, String sessionId) {
+        //TODO connect to Database
+    }
+
     public void registerNewPlayer(String name, String sessionId) {
+        //Only two players can play at the same time
         if (players.size() < 2) {
             //TODO Database Connection
+            //Check if the Player is already registered
             if (checkPlayerNameAlreadyExists(name)) {
                 messageGenerator.notifyRegistrationResult(sessionId, null);
                 return;
             }
+            Player newPlayer = new Player(name, 0, 0, 0, 500);
+            //Add Player to the players Hashmap
             if (players.size() < 1) {
-                players.put(sessionId, new Player(name, TeamColor.WHITE, 0, 0, 0, 500));
-                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.WHITE);
-                messageGenerator.notifyUpdateBoard(board);
-            } else if (players.size() == 1) {
-                players.put(sessionId, new Player(name, TeamColor.BLACK, 0, 0, 0, 500));
-                messageGenerator.notifyRegistrationResult(sessionId, TeamColor.BLACK);
+                newPlayer.setTeamColor(TeamColor.WHITE);
+            } else {
+                //Check what team the other player is in
+                players.values().forEach(player -> {
+                    if (player.getTeamColor().equals(TeamColor.WHITE)) {
+                        newPlayer.setTeamColor(TeamColor.BLACK);
+                    } else {
+                        newPlayer.setTeamColor(TeamColor.WHITE);
+                    }
+                });
             }
+            players.put(sessionId, newPlayer);
+            messageGenerator.notifyRegistrationResult(sessionId, newPlayer.getTeamColor());
             messageGenerator.notifyPlayerAdded(sessionId, name);
-            checkStartingCondition();
+            if (gameState.equals(GameState.WAITINGFORPLAYERS)) {
+                checkStartingCondition();
+            }
+            messageGenerator.notifyUpdateBoard(board);
         } else {
             messageGenerator.notifyRegistrationResult(sessionId, null);
         }
     }
 
     private boolean checkPlayerNameAlreadyExists(String name) {
-        for (IPlayer player : players.values())
+        for (Player player : players.values())
             if (player.getName().equals(name)) {
                 return true;
             }
@@ -122,9 +142,9 @@ public class Game implements IGame {
                 players.remove(sessionId);
             }
         }
-        if (gameState != GameState.WAITINGFORPLAYERS) {
-            gameState = GameState.WAITINGFORPLAYERS;
-        }
+//        if (gameState != GameState.WAITINGFORPLAYERS) {
+//            gameState = GameState.WAITINGFORPLAYERS;
+//        }
     }
 
     private void checkStartingCondition() {
@@ -134,14 +154,15 @@ public class Game implements IGame {
     }
 
     public void startGame() {
-        gameState = GameState.ROUNDACTIVE;
+        turn = 1;
         messageGenerator.notifyStartGame();
         messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
         setBoard();
         messageGenerator.notifyUpdateBoard(board);
+        gameState = GameState.ROUNDACTIVE;
     }
 
-    public void makeMove(String from, String to) {
+    public void makeMove(String from, String to, String sessionId) {
         Tile tileFrom = null;
         Tile tileTo = null;
         for (Tile[] tilesRow : board) {
@@ -162,12 +183,13 @@ public class Game implements IGame {
             } else {
                 messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
             }
-            //messageGenerator.notifyNewEvent(new Event(players.forEach(player -> ); tileFrom.getPiece().getTeamColor() ,tileFrom, tileTo, turn, Instant.now()));
+            messageGenerator.notifyNewEvent(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
             messageGenerator.notifyUpdateBoard(board);
         }
     }
 
     private void endGame() {
+        gameState = GameState.FINISHED;
         messageGenerator.notifyEndGame();
     }
 }

@@ -44,7 +44,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void stop() {
         try {
             if (session != null) {
-                sendMessageToServer(getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(new PlayerDisconnectMessage(session.getId())));
+                sendMessageToServer(getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(new PlayerDisconnectMessage()));
                 System.out.println(session.getId() + " has been disconnected");
                 session.close();
             }

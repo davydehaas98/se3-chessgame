@@ -3,6 +3,7 @@ package chessgameserver;
 import chessgameserver.interfaces.IServerMessageGenerator;
 import chessgameserver.interfaces.IServerWebSocket;
 import chessgameshared.messages.*;
+import model.Event;
 import model.Tile;
 import model.enums.TeamColor;
 
@@ -35,5 +36,9 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
 
     public void notifyNextTurn(int turn, TeamColor turnTeamColor) {
         serverWebSocket.broadcast(new NextTurnMessage(turn, turnTeamColor));
+    }
+
+    public void notifyNewEvent(Event event) {
+        serverWebSocket.broadcast(new NewEventMessage(event));
     }
 }

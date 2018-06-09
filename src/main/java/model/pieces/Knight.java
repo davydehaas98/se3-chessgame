@@ -1,8 +1,8 @@
 package model.pieces;
 
-import model.*;
-import model.enums.TeamColor;
+import model.Tile;
 import model.enums.PieceType;
+import model.enums.TeamColor;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,8 +14,6 @@ public class Knight extends Piece {
     }
 
     public ArrayList<Point> getLegalMoves(Tile[][] board) {
-        ArrayList<Point> moves = Rules.knightRules(board, this);
-        setLegalMoves(moves);
-        return moves;
+        return Rules.knightRules(board, this);
     }
 }

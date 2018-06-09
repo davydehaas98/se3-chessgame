@@ -4,8 +4,8 @@ import model.Tile;
 import model.pieces.Piece;
 
 public interface IGame {
-    void registerNewPlayer(String name, String sessionId);
-    void makeMove(String from, String to);
+    void registerPlayer(String name, String password, String sessionId);
+    void makeMove(String from, String to, String sessionId);
     void startGame();
     void processPlayerDisconnect(String sessionId);
     int getNumberOfPlayers();

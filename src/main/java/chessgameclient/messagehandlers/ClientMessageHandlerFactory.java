@@ -1,8 +1,8 @@
 package chessgameclient.messagehandlers;
 
+import chessgameclient.interfaces.IGameClient;
 import chessgameshared.interfaces.IMessageHandler;
 import chessgameshared.interfaces.IMessageHandlerFactory;
-import chessgameclient.interfaces.IGameClient;
 import model.enums.MessageType;
 
 public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
@@ -24,6 +24,8 @@ public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
                 return new UpdateBoardMessageHandler(igameClient);
             case NextTurnMessage:
                 return new NextTurnMessageHandler(igameClient);
+            case NewEventMessage:
+                return new NewEventMessageHandler(igameClient);
             default:
                 return null;
         }

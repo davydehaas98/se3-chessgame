@@ -1,7 +1,7 @@
 package chessgameclientapp.controllers;
 
 import chessgameclient.interfaces.IGameClient;
-import chessgameshared.interfaces.IClientGUI;
+import chessgameclientapp.interfaces.IChessGameController;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Tile;
@@ -19,7 +19,7 @@ import model.pieces.Piece;
 
 import java.awt.*;
 
-public class ChessGameController extends BaseController implements IClientGUI {
+public class ChessGameController extends BaseController implements IChessGameController {
     public GridPane ChessBoard;
     public TextField tbUserName;
     public Button btnRegister;
@@ -31,19 +31,19 @@ public class ChessGameController extends BaseController implements IClientGUI {
 
     public ChessGameController(IGameClient gameClient) {
         super(gameClient);
-        getGameClient().registerClientGUI(this);
+        getGameClient().registerChessgameController(this);
         Platform.runLater(this::loadTiles);
-    }
-
-    public void register() {
-        String name = tbUserName.getText();
-        if (name.equals("") || name.length() > 64) {
-            showAlert("Registration", "This name is invalid");
-        } else {
-            //TODO
-            getGameClient().registerPlayer(name);
-        }
-    }
+//    }
+//
+//    public void register() {
+//        String name = tbUserName.getText();
+//        if (name.equals("") || name.length() > 64) {
+//            showAlert("Registration", "This name is invalid");
+//        } else {
+//            //TODO
+//            getGameClient().registerPlayer(name);
+//        }
+//    }
 
     public void processRegistrationResult(TeamColor teamColor) {
         Platform.runLater(() -> {
@@ -73,8 +73,15 @@ public class ChessGameController extends BaseController implements IClientGUI {
 
     public void processNextTurn(int turn, TeamColor turnTeamColor) {
         this.turnTeamColor = turnTeamColor;
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             lblTurn.setText("Turn " + turn + " | " + turnTeamColor);
+        });
+    }
+
+    public void processNewEvent(Event event) {
+        Platform.runLater(() ->{
+            System.out.println(event.getInfo());
+            //lvMadeMoves.getItems().add(event.getInfo());
         });
     }
 
@@ -95,25 +102,27 @@ public class ChessGameController extends BaseController implements IClientGUI {
     }
 
     public void processUpdateBoard(Tile[][] board) {
-            for (Tile[] tileRow : board) {
-                for (Tile tile : tileRow) {
-                    Piece pieceOnTile = tile.getPiece();
-                    ChessBoard.getChildren().forEach(node -> {
-                        //Loop through each childnode
-                        if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == playerTeamColor && turnTeamColor == playerTeamColor) {
-                            //Set all legal moves of the corresponding rectangle that contains a piece
-                            setClickEventLegalMove(node, pieceOnTile, board);
-                        } else if (node instanceof ImageView && node.getId().equals(tile.getName())) {
-                            //Set the pieceImage on the corresponding Rectangle
-                            if (pieceOnTile != null) {
+        for (Tile[] tileRow : board) {
+            for (Tile tile : tileRow) {
+                Piece pieceOnTile = tile.getPiece();
+                ChessBoard.getChildren().forEach(node -> {
+                    //Loop through each childnode
+                    if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == playerTeamColor && turnTeamColor == playerTeamColor) {
+                        //Set all legal moves of the corresponding rectangle that contains a piece
+                        setClickEventLegalMove(node, pieceOnTile, board);
+                    } else if (node instanceof ImageView && node.getId().equals(tile.getName())) {
+                        //Set the pieceImage on the corresponding Rectangle
+                        if (pieceOnTile != null) {
+                            Platform.runLater(()->{
                                 ((ImageView) node).setImage(new Image(pieceOnTile.getImage()));
-                            } else {
-                                ((ImageView) node).setImage(null);
-                            }
+                            });
+                        } else {
+                            ((ImageView) node).setImage(null);
                         }
-                    });
-                }
+                    }
+                });
             }
+        }
     }
 
     private void setClickEventLegalMove(Node selectedRectangle, Piece selectedPiece, Tile[][] board) {
@@ -168,12 +177,5 @@ public class ChessGameController extends BaseController implements IClientGUI {
             }
             darkTile = !darkTile;
         }
-    }
-
-    private void showAlert(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

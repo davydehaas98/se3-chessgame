@@ -1,11 +1,15 @@
 package chessgameapi;
 
+import chessgameapi.dto.LoginDTO;
 import chessgamedal.MySQLContext.MySQLPlayerContext;
-import chessgamerepository.IPlayerRepository;
 import chessgamerepository.PlayerRepository;
+import chessgamerepository.interfaces.IPlayerRepository;
 import com.google.gson.Gson;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 @Path("/chessgame")
@@ -21,7 +25,12 @@ public class RESTService {
     @Path("/loginplayer")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response loginPlayer(LoginDTO request)
+    public Response loginPlayer(LoginDTO request){
+        if(request == null){
+//            return Response.status(400).entity(BaseResponseHelper.get)
+        }
+        return null;
+    }
 //    @GET
 //    @Path("/player/{playerid}")
 //    @Produces("application/json")
