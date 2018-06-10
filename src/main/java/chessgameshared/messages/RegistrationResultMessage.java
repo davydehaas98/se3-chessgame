@@ -1,14 +1,13 @@
 package chessgameshared.messages;
 
-import model.enums.TeamColor;
-
 public class RegistrationResultMessage {
-    private TeamColor teamColor;
-    public RegistrationResultMessage(TeamColor teamColor){
-        this.teamColor = teamColor;
+    private boolean result;
+
+    public RegistrationResultMessage(boolean result) {
+        this.result = result;
     }
 
-    public TeamColor getTeamColor() {
-        return teamColor;
+    public boolean isResult() {
+        return result;
     }
 }

@@ -28,6 +28,14 @@ public class Main extends Application {
         launch(args);
     }
 
+    public static Stage getMainStage() {
+        return mainStage;
+    }
+
+    public static Stage getLoginStage() {
+        return loginStage;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         IClientWebSocket clientWebSocket = new ClientWebSocket();

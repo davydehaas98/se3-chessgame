@@ -27,11 +27,19 @@ public class PlayerRepository implements IPlayerRepository {
         return context.getAll();
     }
 
+    public Player getPlayerByName(String name) {
+        return context.getPlayerByName(name);
+    }
+
     public Player loginPlayer(String name, String password) {
         return context.loginPlayer(name, password);
     }
 
-    public boolean createPlayer(String name, String password) {
-        return context.createPlayer(name, password);
+    public boolean registerPlayer(String name, String password) {
+        return context.registerPlayer(name, password);
+    }
+
+    public String requestPassword(String name) {
+        return context.requestPassword(name);
     }
 }

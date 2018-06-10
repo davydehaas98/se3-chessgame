@@ -1,8 +1,9 @@
 package chessgameshared.messages;
 
-public class AnotherPlayerRegisteredMessage {
+public class LoginPlayerMessage {
     private String name;
-    public AnotherPlayerRegisteredMessage(String name){
+
+    public LoginPlayerMessage(String name) {
         this.name = name;
     }
 

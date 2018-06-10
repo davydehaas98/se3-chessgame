@@ -6,8 +6,6 @@ import model.enums.TeamColor;
 
 public interface IChessGameController {
     void showAlert(String header, String content);
-    void processAnotherPlayerRegistered(String name);
-    void processRegistrationResult(TeamColor teamColor);
     void processGameStarted();
     void processGameEnded();
     void processNextTurn(int turn, TeamColor turnTeamColor);

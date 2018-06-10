@@ -4,18 +4,13 @@ import model.enums.TeamColor;
 
 public class Player extends Entity {
     private String name;
-    private String password;
     private TeamColor teamColor;
     private int wins;
     private int losses;
     private int draws;
     private int ranking;
-
-    public Player(String name, String password){
-        this.name = name;
-        this.password = password;
-    }
-    public Player(String name, int wins, int losses, int draws, int ranking) {
+    public Player(long entityId, String name, int wins, int losses, int draws, int ranking) {
+        super.setEntityId(entityId);
         this.name = name;
         this.wins = wins;
         this.losses = losses;
@@ -31,8 +26,20 @@ public class Player extends Entity {
         return teamColor;
     }
 
-    public String getPassword() {
-        return password;
+    public int getWins() {
+        return wins;
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public int getRanking() {
+        return ranking;
     }
 
     public void setTeamColor(TeamColor teamColor) {

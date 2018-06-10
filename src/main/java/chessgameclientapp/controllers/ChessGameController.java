@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import model.Event;
 import model.Tile;
 import model.enums.TeamColor;
 import model.pieces.Piece;
@@ -33,7 +34,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
         super(gameClient);
         getGameClient().registerChessgameController(this);
         Platform.runLater(this::loadTiles);
-//    }
+    }
 //
 //    public void register() {
 //        String name = tbUserName.getText();
@@ -44,23 +45,6 @@ public class ChessGameController extends BaseController implements IChessGameCon
 //            getGameClient().registerPlayer(name);
 //        }
 //    }
-
-    public void processRegistrationResult(TeamColor teamColor) {
-        Platform.runLater(() -> {
-            if (teamColor != null) {
-                tbUserName.setDisable(true);
-                btnRegister.setDisable(true);
-                this.playerTeamColor = teamColor;
-                lblPlayerTeamColor.setText(playerTeamColor.toString());
-            } else {
-                showAlert("Registration", "Try again :(");
-            }
-        });
-    }
-
-    public void processAnotherPlayerRegistered(String name) {
-        System.out.println("Another Player has registered: " + name);
-    }
 
     public void processGameStarted() {
         System.out.println("Game Started");
@@ -80,7 +64,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
 
     public void processNewEvent(Event event) {
         Platform.runLater(() ->{
-            System.out.println(event.getInfo());
+            System.out.println(event.toString());
             //lvMadeMoves.getItems().add(event.getInfo());
         });
     }

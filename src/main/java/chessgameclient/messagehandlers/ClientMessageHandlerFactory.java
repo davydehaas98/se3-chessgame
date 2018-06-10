@@ -14,8 +14,10 @@ public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
         switch (MessageType.valueOf(type)){
             case RegistrationResultMessage:
                 return new RegistrationResultMessageHandler(igameClient);
-            case AnotherPlayerRegistered:
-                return new AnotherPlayerRegisteredMessageHandler(igameClient);
+            case RequestPasswordResultMessage:
+                return new RequestPasswordResultMessageHandler(igameClient);
+            case LoginPlayerResultMessage:
+                return new LoginPlayerResultMessageHandler(igameClient);
             case StartGameMessage:
                 return new StartGameMessageHandler(igameClient);
             case EndGameMessage:

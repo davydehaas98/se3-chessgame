@@ -3,6 +3,11 @@ package chessgamedal.interfaces;
 import model.Player;
 
 public interface IPlayerContext extends IDataContext<Player> {
+    Player getPlayerByName(String name);
+
     Player loginPlayer(String name, String password);
-    boolean createPlayer(String name, String password);
+
+    boolean registerPlayer(String name, String password);
+
+    String requestPassword(String name);
 }

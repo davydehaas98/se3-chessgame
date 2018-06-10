@@ -4,7 +4,7 @@ import chessgameclient.interfaces.IClientMessageGenerator;
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
 import chessgameclientapp.interfaces.ILoginController;
-import chessgameshared.Cryptography;
+import chessgameshared.Crypto;
 import model.Event;
 import model.Tile;
 import model.enums.TeamColor;
@@ -30,7 +30,8 @@ public class GameClient implements IGameClient {
         if (!name.isEmpty() && !name.contains(" ") && name.length() < 65) {
             if (!password.isEmpty() && !password.contains(" ") && password.length() < 65) {
                 if (password.equals(confirmPassword)) {
-                    messageGenerator.registerPlayer(name, Cryptography.hash(password.toCharArray()));
+                    //Register a Player on the database
+                    messageGenerator.registerPlayer(name, new Crypto().hash(password.toCharArray()));
                 } else {
                     loginController.showAlert("Password", "Passwords do not match");
                 }
@@ -40,23 +41,34 @@ public class GameClient implements IGameClient {
         } else {
             loginController.showAlert("Name", "Name is invalid");
         }
-        //messageGenerator.registerPlayerOnServer(name);
     }
 
-    public void loginPlayer(String name, String password) {
+    public void requestPassword(String name, String password) {
         if (!name.isEmpty() && !name.contains(" ") && name.length() < 65) {
             if (!password.isEmpty() && !password.contains(" ") && password.length() < 65) {
+                //Request the Password from the Player
                 messageGenerator.requestPassword(name);
             }
         }
     }
 
-    public void handleRegistrationResult(TeamColor teamColor) {
-        chessGameController.processRegistrationResult(teamColor);
+    public void loginPlayer(String name, String password, String passwordToken) {
+        if(new Crypto().authenticate(password.toCharArray(), passwordToken)){
+            //Log the player in on the Game
+            messageGenerator.loginPlayer(name);
+        }
     }
 
-    public void handleAnotherPlayerRegistered(String name) {
-        chessGameController.processAnotherPlayerRegistered(name);
+    public void handleRequestPasswordResult(String password) {
+        loginController.processRequestPasswordResult(password);
+    }
+
+    public void handleRegistrationResult(boolean result) {
+        loginController.processRegistrationResult(result);
+    }
+
+    public void handleLoginPlayerResult(TeamColor teamColor) {
+        loginController.processLoginPlayerResult(teamColor);
     }
 
     public void handleRoundStarted() {

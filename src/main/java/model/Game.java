@@ -1,6 +1,7 @@
 package model;
 
-import chessgameapi.RESTClient;
+import chessgamerepository.PlayerRepository;
+import chessgamerepository.interfaces.IPlayerRepository;
 import chessgameserver.interfaces.IServerMessageGenerator;
 import model.enums.GameState;
 import model.enums.TeamColor;
@@ -20,6 +21,8 @@ public class Game implements IGame {
     private GameState gameState;
     private int turn;
 
+    private IPlayerRepository playerRepository;
+
     private Tile[][] board;
     private List<Event> events;
 
@@ -27,6 +30,7 @@ public class Game implements IGame {
         this.messageGenerator = messageGenerator;
         players = new HashMap<>();
         gameState = GameState.WAITINGFORPLAYERS;
+        playerRepository = new PlayerRepository();
     }
 
     public int getNumberOfPlayers() {
@@ -90,19 +94,25 @@ public class Game implements IGame {
 
     @Override
     public void registerPlayer(String name, String password, String sessionId) {
+        messageGenerator.notifyRegisterResult(playerRepository.registerPlayer(name, password), sessionId);
         //TODO connect to Database
     }
 
-    public void registerNewPlayer(String name, String sessionId) {
+    public void requestPassword(String name, String sessionId) {
+        String password = playerRepository.requestPassword(name);
+        messageGenerator.notifyRequestPassword(password, sessionId);
+    }
+
+    public void loginPlayer(String name, String sessionId) {
         //Only two players can play at the same time
         if (players.size() < 2) {
             //TODO Database Connection
             //Check if the Player is already registered
-            if (checkPlayerNameAlreadyExists(name)) {
-                messageGenerator.notifyRegistrationResult(sessionId, null);
+            if (isAlreadyLoggedIn(name)) {
+                messageGenerator.notifyLoginResult(null, sessionId);
                 return;
             }
-            Player newPlayer = new Player(name, 0, 0, 0, 500);
+            Player newPlayer = playerRepository.getPlayerByName(name);
             //Add Player to the players Hashmap
             if (players.size() < 1) {
                 newPlayer.setTeamColor(TeamColor.WHITE);
@@ -117,18 +127,18 @@ public class Game implements IGame {
                 });
             }
             players.put(sessionId, newPlayer);
-            messageGenerator.notifyRegistrationResult(sessionId, newPlayer.getTeamColor());
-            messageGenerator.notifyPlayerAdded(sessionId, name);
+            System.out.println("[Players]: " + players.size());
+            messageGenerator.notifyLoginResult(newPlayer.getTeamColor(), sessionId);
             if (gameState.equals(GameState.WAITINGFORPLAYERS)) {
                 checkStartingCondition();
             }
             messageGenerator.notifyUpdateBoard(board);
         } else {
-            messageGenerator.notifyRegistrationResult(sessionId, null);
+            messageGenerator.notifyLoginResult(null, sessionId);
         }
     }
 
-    private boolean checkPlayerNameAlreadyExists(String name) {
+    private boolean isAlreadyLoggedIn(String name) {
         for (Player player : players.values())
             if (player.getName().equals(name)) {
                 return true;

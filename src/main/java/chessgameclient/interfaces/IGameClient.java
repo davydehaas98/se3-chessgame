@@ -9,14 +9,16 @@ import model.enums.TeamColor;
 public interface IGameClient {
     void registerChessgameController(IChessGameController chessGameController);
     void registerLoginController(ILoginController loginController);
-    void loginPlayer(String name, String password);
+    void requestPassword(String name, String password);
     void registerPlayer(String name, String password, String confirmPassword);
-    void handleRegistrationResult(TeamColor teamColor);
-    void handleAnotherPlayerRegistered(String name);
+    void makeMove(String from, String to);
+    void handleRequestPasswordResult(String password);
+    void handleRegistrationResult(boolean result);
+    void handleLoginPlayerResult(TeamColor teamColor);
     void handleRoundStarted();
     void handleGameEnded();
     void handleUpdateBoard(Tile[][] board);
-    void makeMove(String from, String to);
     void handleNextTurn(int turn, TeamColor turnTeamColor);
     void handleNewEvent(Event event);
+    void loginPlayer(String name, String password, String passwordToken);
 }
