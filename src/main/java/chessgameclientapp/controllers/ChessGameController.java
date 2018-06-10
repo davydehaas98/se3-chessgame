@@ -22,8 +22,6 @@ import java.awt.*;
 
 public class ChessGameController extends BaseController implements IChessGameController {
     public GridPane ChessBoard;
-    public TextField tbUserName;
-    public Button btnRegister;
     public Label lblPlayerTeamColor;
     public Label lblTurn;
     public ListView lvMadeMoves;
@@ -35,16 +33,6 @@ public class ChessGameController extends BaseController implements IChessGameCon
         getGameClient().registerChessgameController(this);
         Platform.runLater(this::loadTiles);
     }
-//
-//    public void register() {
-//        String name = tbUserName.getText();
-//        if (name.equals("") || name.length() > 64) {
-//            showAlert("Registration", "This name is invalid");
-//        } else {
-//            //TODO
-//            getGameClient().registerPlayer(name);
-//        }
-//    }
 
     public void processGameStarted() {
         System.out.println("Game Started");
@@ -52,7 +40,6 @@ public class ChessGameController extends BaseController implements IChessGameCon
 
     public void processGameEnded() {
         System.out.println("Game Ended");
-
     }
 
     public void processNextTurn(int turn, TeamColor turnTeamColor) {

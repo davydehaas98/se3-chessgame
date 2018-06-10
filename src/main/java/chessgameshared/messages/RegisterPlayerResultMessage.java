@@ -1,9 +1,9 @@
 package chessgameshared.messages;
 
-public class RegistrationResultMessage {
+public class RegisterPlayerResultMessage {
     private boolean result;
 
-    public RegistrationResultMessage(boolean result) {
+    public RegisterPlayerResultMessage(boolean result) {
         this.result = result;
     }
 

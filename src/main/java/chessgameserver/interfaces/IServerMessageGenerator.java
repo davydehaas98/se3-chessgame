@@ -5,9 +5,9 @@ import model.Tile;
 import model.enums.TeamColor;
 
 public interface IServerMessageGenerator {
-    void notifyRegisterResult(boolean result, String sessionId);
-    void notifyRequestPassword(String password, String sessionId);
-    void notifyLoginResult(TeamColor teamColor, String sessionId);
+    void notifyRegisterPlayerResult(boolean result, String sessionId);
+    void notifyRequestPasswordResult(String password, String sessionId);
+    void notifyLoginPlayerResult(TeamColor teamColor, String sessionId);
     void notifyStartGame();
     void notifyEndGame();
     void notifyUpdateBoard(Tile[][] board);

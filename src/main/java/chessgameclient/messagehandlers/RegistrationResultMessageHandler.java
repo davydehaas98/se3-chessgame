@@ -2,14 +2,14 @@ package chessgameclient.messagehandlers;
 
 import chessgameclient.interfaces.IGameClient;
 import chessgameshared.MessageHandler;
-import chessgameshared.messages.RegistrationResultMessage;
+import chessgameshared.messages.RegisterPlayerResultMessage;
 
-public class RegistrationResultMessageHandler extends MessageHandler<RegistrationResultMessage> {
+public class RegistrationResultMessageHandler extends MessageHandler<RegisterPlayerResultMessage> {
     public RegistrationResultMessageHandler(IGameClient gameClient) {
         super(gameClient);
     }
 
-    public void handleMessageInternal(RegistrationResultMessage message, String sessionId) {
+    public void handleMessageInternal(RegisterPlayerResultMessage message, String sessionId) {
         getGameClient().handleRegistrationResult(message.isResult());
     }
 }

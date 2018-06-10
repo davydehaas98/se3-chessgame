@@ -14,15 +14,15 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
         this.serverWebSocket = serverWebSocket;
     }
 
-    public void notifyRegisterResult(boolean result, String sessionId) {
-        serverWebSocket.sendTo(sessionId, new RegistrationResultMessage(result));
+    public void notifyRegisterPlayerResult(boolean result, String sessionId) {
+        serverWebSocket.sendTo(sessionId, new RegisterPlayerResultMessage(result));
     }
 
-    public void notifyRequestPassword(String password, String sessionId) {
+    public void notifyRequestPasswordResult(String password, String sessionId) {
         serverWebSocket.sendTo(sessionId, new RequestPasswordResultMessage(password));
     }
 
-    public void notifyLoginResult(TeamColor teamColor, String sessionId) {
+    public void notifyLoginPlayerResult(TeamColor teamColor, String sessionId) {
         serverWebSocket.sendTo(sessionId, new LoginPlayerResultMessage(teamColor));
     }
 

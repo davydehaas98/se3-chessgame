@@ -42,10 +42,10 @@ public class LoginController extends BaseController implements ILoginController 
 
     public void processLoginPlayerResult(TeamColor teamColor) {
         if(teamColor != null){
-            showAlert("Login", "Login successful");
             Platform.runLater(()->{
                 Main.getMainStage().show();
                 Main.getLoginStage().hide();
+                showAlert("Login", "Login successful");
             });
         }else{
             showAlert("Login", "Login failed");

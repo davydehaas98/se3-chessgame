@@ -94,13 +94,13 @@ public class Game implements IGame {
 
     @Override
     public void registerPlayer(String name, String password, String sessionId) {
-        messageGenerator.notifyRegisterResult(playerRepository.registerPlayer(name, password), sessionId);
+        messageGenerator.notifyRegisterPlayerResult(playerRepository.registerPlayer(name, password), sessionId);
         //TODO connect to Database
     }
 
     public void requestPassword(String name, String sessionId) {
         String password = playerRepository.requestPassword(name);
-        messageGenerator.notifyRequestPassword(password, sessionId);
+        messageGenerator.notifyRequestPasswordResult(password, sessionId);
     }
 
     public void loginPlayer(String name, String sessionId) {
@@ -109,7 +109,7 @@ public class Game implements IGame {
             //TODO Database Connection
             //Check if the Player is already registered
             if (isAlreadyLoggedIn(name)) {
-                messageGenerator.notifyLoginResult(null, sessionId);
+                messageGenerator.notifyLoginPlayerResult(null, sessionId);
                 return;
             }
             Player newPlayer = playerRepository.getPlayerByName(name);
@@ -127,14 +127,14 @@ public class Game implements IGame {
                 });
             }
             players.put(sessionId, newPlayer);
-            System.out.println("[Players]: " + players.size());
-            messageGenerator.notifyLoginResult(newPlayer.getTeamColor(), sessionId);
+            System.out.println("[Players in game]: " + players.size());
+            messageGenerator.notifyLoginPlayerResult(newPlayer.getTeamColor(), sessionId);
             if (gameState.equals(GameState.WAITINGFORPLAYERS)) {
                 checkStartingCondition();
             }
             messageGenerator.notifyUpdateBoard(board);
         } else {
-            messageGenerator.notifyLoginResult(null, sessionId);
+            messageGenerator.notifyLoginPlayerResult(null, sessionId);
         }
     }
 
@@ -152,9 +152,7 @@ public class Game implements IGame {
                 players.remove(sessionId);
             }
         }
-//        if (gameState != GameState.WAITINGFORPLAYERS) {
-//            gameState = GameState.WAITINGFORPLAYERS;
-//        }
+        System.out.println("[Players in game]: " + players.size());
     }
 
     private void checkStartingCondition() {
