@@ -8,7 +8,7 @@ public interface IGame {
 
     void requestPassword(String name, String sessionId);
 
-    void loginPlayer(String name, String sessionId);
+    void loginPlayer(String name, String password, String sessionId);
 
     void makeMove(String from, String to, String sessionId);
 

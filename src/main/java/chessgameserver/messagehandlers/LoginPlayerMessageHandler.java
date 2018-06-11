@@ -10,6 +10,6 @@ public class LoginPlayerMessageHandler extends MessageHandler<LoginPlayerMessage
     }
 
     public void handleMessageInternal(LoginPlayerMessage message, String sessionId) {
-        getGame().loginPlayer(message.getName(), sessionId);
+        getGame().loginPlayer(message.getName(), message.getPassword(), sessionId);
     }
 }

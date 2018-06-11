@@ -1,9 +1,9 @@
 package chessgameshared.interfaces;
 
-import chessgameshared.messages.EncapsulatingMessage;
+import chessgameshared.messages.EncapsulatedMessage;
 
 public interface IEncapsulatedMessageGenerator {
-    EncapsulatingMessage generateEncapsulatedMessage(Object content);
+    EncapsulatedMessage generateEncapsulatedMessage(Object content);
 
     String generateEncapsulatedMessageString(Object content);
 }

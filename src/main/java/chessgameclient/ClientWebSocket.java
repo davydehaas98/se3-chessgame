@@ -5,7 +5,7 @@ import chessgameclient.interfaces.IClientWebSocket;
 import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
-import chessgameshared.messages.EncapsulatingMessage;
+import chessgameshared.messages.EncapsulatedMessage;
 import chessgameshared.messages.PlayerDisconnectMessage;
 
 import javax.websocket.*;
@@ -76,7 +76,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     }
 
     public void onMessageReceived(String message, String sessionId) {
-        EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
+        EncapsulatedMessage encapMessage = getGson().fromJson(message, EncapsulatedMessage.class);
         handler.processMessage(sessionId, encapMessage.getMessageType(), encapMessage.getMessageData());
     }
 

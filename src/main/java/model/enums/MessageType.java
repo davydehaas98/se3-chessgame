@@ -1,10 +1,17 @@
 package model.enums;
 
 public enum MessageType {
-    RegisterPlayerMessage, RegistrationResultMessage,
+    RegisterPlayerMessage,
+    RegisterPlayerResultMessage,
+    RequestPasswordMessage,
     RequestPasswordResultMessage,
-    LoginPlayerMessage, LoginPlayerResultMessage,
-    UpdateBoardMessage, StartGameMessage, EndGameMessage,
-    MakeMoveMessage, NextTurnMessage, PlayerDisconnectMessage,
-    NewEventMessage, RequestPasswordMessage
+    LoginPlayerMessage,
+    LoginPlayerResultMessage,
+    UpdateBoardMessage,
+    StartGameMessage,
+    EndGameMessage,
+    MakeMoveMessage,
+    NextTurnMessage,
+    PlayerDisconnectMessage,
+    NewEventMessage
 }

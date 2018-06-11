@@ -4,7 +4,7 @@ import chessgameserver.interfaces.IServerWebSocket;
 import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
-import chessgameshared.messages.EncapsulatingMessage;
+import chessgameshared.messages.EncapsulatedMessage;
 
 import javax.inject.Singleton;
 import javax.websocket.*;
@@ -30,7 +30,7 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     @OnMessage
     public void onMessage(String message, Session session) {
         System.out.println(message);
-        EncapsulatingMessage encapMessage = getGson().fromJson(message, EncapsulatingMessage.class);
+        EncapsulatedMessage encapMessage = getGson().fromJson(message, EncapsulatedMessage.class);
         getHandler().processMessage(session.getId(), encapMessage.getMessageType(), encapMessage.getMessageData());
     }
 

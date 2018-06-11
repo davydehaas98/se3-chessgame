@@ -19,8 +19,8 @@ public class ClientMessageGenerator implements IClientMessageGenerator {
         clientWebSocket.onMessageSend(new RequestPasswordMessage(name));
     }
 
-    public void loginPlayer(String name) {
-        clientWebSocket.onMessageSend(new LoginPlayerMessage(name));
+    public void loginPlayer(String name, String password) {
+        clientWebSocket.onMessageSend(new LoginPlayerMessage(name, password));
     }
 
     public void makeMove(String from, String to) {

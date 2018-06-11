@@ -9,25 +9,25 @@ public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
     //This Class handles the message send from the Server to the Client
     //For every type of message this class will return the corresponding handler
     //In every handler the handleMessageInternal Method is different
-    public IMessageHandler getHandler(String type, Object gameClient){
-        IGameClient igameClient = (IGameClient) gameClient;
+    public IMessageHandler getHandler(String type, Object gc){
+        IGameClient gameClient = (IGameClient) gc;
         switch (MessageType.valueOf(type)){
-            case RegistrationResultMessage:
-                return new RegistrationResultMessageHandler(igameClient);
+            case RegisterPlayerResultMessage:
+                return new RegistrationResultMessageHandler(gameClient);
             case RequestPasswordResultMessage:
-                return new RequestPasswordResultMessageHandler(igameClient);
+                return new RequestPasswordResultMessageHandler(gameClient);
             case LoginPlayerResultMessage:
-                return new LoginPlayerResultMessageHandler(igameClient);
+                return new LoginPlayerResultMessageHandler(gameClient);
             case StartGameMessage:
-                return new StartGameMessageHandler(igameClient);
+                return new StartGameMessageHandler(gameClient);
             case EndGameMessage:
-                return new EndGameMessageHandler(igameClient);
+                return new EndGameMessageHandler(gameClient);
             case UpdateBoardMessage:
-                return new UpdateBoardMessageHandler(igameClient);
+                return new UpdateBoardMessageHandler(gameClient);
             case NextTurnMessage:
-                return new NextTurnMessageHandler(igameClient);
+                return new NextTurnMessageHandler(gameClient);
             case NewEventMessage:
-                return new NewEventMessageHandler(igameClient);
+                return new NewEventMessageHandler(gameClient);
             default:
                 return null;
         }

@@ -1,10 +1,10 @@
 package chessgameshared.messages;
 
-public class EncapsulatingMessage {
+public class EncapsulatedMessage {
     private String messageType;
     private String messageData;
 
-    public EncapsulatingMessage(String messageType, String messageData) {
+    public EncapsulatedMessage(String messageType, String messageData) {
         this.messageType = messageType;
         this.messageData = messageData;
     }

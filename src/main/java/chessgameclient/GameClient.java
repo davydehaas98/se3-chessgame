@@ -55,7 +55,7 @@ public class GameClient implements IGameClient {
     public void loginPlayer(String name, String password, String passwordToken) {
         if(new Crypto().authenticate(password.toCharArray(), passwordToken)){
             //Log the player in on the Game
-            messageGenerator.loginPlayer(name);
+            messageGenerator.loginPlayer(name, passwordToken);
         }
     }
 

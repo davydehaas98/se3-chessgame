@@ -6,7 +6,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 public class RESTServer {
-    private static final int PORT = 8009;
+    private static final int PORT = 8095;
 
     public static void main(String[] args) throws Exception {
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -15,7 +15,7 @@ public class RESTServer {
         server.setHandler(contextHandler);
         ServletHolder servletHolder = contextHandler.addServlet(ServletContainer.class, "/*");
         servletHolder.setInitOrder(0);
-        servletHolder.setInitParameter("jersey.config.server.provider.classnames", RESTServer.class.getCanonicalName());
+        servletHolder.setInitParameter("jersey.config.server.provider.classnames", RESTService.class.getCanonicalName());
         try {
             server.start();
             server.join();

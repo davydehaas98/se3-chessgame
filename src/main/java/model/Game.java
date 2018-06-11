@@ -1,5 +1,7 @@
 package model;
 
+import chessgameapi.IRESTClient;
+import chessgameapi.RESTClient;
 import chessgamerepository.PlayerRepository;
 import chessgamerepository.interfaces.IPlayerRepository;
 import chessgameserver.interfaces.IServerMessageGenerator;
@@ -17,20 +19,19 @@ import java.util.Objects;
 
 public class Game implements IGame {
     private IServerMessageGenerator messageGenerator;
+    private IRESTClient restClient;
     private HashMap<String, Player> players;
     private GameState gameState;
     private int turn;
-
-    private IPlayerRepository playerRepository;
 
     private Tile[][] board;
     private List<Event> events;
 
     public Game(IServerMessageGenerator messageGenerator) {
         this.messageGenerator = messageGenerator;
+        restClient = new RESTClient();
         players = new HashMap<>();
         gameState = GameState.WAITINGFORPLAYERS;
-        playerRepository = new PlayerRepository();
     }
 
     public int getNumberOfPlayers() {
@@ -92,18 +93,18 @@ public class Game implements IGame {
         return board;
     }
 
-    @Override
     public void registerPlayer(String name, String password, String sessionId) {
-        messageGenerator.notifyRegisterPlayerResult(playerRepository.registerPlayer(name, password), sessionId);
+        boolean result = restClient.registerPlayer(name, password);
+        messageGenerator.notifyRegisterPlayerResult(result, sessionId);
         //TODO connect to Database
     }
 
     public void requestPassword(String name, String sessionId) {
-        String password = playerRepository.requestPassword(name);
+        String password = restClient.requestPassword(name);
         messageGenerator.notifyRequestPasswordResult(password, sessionId);
     }
 
-    public void loginPlayer(String name, String sessionId) {
+    public void loginPlayer(String name, String password, String sessionId) {
         //Only two players can play at the same time
         if (players.size() < 2) {
             //TODO Database Connection
@@ -112,7 +113,7 @@ public class Game implements IGame {
                 messageGenerator.notifyLoginPlayerResult(null, sessionId);
                 return;
             }
-            Player newPlayer = playerRepository.getPlayerByName(name);
+            Player newPlayer = restClient.loginPlayer(name, password);
             //Add Player to the players Hashmap
             if (players.size() < 1) {
                 newPlayer.setTeamColor(TeamColor.WHITE);

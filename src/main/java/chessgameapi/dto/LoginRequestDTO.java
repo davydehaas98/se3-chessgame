@@ -1,9 +1,13 @@
 package chessgameapi.dto;
 
-public class RegisterDTO {
+public class LoginRequestDTO extends BaseRequestDTO {
     private String name;
     private String password;
 
+    public LoginRequestDTO(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 
     public String getPassword() {
         return password;
@@ -19,10 +23,5 @@ public class RegisterDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public RegisterDTO(String name, String password) {
-        this.name = name;
-        this.password = password;
     }
 }

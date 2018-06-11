@@ -1,7 +1,7 @@
 package chessgameshared;
 
 import chessgameshared.interfaces.IEncapsulatedMessageGenerator;
-import chessgameshared.messages.EncapsulatingMessage;
+import chessgameshared.messages.EncapsulatedMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.pieces.*;
@@ -17,13 +17,13 @@ public class EncapsulatedMessageGenerator implements IEncapsulatedMessageGenerat
     private Gson gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
 
 
-    public EncapsulatingMessage generateEncapsulatedMessage(Object content) {
+    public EncapsulatedMessage generateEncapsulatedMessage(Object content) {
         String type = content.getClass().toGenericString();
         String messageForServerJson = gson.toJson(content);
-        return new EncapsulatingMessage(type, messageForServerJson);
+        return new EncapsulatedMessage(type, messageForServerJson);
     }
     public String generateEncapsulatedMessageString(Object content){
-        EncapsulatingMessage message = generateEncapsulatedMessage(content);
+        EncapsulatedMessage message = generateEncapsulatedMessage(content);
         return gson.toJson(message);
     }
 }

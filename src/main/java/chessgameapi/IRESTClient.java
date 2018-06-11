@@ -1,10 +1,8 @@
-package chessgamerepository.interfaces;
+package chessgameapi;
 
 import model.Player;
 
-public interface IPlayerRepository extends IRepository<Player> {
-    Player getPlayerByName(String name);
-
+public interface IRESTClient {
     boolean registerPlayer(String name, String password);
 
     String requestPassword(String name);
