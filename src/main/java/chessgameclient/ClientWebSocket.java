@@ -14,7 +14,7 @@ import java.net.URI;
 
 @ClientEndpoint
 public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
-    private static final String serverURI = "ws://localhost:8008/chessgame/";
+    private static final String SERVERURI = "ws://localhost:8008/chessgame/";
     private Session session;
     private IClientMessageProcessor handler;
     private static ClientWebSocket instance = null;
@@ -34,7 +34,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void start() {
         try {
             WebSocketContainer wsContainer = ContainerProvider.getWebSocketContainer();
-            wsContainer.connectToServer(this, new URI(serverURI));
+            wsContainer.connectToServer(this, new URI(SERVERURI));
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
         }

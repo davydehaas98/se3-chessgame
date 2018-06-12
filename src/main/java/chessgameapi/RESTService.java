@@ -9,60 +9,56 @@ import chessgamerepository.PlayerRepository;
 import chessgamerepository.interfaces.IPlayerRepository;
 import com.google.gson.Gson;
 import model.Player;
-import org.eclipse.persistence.annotations.Partitioned;
 
-import javax.annotation.PostConstruct;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/chessgame")
 public class RESTService {
     private IPlayerRepository playerRepository;
+    private Gson gson;
 
     public RESTService() {
         playerRepository = new PlayerRepository(new MySQLPlayerContext());
-    }
-
-    @GET
-    @Path("/get")
-    public Response defaultGet() {
-        System.out.println("[REST] defaultGet");
-        return Response.status(200).entity(new BaseResultDTO()).build();
+        gson = new Gson();
     }
 
     @POST
-    @Path("/register")
+    @Path("/player/register")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response registerPlayer(RegisterRequestDTO requestDTO) {
+    public Response registerPlayer(String input) {
         System.out.println("[REST] RegisterPlayer");
-        if (requestDTO != null) {
-            boolean result = playerRepository.registerPlayer(requestDTO.getName(), requestDTO.getPassword());
+        if (input != null) {
+            RegisterRequestDTO registerRequestDTO = gson.fromJson(input, RegisterRequestDTO.class);
+            boolean result = playerRepository.registerPlayer(registerRequestDTO.getName(), registerRequestDTO.getPassword());
             return Response.status(200).entity(ResponseHelper.getRegisterResultDTOResponse(result)).build();
         }
         return Response.status(400).entity(ResponseHelper.getErrorResponse()).build();
     }
     @POST
-    @Path("/requestpassword")
+    @Path("/player/requestpassword")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response requestPassword(RequestPasswordRequestDTO requestDTO) {
+    public Response requestPassword(String input) {
         System.out.println("[REST] RequestPassword");
-        if (requestDTO != null) {
-            String result = playerRepository.requestPassword(requestDTO.getName());
+        if (input != null) {
+            RequestPasswordRequestDTO requestPasswordRequestDTO = gson.fromJson(input, RequestPasswordRequestDTO.class);
+            String result = playerRepository.requestPassword(requestPasswordRequestDTO.getName());
             return Response.status(200).entity(ResponseHelper.getRequestPasswordResultDTOResponse(result)).build();
         }
         return Response.status(400).entity(ResponseHelper.getErrorResponse()).build();
     }
 
     @POST
-    @Path("/login")
+    @Path("/player/login")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response loginPlayer(LoginRequestDTO requestDTO) {
+    public Response loginPlayer(String input) {
         System.out.println("[REST] LoginPlayer");
-        if(requestDTO != null){
-            Player result = playerRepository.loginPlayer(requestDTO.getName(), requestDTO.getPassword());
+        if(input != null){
+            LoginRequestDTO loginRequestDTO = gson.fromJson(input,LoginRequestDTO.class);
+            Player result = playerRepository.loginPlayer(loginRequestDTO.getName(), loginRequestDTO.getPassword());
             return  Response.status(200).entity(ResponseHelper.getLoginResultDTOResponse(result)).build();
         }
         return Response.status(400).entity(ResponseHelper.getErrorResponse()).build();

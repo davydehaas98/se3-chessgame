@@ -1,7 +1,6 @@
 package chessgameserver.messagehandlers;
 
 import chessgameshared.MessageHandler;
-import chessgameshared.interfaces.IMessageHandler;
 import chessgameshared.messages.RequestPasswordMessage;
 import model.interfaces.IGame;
 

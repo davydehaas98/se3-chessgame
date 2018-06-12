@@ -2,8 +2,6 @@ package model;
 
 import chessgameapi.IRESTClient;
 import chessgameapi.RESTClient;
-import chessgamerepository.PlayerRepository;
-import chessgamerepository.interfaces.IPlayerRepository;
 import chessgameserver.interfaces.IServerMessageGenerator;
 import model.enums.GameState;
 import model.enums.TeamColor;

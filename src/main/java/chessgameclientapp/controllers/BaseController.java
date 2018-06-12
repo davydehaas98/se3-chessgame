@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 public abstract class BaseController {
-    public IGameClient gameClient;
+    private IGameClient gameClient;
 
     BaseController(IGameClient gameClient) {
         this.gameClient = gameClient;

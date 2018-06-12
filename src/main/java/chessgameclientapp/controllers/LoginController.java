@@ -4,16 +4,22 @@ import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.Main;
 import chessgameclientapp.interfaces.ILoginController;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.enums.TeamColor;
 
 public class LoginController extends BaseController implements ILoginController {
-    public TextField tbLoginName;
-    public PasswordField tbLoginPassword;
-    public TextField tbRegisterName;
-    public PasswordField tbRegisterPassword;
-    public PasswordField tbRegisterPasswordConfirm;
+    @FXML
+    private TextField tbLoginName;
+    @FXML
+    private PasswordField tbLoginPassword;
+    @FXML
+    private TextField tbRegisterName;
+    @FXML
+    private PasswordField tbRegisterPassword;
+    @FXML
+    private PasswordField tbRegisterPasswordConfirm;
 
     public LoginController(IGameClient gameClient) {
         super(gameClient);

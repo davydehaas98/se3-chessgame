@@ -2,6 +2,7 @@ package chessgamedal.MySQLContext;
 
 import chessgamedal.DatabaseConnection;
 import chessgamedal.interfaces.IPlayerContext;
+import chessgameshared.logging.Logger;
 import model.Player;
 
 import java.sql.CallableStatement;
@@ -24,7 +25,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
                 }
             }
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
         return player;
     }
@@ -40,7 +41,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
                 }
             }
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
         return players;
     }
@@ -57,7 +58,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
                 }
             }
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
         return player;
     }
@@ -72,7 +73,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
             statement.executeQuery();
             return statement.getBoolean("oresult");
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
             return false;
         }
     }
@@ -90,7 +91,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
                 }
             }
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
         return password;
     }
@@ -109,7 +110,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
                 }
             }
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
         return player;
     }

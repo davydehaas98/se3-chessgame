@@ -18,11 +18,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.beans.EventHandler;
 import java.lang.reflect.Constructor;
 
 public class Main extends Application {
-    private static Stage mainStage, loginStage;
+    private static Stage mainStage;
+    private static Stage loginStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -90,7 +90,7 @@ public class Main extends Application {
                 //Default constructor:
                 return type.newInstance();
             } catch (Exception exc) {
-                exc.printStackTrace();
+                Logger.getInstance().log(exc);
                 return null;
             }
         });

@@ -19,6 +19,9 @@
             </plugin>
         </plugins>
     </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -34,6 +37,7 @@
             <type>jar</type>
         </dependency>
 
+        <!-- REST -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>

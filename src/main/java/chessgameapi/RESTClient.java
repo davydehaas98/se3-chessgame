@@ -10,23 +10,27 @@ public class RESTClient extends RESTClientBase implements IRESTClient {
         return URL;
     }
 
+    public void testGET(){
+        executeQueryGet("/get", BaseResultDTO.class);
+    }
+
     public boolean registerPlayer(String name, String password) {
         RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO(name, password);
-        final String query = "/register";
+        final String query = "/player/register";
         RegisterResultDTO result = executeQueryPost(registerRequestDTO, query, RegisterResultDTO.class);
         return result.isSuccess();
     }
 
     public String requestPassword(String name) {
         RequestPasswordRequestDTO requestPasswordRequestDTO = new RequestPasswordRequestDTO(name);
-        final String query = "/requestpassword";
+        final String query = "/player/requestpassword";
         RequestPasswordResultDTO result = executeQueryPost(requestPasswordRequestDTO, query, RequestPasswordResultDTO.class);
         return result.getPassword();
     }
 
     public Player loginPlayer(String name, String password) {
         LoginRequestDTO loginRequestDTO = new LoginRequestDTO(name, password);
-        final String query = "/login";
+        final String query = "/player/login";
         LoginResultDTO result = executeQueryPost(loginRequestDTO, query, LoginResultDTO.class);
         return result.getPlayer();
     }

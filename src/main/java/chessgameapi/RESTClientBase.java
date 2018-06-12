@@ -1,6 +1,7 @@
 package chessgameapi;
 
 import chessgameapi.dto.BaseRequestDTO;
+import chessgameshared.logging.Logger;
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
@@ -22,7 +23,7 @@ public abstract class RESTClientBase {
             final String entityString = EntityUtils.toString(entity);
             return gson.fromJson(entityString, clazz);
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
             return null;
         }
     }
@@ -50,7 +51,7 @@ public abstract class RESTClientBase {
             params = new StringEntity(json);
             httpPost.setEntity(params);
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
 
         return executeRequest(httpPost, clazz);
@@ -67,7 +68,7 @@ public abstract class RESTClientBase {
             params = new StringEntity(gson.toJson(request));
             httpPut.setEntity(params);
         } catch (Exception exc) {
-            exc.printStackTrace();
+            Logger.getInstance().log(exc);
         }
         return executeRequest(httpPut, clazz);
     }
