@@ -13,5 +13,5 @@ public enum MessageType {
     MakeMoveMessage,
     NextTurnMessage,
     PlayerDisconnectMessage,
-    NewEventMessage
+    EventsMessage
 }

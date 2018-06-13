@@ -26,7 +26,7 @@ public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
                 return new UpdateBoardMessageHandler(gameClient);
             case NextTurnMessage:
                 return new NextTurnMessageHandler(gameClient);
-            case NewEventMessage:
+            case EventsMessage:
                 return new EventsMessageHandler(gameClient);
             default:
                 return null;

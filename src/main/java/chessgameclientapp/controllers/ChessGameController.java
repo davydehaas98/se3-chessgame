@@ -62,7 +62,12 @@ public class ChessGameController extends BaseController implements IChessGameCon
     }
 
     public void processEvents(List<Event> events) {
-
+//            lvMadeMoves.getItems().clear();
+//            for (Event event : events) {
+//                Platform.runLater(()->{
+//                    lvMadeMoves.getItems().add(event.getInfo());
+//                });
+//            }
     }
 
     private void resetStrokes() {
@@ -87,7 +92,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
                 Piece pieceOnTile = tile.getPiece();
                 chessBoard.getChildren().forEach(node -> {
                     //Loop through each childnode
-                    if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == playerTeamColor && turnTeamColor == playerTeamColor) {
+                    if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == player.getTeamColor() && turnTeamColor == player.getTeamColor()) {
                         //Set all legal moves of the corresponding rectangle that contains a piece
                         setClickEventLegalMove(node, pieceOnTile, board);
                     } else if (node instanceof ImageView && node.getId().equals(tile.getName())) {

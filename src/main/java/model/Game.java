@@ -10,10 +10,8 @@ import model.pieces.*;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class Game implements IGame {
     private IServerMessageGenerator messageGenerator;
@@ -29,11 +27,8 @@ public class Game implements IGame {
         this.messageGenerator = messageGenerator;
         restClient = new RESTClient();
         players = new HashMap<>();
+        events = new ArrayList<>();
         gameState = GameState.WAITINGFORPLAYERS;
-    }
-
-    public int getNumberOfPlayers() {
-        return players.size();
     }
 
     private boolean isCheck(Tile[][] board) {
@@ -52,7 +47,7 @@ public class Game implements IGame {
         return false;
     }
 
-    private void setBoard() {
+    public void setBoard() {
         board = new Tile[8][8];
         String files = "abcdefgh";
         //Set Tiles
@@ -72,7 +67,11 @@ public class Game implements IGame {
         setPiecesOnBoard(TeamColor.WHITE, 7);
     }
 
-    private void setPiecesOnBoard(TeamColor teamColor, int y) {
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    public void setPiecesOnBoard(TeamColor teamColor, int y) {
         board[0][y].placePiece(new Rook(teamColor, new Point(0, y)));
         board[1][y].placePiece(new Knight(teamColor, new Point(1, y)));
         board[2][y].placePiece(new Bishop(teamColor, new Point(2, y)));
@@ -81,14 +80,6 @@ public class Game implements IGame {
         board[5][y].placePiece(new Bishop(teamColor, new Point(5, y)));
         board[6][y].placePiece(new Knight(teamColor, new Point(6, y)));
         board[7][y].placePiece(new Rook(teamColor, new Point(7, y)));
-    }
-
-    public Piece getChessPiece(int row, int column) {
-        return board[row][column].getPiece();
-    }
-
-    public Tile[][] getBoard() {
-        return board;
     }
 
     public void registerPlayer(String name, String password, String sessionId) {
@@ -135,6 +126,7 @@ public class Game implements IGame {
                 checkStartingCondition();
             } else {
                 sendCurrentTurn();
+                messageGenerator.notifyEvents(events);
                 messageGenerator.notifyUpdateBoard(board);
             }
         } else {
@@ -166,7 +158,7 @@ public class Game implements IGame {
         gameState = GameState.ROUNDACTIVE;
     }
 
-    public void makeMove(String from, String to, String sessionId) {
+    public boolean makeMove(String from, String to, String sessionId) {
         Tile tileFrom = null;
         Tile tileTo = null;
         for (Tile[] tilesRow : board) {
@@ -181,12 +173,14 @@ public class Game implements IGame {
         if (tileFrom != null && tileTo != null) {
             tileTo.placePiece(tileFrom.getPiece());
             tileFrom.removePiece();
-            turn++;
-            sendCurrentTurn();
             events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
             messageGenerator.notifyEvents(events);
+            turn++;
+            sendCurrentTurn();
             messageGenerator.notifyUpdateBoard(board);
+            return true;
         }
+        return false;
     }
 
     private void sendCurrentTurn(){

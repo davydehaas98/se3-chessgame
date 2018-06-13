@@ -17,8 +17,27 @@ public class Event  extends Entity {
         this.time = time;
     }
 
-    @Override
-    public String toString() {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Tile getFrom() {
+        return from;
+    }
+
+    public Tile getTo() {
+        return to;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public String getInfo() {
         return String.format("[%s]:[%s] player: %s played %s from %s to %s.", turn, time.toString(), player.getName(), from.getPiece().getPieceType().toString(), from.getName(), to.getName());
     }
 }
