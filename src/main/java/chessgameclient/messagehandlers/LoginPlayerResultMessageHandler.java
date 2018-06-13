@@ -10,6 +10,6 @@ public class LoginPlayerResultMessageHandler extends MessageHandler<LoginPlayerR
     }
 
     public void handleMessageInternal(LoginPlayerResultMessage message, String sessionId) {
-        getGameClient().handleLoginPlayerResult(message.getTeamColor());
+        getGameClient().handleLoginPlayerResult(message.getPlayer());
     }
 }

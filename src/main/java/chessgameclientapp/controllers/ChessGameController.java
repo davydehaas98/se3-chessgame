@@ -3,6 +3,7 @@ package chessgameclientapp.controllers;
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,11 +14,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Event;
+import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
 import model.pieces.Piece;
 
 import java.awt.*;
+import java.util.List;
 
 public class ChessGameController extends BaseController implements IChessGameController {
     @FXML
@@ -28,13 +31,19 @@ public class ChessGameController extends BaseController implements IChessGameCon
     private Label lblTurn;
     @FXML
     private ListView lvMadeMoves;
-    private TeamColor playerTeamColor;
+    private Player player;
     private TeamColor turnTeamColor;
 
     public ChessGameController(IGameClient gameClient) {
         super(gameClient);
         getGameClient().registerChessgameController(this);
         Platform.runLater(this::loadTiles);
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+        Platform.runLater(() ->
+                lblPlayerTeamColor.setText("You are: " + player.getTeamColor().toString()));
     }
 
     public void processGameStarted() {
@@ -52,11 +61,8 @@ public class ChessGameController extends BaseController implements IChessGameCon
         });
     }
 
-    public void processNewEvent(Event event) {
-        Platform.runLater(() -> {
-            System.out.println(event.toString());
-            //lvMadeMoves.getItems().add(event.getInfo());
-        });
+    public void processEvents(List<Event> events) {
+
     }
 
     private void resetStrokes() {
@@ -139,7 +145,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
                     rec.setFill(Color.BROWN);
                     darkTile = false;
                 } else {
-                    rec.setFill(Color.GREY);
+                    rec.setFill(Color.LIGHTGRAY);
                     darkTile = true;
                 }
                 chessBoard.add(rec, column, row);

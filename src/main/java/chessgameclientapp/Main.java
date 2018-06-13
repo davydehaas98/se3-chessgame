@@ -49,7 +49,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
         setLoaderControllerFactory(gameClient, loader);
-        loginStage = new Stage();
+        loginStage = primaryStage;
         loginStage.setScene(new Scene(loader.load()));
         loginStage.setTitle("Login");
         loginStage.getIcons().add(new Image("/images/ChessGameIcon.png"));
@@ -62,7 +62,7 @@ public class Main extends Application {
 
         loader = new FXMLLoader(getClass().getResource("/ChessGame.fxml"));
         setLoaderControllerFactory(gameClient, loader);
-        mainStage = primaryStage;
+        mainStage = new Stage();
         mainStage.setScene(new Scene(loader.load()));
         mainStage.setTitle("ChessGame");
         mainStage.getIcons().add(new Image("/images/ChessGameIcon.png"));

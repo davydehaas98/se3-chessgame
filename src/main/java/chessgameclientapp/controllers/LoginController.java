@@ -7,7 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.enums.TeamColor;
+import model.Player;
 
 public class LoginController extends BaseController implements ILoginController {
     @FXML
@@ -46,15 +46,14 @@ public class LoginController extends BaseController implements ILoginController 
         getGameClient().loginPlayer(tbLoginName.getText(), tbLoginPassword.getText(), passwordToken);
     }
 
-    public void processLoginPlayerResult(TeamColor teamColor) {
-        if(teamColor != null){
+    public void processLoginPlayerResult(Player player) {
+        if(player != null){
             Platform.runLater(()->{
                 Main.getMainStage().show();
                 Main.getLoginStage().hide();
-                showAlert("Login", "Login successful");
             });
         }else{
-            showAlert("Login", "Login failed");
+            Platform.runLater(() -> showAlert("Login", "Login failed"));
         }
     }
 }

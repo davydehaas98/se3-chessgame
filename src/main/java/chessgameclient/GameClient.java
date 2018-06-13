@@ -6,8 +6,11 @@ import chessgameclientapp.interfaces.IChessGameController;
 import chessgameclientapp.interfaces.ILoginController;
 import chessgameshared.Crypto;
 import model.Event;
+import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+
+import java.util.List;
 
 public class GameClient implements IGameClient {
     private IClientMessageGenerator messageGenerator;
@@ -67,8 +70,9 @@ public class GameClient implements IGameClient {
         loginController.processRegistrationResult(result);
     }
 
-    public void handleLoginPlayerResult(TeamColor teamColor) {
-        loginController.processLoginPlayerResult(teamColor);
+    public void handleLoginPlayerResult(Player player) {
+        chessGameController.setPlayer(player);
+        loginController.processLoginPlayerResult(player);
     }
 
     public void handleRoundStarted() {
@@ -91,7 +95,7 @@ public class GameClient implements IGameClient {
         chessGameController.processNextTurn(turn, turnTeamColor);
     }
 
-    public void handleNewEvent(Event event) {
-        chessGameController.processNewEvent(event);
+    public void handleNewEvent(List<Event> events) {
+        chessGameController.processEvents(events);
     }
 }

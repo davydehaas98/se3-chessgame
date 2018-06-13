@@ -10,7 +10,7 @@ import java.sql.Statement;
 public final class DatabaseConnection {
     private static final String CONNECTIONSTRING = "jdbc:mysql://studmysql01.fhict.local:3306/dbi369008?useSSL=false";
     private static Connection connection;
-    private static String driver = "com.mysql.cj.jdbc.Driver";
+    private static final String driver = "com.mysql.cj.jdbc.Driver";
 
     public static Connection getConnection() {
         try {

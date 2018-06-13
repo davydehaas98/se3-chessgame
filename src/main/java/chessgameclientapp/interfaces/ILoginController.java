@@ -1,10 +1,10 @@
 package chessgameclientapp.interfaces;
 
-import model.enums.TeamColor;
+import model.Player;
 
 public interface ILoginController {
     void showAlert(String header, String content);
     void processRequestPasswordResult(String password);
     void processRegistrationResult(boolean result);
-    void processLoginPlayerResult(TeamColor teamColor);
+    void processLoginPlayerResult(Player player);
 }

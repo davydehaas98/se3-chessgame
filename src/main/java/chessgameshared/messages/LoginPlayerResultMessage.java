@@ -1,15 +1,15 @@
 package chessgameshared.messages;
 
-import model.enums.TeamColor;
+import model.Player;
 
 public class LoginPlayerResultMessage {
-    private TeamColor teamColor;
+    private Player player;
 
-    public LoginPlayerResultMessage(TeamColor teamColor) {
-        this.teamColor = teamColor;
+    public LoginPlayerResultMessage(Player player) {
+        this.player = player;
     }
 
-    public TeamColor getTeamColor() {
-        return teamColor;
+    public Player getPlayer() {
+        return player;
     }
 }

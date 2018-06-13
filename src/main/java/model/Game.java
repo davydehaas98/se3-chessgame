@@ -102,17 +102,20 @@ public class Game implements IGame {
         messageGenerator.notifyRequestPasswordResult(password, sessionId);
     }
 
-    public void loginPlayer(String name, String password, String sessionId) {
-        //Only two players can play at the same time
-        if (players.size() < 2) {
-            //TODO Database Connection
-            //Check if the Player is already registered
-            if (isAlreadyLoggedIn(name)) {
-                messageGenerator.notifyLoginPlayerResult(null, sessionId);
-                return;
+    private boolean checkIfAlreadyLoggedIn(Player newPlayer) {
+        for(Player player : players.values()){
+            if(player.getEntityId() == newPlayer.getEntityId()){
+                return true;
             }
-            Player newPlayer = restClient.loginPlayer(name, password);
-            //Add Player to the players Hashmap
+        }
+        return false;
+    }
+
+    public void loginPlayer(String name, String password, String sessionId) {
+        Player newPlayer = restClient.loginPlayer(name, password);
+        //Only two players can play at the same time
+        if (players.size() < 2 && newPlayer != null && !checkIfAlreadyLoggedIn(newPlayer)) {
+            //Set TeamColor
             if (players.size() < 1) {
                 newPlayer.setTeamColor(TeamColor.WHITE);
             } else {
@@ -127,22 +130,16 @@ public class Game implements IGame {
             }
             players.put(sessionId, newPlayer);
             System.out.println("[Players in game]: " + players.size());
-            messageGenerator.notifyLoginPlayerResult(newPlayer.getTeamColor(), sessionId);
+            messageGenerator.notifyLoginPlayerResult(newPlayer, sessionId);
             if (gameState.equals(GameState.WAITINGFORPLAYERS)) {
                 checkStartingCondition();
+            } else {
+                sendCurrentTurn();
+                messageGenerator.notifyUpdateBoard(board);
             }
-            messageGenerator.notifyUpdateBoard(board);
         } else {
             messageGenerator.notifyLoginPlayerResult(null, sessionId);
         }
-    }
-
-    private boolean isAlreadyLoggedIn(String name) {
-        for (Player player : players.values())
-            if (player.getName().equals(name)) {
-                return true;
-            }
-        return false;
     }
 
     public void processPlayerDisconnect(String sessionId) {
@@ -161,9 +158,9 @@ public class Game implements IGame {
     }
 
     public void startGame() {
-        turn = 1;
         messageGenerator.notifyStartGame();
-        messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
+        turn = 1;
+        sendCurrentTurn();
         setBoard();
         messageGenerator.notifyUpdateBoard(board);
         gameState = GameState.ROUNDACTIVE;
@@ -185,13 +182,18 @@ public class Game implements IGame {
             tileTo.placePiece(tileFrom.getPiece());
             tileFrom.removePiece();
             turn++;
-            if (turn % 2 == 0) {
-                messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
-            } else {
-                messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
-            }
-            messageGenerator.notifyNewEvent(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
+            sendCurrentTurn();
+            events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
+            messageGenerator.notifyEvents(events);
             messageGenerator.notifyUpdateBoard(board);
+        }
+    }
+
+    private void sendCurrentTurn(){
+        if (turn % 2 == 0) {
+            messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
+        } else {
+            messageGenerator.notifyNextTurn(turn, TeamColor.WHITE);
         }
     }
 

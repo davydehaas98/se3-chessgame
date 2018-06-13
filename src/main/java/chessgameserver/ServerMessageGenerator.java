@@ -4,8 +4,11 @@ import chessgameserver.interfaces.IServerMessageGenerator;
 import chessgameserver.interfaces.IServerWebSocket;
 import chessgameshared.messages.*;
 import model.Event;
+import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+
+import java.util.List;
 
 public class ServerMessageGenerator implements IServerMessageGenerator {
     private IServerWebSocket serverWebSocket;
@@ -22,8 +25,8 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
         serverWebSocket.sendTo(sessionId, new RequestPasswordResultMessage(password));
     }
 
-    public void notifyLoginPlayerResult(TeamColor teamColor, String sessionId) {
-        serverWebSocket.sendTo(sessionId, new LoginPlayerResultMessage(teamColor));
+    public void notifyLoginPlayerResult(Player player, String sessionId) {
+        serverWebSocket.sendTo(sessionId, new LoginPlayerResultMessage(player));
     }
 
     public void notifyStartGame() {
@@ -42,7 +45,7 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
         serverWebSocket.broadcast(new NextTurnMessage(turn, turnTeamColor));
     }
 
-    public void notifyNewEvent(Event event) {
-        serverWebSocket.broadcast(new NewEventMessage(event));
+    public void notifyEvents(List<Event> events) {
+        serverWebSocket.broadcast(new EventsMessage(events));
     }
 }
