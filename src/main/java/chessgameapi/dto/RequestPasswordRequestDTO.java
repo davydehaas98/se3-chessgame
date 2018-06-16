@@ -10,8 +10,4 @@ public class RequestPasswordRequestDTO extends BaseRequestDTO {
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

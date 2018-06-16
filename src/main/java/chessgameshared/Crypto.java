@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 /**
  * Hash passwords for storage, and test passwords against password tokens.
- *
+ * <p>
  * Instances of this class can be used concurrently by multiple threads.
  *
  * @author erickson
@@ -37,8 +37,7 @@ public final class Crypto {
 
     private final int cost;
 
-    public Crypto()
-    {
+    public Crypto() {
         this(DEFAULT_COST);
     }
 
@@ -47,18 +46,28 @@ public final class Crypto {
      *
      * @param cost the exponential computational cost of hashing a password, 0 to 30
      */
-    public Crypto(int cost)
-    {
+    public Crypto(int cost) {
         iterations(cost); /* Validate cost */
         this.cost = cost;
         this.random = new SecureRandom();
     }
 
-    private static int iterations(int cost)
-    {
+    private static int iterations(int cost) {
         if ((cost < 0) || (cost > 30))
             throw new IllegalArgumentException("cost: " + cost);
         return 1 << cost;
+    }
+
+    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations) {
+        KeySpec spec = new PBEKeySpec(password, salt, iterations, SIZE);
+        try {
+            SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
+            return f.generateSecret(spec).getEncoded();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("Missing algorithm: " + ALGORITHM, ex);
+        } catch (InvalidKeySpecException ex) {
+            throw new IllegalStateException("Invalid SecretKeyFactory", ex);
+        }
     }
 
     /**
@@ -66,8 +75,7 @@ public final class Crypto {
      *
      * @return a secure authentication token to be stored for later authentication
      */
-    public String hash(char[] password)
-    {
+    public String hash(char[] password) {
         byte[] salt = new byte[SIZE / 8];
         random.nextBytes(salt);
         byte[] dk = pbkdf2(password, salt, 1 << cost);
@@ -83,8 +91,7 @@ public final class Crypto {
      *
      * @return true if the password and token match
      */
-    public boolean authenticate(char[] password, String token)
-    {
+    public boolean authenticate(char[] password, String token) {
         Matcher m = layout.matcher(token);
         if (!m.matches())
             throw new IllegalArgumentException("Invalid token format");
@@ -98,21 +105,6 @@ public final class Crypto {
         return zero == 0;
     }
 
-    private static byte[] pbkdf2(char[] password, byte[] salt, int iterations)
-    {
-        KeySpec spec = new PBEKeySpec(password, salt, iterations, SIZE);
-        try {
-            SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
-            return f.generateSecret(spec).getEncoded();
-        }
-        catch (NoSuchAlgorithmException ex) {
-            throw new IllegalStateException("Missing algorithm: " + ALGORITHM, ex);
-        }
-        catch (InvalidKeySpecException ex) {
-            throw new IllegalStateException("Invalid SecretKeyFactory", ex);
-        }
-    }
-
     /**
      * Hash a password in an immutable {@code String}.
      *
@@ -122,8 +114,7 @@ public final class Crypto {
      * @deprecated Use {@link #hash(char[])} instead
      */
     @Deprecated
-    public String hash(String password)
-    {
+    public String hash(String password) {
         return hash(password.toCharArray());
     }
 
@@ -131,12 +122,11 @@ public final class Crypto {
      * Authenticate with a password in an immutable {@code String} and a stored
      * password token.
      *
-     * @deprecated Use {@link #authenticate(char[],String)} instead.
      * @see #hash(String)
+     * @deprecated Use {@link #authenticate(char[], String)} instead.
      */
     @Deprecated
-    public boolean authenticate(String password, String token)
-    {
+    public boolean authenticate(String password, String token) {
         return authenticate(password.toCharArray(), token);
     }
 }

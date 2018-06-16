@@ -22,7 +22,8 @@ public class EncapsulatedMessageGenerator implements IEncapsulatedMessageGenerat
         String messageForServerJson = gson.toJson(content);
         return new EncapsulatedMessage(type, messageForServerJson);
     }
-    public String generateEncapsulatedMessageString(Object content){
+
+    public String generateEncapsulatedMessageString(Object content) {
         EncapsulatedMessage message = generateEncapsulatedMessage(content);
         return gson.toJson(message);
     }

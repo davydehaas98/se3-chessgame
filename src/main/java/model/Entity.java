@@ -2,7 +2,8 @@ package model;
 
 public class Entity {
     private long entityId;
-    public long getEntityId(){
+
+    public long getEntityId() {
         return entityId;
     }
 

@@ -6,7 +6,7 @@ import chessgameshared.interfaces.IMessageHandler;
 import chessgameshared.interfaces.IMessageHandlerFactory;
 
 public class ServerMessageProcessor extends MessageProcessorBase implements IServerMessageProcessor {
-    public ServerMessageProcessor(IMessageHandlerFactory messageHandlerFactory){
+    public ServerMessageProcessor(IMessageHandlerFactory messageHandlerFactory) {
         super(messageHandlerFactory);
     }
 

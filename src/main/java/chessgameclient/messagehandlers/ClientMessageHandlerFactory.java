@@ -9,9 +9,9 @@ public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
     //This Class handles the message send from the Server to the Client
     //For every type of message this class will return the corresponding handler
     //In every handler the handleMessageInternal Method is different
-    public IMessageHandler getHandler(String type, Object gc){
+    public IMessageHandler getHandler(String type, Object gc) {
         IGameClient gameClient = (IGameClient) gc;
-        switch (MessageType.valueOf(type)){
+        switch (MessageType.valueOf(type)) {
             case RegisterPlayerResultMessage:
                 return new RegistrationResultMessageHandler(gameClient);
             case RequestPasswordResultMessage:

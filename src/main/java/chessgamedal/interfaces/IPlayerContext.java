@@ -2,7 +2,7 @@ package chessgamedal.interfaces;
 
 import model.Player;
 
-public interface IPlayerContext extends IDataContext<Player> {
+public interface IPlayerContext extends IContext<Player> {
     Player getPlayerByName(String name);
 
     Player loginPlayer(String name, String password);

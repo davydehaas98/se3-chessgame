@@ -35,12 +35,12 @@ public abstract class Piece {
         return currentPosition;
     }
 
-    public String getImage() {
-        return image;
-    }
-
     public void setCurrentPosition(Point currentPosition) {
         this.currentPosition = currentPosition;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     void setImage(String image) {

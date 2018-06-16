@@ -94,8 +94,8 @@ public class Game implements IGame {
     }
 
     private boolean checkIfAlreadyLoggedIn(Player newPlayer) {
-        for(Player player : players.values()){
-            if(player.getEntityId() == newPlayer.getEntityId()){
+        for (Player player : players.values()) {
+            if (player.getEntityId() == newPlayer.getEntityId()) {
                 return true;
             }
         }
@@ -183,7 +183,7 @@ public class Game implements IGame {
         return false;
     }
 
-    private void sendCurrentTurn(){
+    private void sendCurrentTurn() {
         if (turn % 2 == 0) {
             messageGenerator.notifyNextTurn(turn, TeamColor.BLACK);
         } else {

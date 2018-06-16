@@ -16,7 +16,7 @@ public abstract class BaseController {
     }
 
     public void showAlert(String header, String content) {
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(header);
             alert.setContentText(content);

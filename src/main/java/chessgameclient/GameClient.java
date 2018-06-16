@@ -51,12 +51,14 @@ public class GameClient implements IGameClient {
             if (!password.isEmpty() && !password.contains(" ") && password.length() < 65) {
                 //Request the Password from the Player
                 messageGenerator.requestPassword(name);
+            } else {
+
             }
         }
     }
 
     public void loginPlayer(String name, String password, String passwordToken) {
-        if(new Crypto().authenticate(password.toCharArray(), passwordToken)){
+        if (new Crypto().authenticate(password.toCharArray(), passwordToken)) {
             //Log the player in on the Game
             messageGenerator.loginPlayer(name, passwordToken);
         }

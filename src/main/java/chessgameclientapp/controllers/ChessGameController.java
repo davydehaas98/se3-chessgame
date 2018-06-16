@@ -3,7 +3,6 @@ package chessgameclientapp.controllers;
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

@@ -16,12 +16,4 @@ public class RegisterRequestDTO extends BaseRequestDTO {
     public String getName() {
         return name;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

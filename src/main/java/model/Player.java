@@ -9,6 +9,7 @@ public class Player extends Entity {
     private int losses;
     private int draws;
     private int ranking;
+
     public Player(long entityId, String name, int wins, int losses, int draws, int ranking) {
         super.setEntityId(entityId);
         this.name = name;
@@ -26,6 +27,10 @@ public class Player extends Entity {
         return teamColor;
     }
 
+    public void setTeamColor(TeamColor teamColor) {
+        this.teamColor = teamColor;
+    }
+
     public int getWins() {
         return wins;
     }
@@ -40,9 +45,5 @@ public class Player extends Entity {
 
     public int getRanking() {
         return ranking;
-    }
-
-    public void setTeamColor(TeamColor teamColor) {
-        this.teamColor = teamColor;
     }
 }

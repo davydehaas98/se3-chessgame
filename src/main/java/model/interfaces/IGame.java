@@ -1,7 +1,6 @@
 package model.interfaces;
 
 import model.Tile;
-import model.pieces.Piece;
 
 public interface IGame {
     void registerPlayer(String name, String password, String sessionId);

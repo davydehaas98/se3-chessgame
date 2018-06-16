@@ -2,7 +2,7 @@ package chessgameapi.dto;
 
 import model.Player;
 
-public class LoginResultDTO extends BaseResultDTO{
+public class LoginResultDTO extends BaseResultDTO {
     private Player player;
 
     public Player getPlayer() {

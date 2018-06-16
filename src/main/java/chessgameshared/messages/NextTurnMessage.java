@@ -5,6 +5,7 @@ import model.enums.TeamColor;
 public class NextTurnMessage {
     private int turn;
     private TeamColor turnTeamColor;
+
     public NextTurnMessage(int turn, TeamColor turnTeamColor) {
         this.turn = turn;
         this.turnTeamColor = turnTeamColor;

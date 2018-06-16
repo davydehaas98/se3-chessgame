@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @Singleton
-@ServerEndpoint(value="/chessgame/")
+@ServerEndpoint(value = "/chessgame/")
 public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     private static ArrayList<Session> sessions = new ArrayList<>();
 

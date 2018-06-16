@@ -5,7 +5,7 @@ import chessgameshared.MessageHandler;
 import chessgameshared.messages.RequestPasswordResultMessage;
 
 public class RequestPasswordResultMessageHandler extends MessageHandler<RequestPasswordResultMessage> {
-    public RequestPasswordResultMessageHandler(IGameClient gameClient){
+    public RequestPasswordResultMessageHandler(IGameClient gameClient) {
         super(gameClient);
     }
 

@@ -15,9 +15,9 @@ import java.net.URI;
 @ClientEndpoint
 public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     private static final String SERVERURI = "ws://localhost:8008/chessgame/";
+    private static ClientWebSocket instance = null;
     private Session session;
     private IClientMessageProcessor handler;
-    private static ClientWebSocket instance = null;
 
     public static ClientWebSocket getInstance() {
         if (instance == null) {

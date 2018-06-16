@@ -1,16 +1,17 @@
 package chessgameapi;
 
-import chessgameapi.dto.BaseResultDTO;
 import chessgameapi.dto.LoginRequestDTO;
 import chessgameapi.dto.RegisterRequestDTO;
 import chessgameapi.dto.RequestPasswordRequestDTO;
-import chessgamedal.MySQLContext.MySQLPlayerContext;
 import chessgamerepository.PlayerRepository;
 import chessgamerepository.interfaces.IPlayerRepository;
 import com.google.gson.Gson;
 import model.Player;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 @Path("/chessgame")
@@ -19,7 +20,7 @@ public class RESTService {
     private Gson gson;
 
     public RESTService() {
-        playerRepository = new PlayerRepository(new MySQLPlayerContext());
+        playerRepository = new PlayerRepository();
         gson = new Gson();
     }
 
@@ -36,6 +37,7 @@ public class RESTService {
         }
         return Response.status(400).entity(ResponseHelper.getErrorResponse()).build();
     }
+
     @POST
     @Path("/player/requestpassword")
     @Consumes("application/json")
@@ -56,10 +58,10 @@ public class RESTService {
     @Produces("application/json")
     public Response loginPlayer(String input) {
         System.out.println("[REST] LoginPlayer");
-        if(input != null){
-            LoginRequestDTO loginRequestDTO = gson.fromJson(input,LoginRequestDTO.class);
+        if (input != null) {
+            LoginRequestDTO loginRequestDTO = gson.fromJson(input, LoginRequestDTO.class);
             Player result = playerRepository.loginPlayer(loginRequestDTO.getName(), loginRequestDTO.getPassword());
-            return  Response.status(200).entity(ResponseHelper.getLoginResultDTOResponse(result)).build();
+            return Response.status(200).entity(ResponseHelper.getLoginResultDTOResponse(result)).build();
         }
         return Response.status(400).entity(ResponseHelper.getErrorResponse()).build();
     }

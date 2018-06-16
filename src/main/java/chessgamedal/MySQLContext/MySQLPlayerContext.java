@@ -21,7 +21,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
             statement.setInt(1, id);
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
-                    player = new Player(result.getInt("id"),result.getString("name"), result.getInt("ranking"), result.getInt("wins"), result.getInt("losses"), result.getInt("draws"));
+                    player = new Player(result.getInt("id"), result.getString("name"), result.getInt("ranking"), result.getInt("wins"), result.getInt("losses"), result.getInt("draws"));
                 }
             }
         } catch (Exception exc) {
@@ -37,7 +37,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
              CallableStatement statement = connection.prepareCall(query)) {
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
-                    players.add(new Player(result.getInt("id"),result.getString("name"), result.getInt("ranking"), result.getInt("wins"), result.getInt("losses"), result.getInt("draws")));
+                    players.add(new Player(result.getInt("id"), result.getString("name"), result.getInt("ranking"), result.getInt("wins"), result.getInt("losses"), result.getInt("draws")));
                 }
             }
         } catch (Exception exc) {
@@ -106,7 +106,7 @@ public final class MySQLPlayerContext implements IPlayerContext {
 
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
-                    player = new Player(result.getInt("id"),result.getString("name"), result.getInt("ranking"), result.getInt("wins"), result.getInt("losses"), result.getInt("draws"));
+                    player = new Player(result.getInt("id"), result.getString("name"), result.getInt("ranking"), result.getInt("wins"), result.getInt("losses"), result.getInt("draws"));
                 }
             }
         } catch (Exception exc) {

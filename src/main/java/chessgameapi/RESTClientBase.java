@@ -11,6 +11,7 @@ import org.apache.http.util.EntityUtils;
 
 abstract class RESTClientBase {
     private final Gson gson = new Gson();
+
     abstract String getBaseURL();
 
     private <T> T executeRequest(HttpUriRequest request, Class<T> clazz) {

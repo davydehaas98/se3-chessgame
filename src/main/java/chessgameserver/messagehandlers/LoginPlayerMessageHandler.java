@@ -5,7 +5,7 @@ import chessgameshared.messages.LoginPlayerMessage;
 import model.interfaces.IGame;
 
 public class LoginPlayerMessageHandler extends MessageHandler<LoginPlayerMessage> {
-    LoginPlayerMessageHandler(IGame game){
+    LoginPlayerMessageHandler(IGame game) {
         super(game);
     }
 

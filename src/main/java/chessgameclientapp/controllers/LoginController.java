@@ -47,12 +47,12 @@ public class LoginController extends BaseController implements ILoginController 
     }
 
     public void processLoginPlayerResult(Player player) {
-        if(player != null){
-            Platform.runLater(()->{
+        if (player != null) {
+            Platform.runLater(() -> {
                 Main.getMainStage().show();
                 Main.getLoginStage().hide();
             });
-        }else{
+        } else {
             Platform.runLater(() -> showAlert("Login", "Login failed"));
         }
     }

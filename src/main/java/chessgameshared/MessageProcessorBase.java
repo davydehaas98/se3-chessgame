@@ -12,7 +12,7 @@ public abstract class MessageProcessorBase implements IMessageProcessor {
     private IMessageHandlerFactory messageHandlerFactory;
     private Gson gson;
 
-    public MessageProcessorBase(IMessageHandlerFactory messageHandlerFactory){
+    public MessageProcessorBase(IMessageHandlerFactory messageHandlerFactory) {
         this.messageHandlerFactory = messageHandlerFactory;
         RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
                 .registerSubtype(Pawn.class, "Pawn")
@@ -35,9 +35,12 @@ public abstract class MessageProcessorBase implements IMessageProcessor {
     public Gson getGson() {
         return gson;
     }
-    public void registerGame(IGame game){
+
+    public void registerGame(IGame game) {
         this.game = game;
     }
+
     public abstract void processMessage(String sessionId, String type, String data);
+
     public abstract void handleDisconnect(String sessionId);
 }

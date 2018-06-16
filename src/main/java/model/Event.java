@@ -2,7 +2,7 @@ package model;
 
 import java.util.Date;
 
-public class Event  extends Entity {
+public class Event extends Entity {
     private Player player;
     private Tile from;
     private Tile to;
