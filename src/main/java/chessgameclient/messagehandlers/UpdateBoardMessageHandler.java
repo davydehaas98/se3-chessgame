@@ -5,7 +5,7 @@ import chessgameshared.MessageHandler;
 import chessgameshared.messages.UpdateBoardMessage;
 
 public class UpdateBoardMessageHandler extends MessageHandler<UpdateBoardMessage> {
-    public UpdateBoardMessageHandler(IGameClient gameClient) {
+    UpdateBoardMessageHandler(IGameClient gameClient) {
         super(gameClient);
     }
 

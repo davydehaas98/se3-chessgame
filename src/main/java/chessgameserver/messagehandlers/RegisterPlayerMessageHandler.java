@@ -9,6 +9,7 @@ public class RegisterPlayerMessageHandler extends MessageHandler<RegisterPlayerM
         super(game);
     }
 
+    @Override
     public void handleMessageInternal(RegisterPlayerMessage message, String sessionId) {
         getGame().registerPlayer(message.getName(), message.getPassword(), sessionId);
     }

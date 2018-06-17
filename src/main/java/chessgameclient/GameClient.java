@@ -50,12 +50,11 @@ public class GameClient implements IGameClient {
         if (!name.isEmpty() && !name.contains(" ") && name.length() < 65) {
             if (!password.isEmpty() && !password.contains(" ") && password.length() < 65) {
                 //Request the Password from the Player
-               messageGenerator.requestPassword(name);
+                messageGenerator.requestPassword(name);
             } else {
                 loginController.showAlert("Password", "Password is invalid");
             }
-        }
-        else {
+        } else {
             loginController.showAlert("Name", "Name is invalid");
         }
     }
@@ -64,10 +63,13 @@ public class GameClient implements IGameClient {
         if (new Crypto().authenticate(password.toCharArray(), passwordToken)) {
             //Log the player in on the Game
             messageGenerator.loginPlayer(name, passwordToken);
+        } else {
+            loginController.showAlert("Password", "Password was not correct");
         }
-        else{
-            loginController.showAlert("Password","Password was not correct");
-        }
+    }
+
+    public void logoutPlayer(){
+        messageGenerator.logoutPlayer();
     }
 
     public void makeMove(String from, String to) {

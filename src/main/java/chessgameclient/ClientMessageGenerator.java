@@ -27,7 +27,7 @@ public class ClientMessageGenerator implements IClientMessageGenerator {
         clientWebSocket.onMessageSend(new MakeMoveMessage(from, to));
     }
 
-    public void playerDisconnect() {
-        clientWebSocket.onMessageSend(new PlayerDisconnectMessage());
+    public void logoutPlayer() {
+        clientWebSocket.onMessageSend(new LogoutPlayerMessage());
     }
 }

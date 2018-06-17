@@ -28,7 +28,7 @@ public abstract class MessageProcessorBase implements IMessageProcessor {
         return game;
     }
 
-    public IMessageHandlerFactory getMessageHandlerFactory() {
+    protected IMessageHandlerFactory getMessageHandlerFactory() {
         return messageHandlerFactory;
     }
 

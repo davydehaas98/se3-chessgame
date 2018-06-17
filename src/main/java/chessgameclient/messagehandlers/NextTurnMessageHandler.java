@@ -5,7 +5,7 @@ import chessgameshared.MessageHandler;
 import chessgameshared.messages.NextTurnMessage;
 
 public class NextTurnMessageHandler extends MessageHandler<NextTurnMessage> {
-    public NextTurnMessageHandler(IGameClient igameClient) {
+    NextTurnMessageHandler(IGameClient igameClient) {
         super(igameClient);
     }
 

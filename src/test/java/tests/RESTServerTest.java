@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class RESTServerTest {
     @Test
-    public void serverTest(){
+    public void serverTest() {
 
     }
 }

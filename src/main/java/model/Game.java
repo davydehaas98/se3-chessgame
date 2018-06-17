@@ -120,7 +120,6 @@ public class Game implements IGame {
                 });
             }
             players.put(sessionId, newPlayer);
-            System.out.println("[Players in game]: " + players.size());
             messageGenerator.notifyLoginPlayerResult(newPlayer, sessionId);
             if (gameState.equals(GameState.WAITINGFORPLAYERS)) {
                 checkStartingCondition();
@@ -132,15 +131,17 @@ public class Game implements IGame {
         } else {
             messageGenerator.notifyLoginPlayerResult(null, sessionId);
         }
+        System.out.println("[Players in game]: " + players.size());
     }
 
-    public void processPlayerDisconnect(String sessionId) {
+    public void logoutPlayer(String sessionId) {
         for (String key : players.keySet()) {
             if (key.equals(sessionId)) {
                 players.remove(sessionId);
+                System.out.println("[Players in game]: " + players.size());
+                return;
             }
         }
-        System.out.println("[Players in game]: " + players.size());
     }
 
     private void checkStartingCondition() {

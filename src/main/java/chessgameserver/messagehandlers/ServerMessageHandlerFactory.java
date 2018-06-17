@@ -15,10 +15,10 @@ public class ServerMessageHandlerFactory implements IMessageHandlerFactory {
                 return new RequestPasswordMessageHandler(igame);
             case LoginPlayerMessage:
                 return new LoginPlayerMessageHandler(igame);
+            case LogoutPlayerMessage:
+                return new LogoutPlayerMessageHandler(igame);
             case MakeMoveMessage:
                 return new MakeMoveMessageHandler(igame);
-            case PlayerDisconnectMessage:
-                return new PlayerDisconnectMessageHandler(igame);
             default:
                 return null;
         }

@@ -25,15 +25,15 @@ public abstract class WebSocketBase implements IWebSocket {
         gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
     }
 
-    public IEncapsulatedMessageGenerator getEncapsulatedMessageGenerator() {
+    protected IEncapsulatedMessageGenerator getEncapsulatedMessageGenerator() {
         return encapsulatedMessageGenerator;
     }
 
-    public Gson getGson() {
+    protected Gson getGson() {
         return gson;
     }
 
-    public IMessageProcessor getHandler() {
+    protected IMessageProcessor getHandler() {
         return handler;
     }
 

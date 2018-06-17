@@ -61,14 +61,6 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
         }
     }
 
-    public Session getSessionFromId(String sessionId) {
-        for (Session s : sessions) {
-            if (s.getId().equals(sessionId))
-                return s;
-        }
-        return null;
-    }
-
     public void broadcast(Object object) {
         for (Session session : sessions) {
             sendTo(session.getId(), object);
@@ -81,5 +73,13 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
                 sendTo(session.getId(), object);
             }
         }
+    }
+
+    private Session getSessionFromId(String sessionId) {
+        for (Session s : sessions) {
+            if (s.getId().equals(sessionId))
+                return s;
+        }
+        return null;
     }
 }

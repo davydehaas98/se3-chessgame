@@ -40,20 +40,23 @@ public class ChessGameServer {
         wsServer.setHandler(wsContextHandler);
 
         try {
-            //Initialize javax.websocket layer
-            ServerContainer wsContainer = WebSocketServerContainerInitializer.configureContext(wsContextHandler);
-            //Add websocket endpoint to javax.websocket layer
-            ServerEndpointConfig config = ServerEndpointConfig.Builder.create(serverWebSocket.getClass(), serverWebSocket.getClass().getAnnotation(ServerEndpoint.class).value()).configurator(new ServerEndpointConfig.Configurator() {
+            ServerEndpointConfig.Configurator configurator = new ServerEndpointConfig.Configurator() {
                 @Override
                 public <T> T getEndpointInstance(Class<T> endpointClass) {
                     return (T) serverWebSocket;
                 }
-            }).build();
+            };
+            //Initialize JavaX Websocket layer
+            ServerContainer wsContainer = WebSocketServerContainerInitializer.configureContext(wsContextHandler);
+            //Add Webosocket endpoint to JavaX Websocket layer
+            ServerEndpointConfig config = ServerEndpointConfig.Builder.create(serverWebSocket.getClass(), serverWebSocket.getClass().getAnnotation(ServerEndpoint.class).value()).configurator(configurator).build();
             wsContainer.addEndpoint(config);
             wsServer.start();
             wsServer.join();
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
+        } finally {
+            wsServer.destroy();
         }
     }
 }

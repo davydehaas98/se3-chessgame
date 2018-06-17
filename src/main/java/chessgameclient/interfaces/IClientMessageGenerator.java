@@ -9,5 +9,5 @@ public interface IClientMessageGenerator {
 
     void makeMove(String from, String to);
 
-    void playerDisconnect();
+    void logoutPlayer();
 }

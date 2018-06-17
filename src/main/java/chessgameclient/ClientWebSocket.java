@@ -5,17 +5,16 @@ import chessgameclient.interfaces.IClientWebSocket;
 import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
+import chessgameshared.messages.LogoutPlayerMessage;
 import chessgameshared.messages.EncapsulatedMessage;
-import chessgameshared.messages.PlayerDisconnectMessage;
 
 import javax.websocket.*;
-import java.io.IOException;
 import java.net.URI;
 
 @ClientEndpoint
 public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     private static final String SERVERURI = "ws://localhost:8008/chessgame/";
-    private static ClientWebSocket instance = null;
+    private static ClientWebSocket instance;
     private Session session;
     private IClientMessageProcessor handler;
 
@@ -44,7 +43,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     public void stop() {
         try {
             if (session != null) {
-                sendMessageToServer(getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(new PlayerDisconnectMessage()));
+                sendMessageToServer(getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(new LogoutPlayerMessage()));
                 System.out.println(session.getId() + " has been disconnected");
                 session.close();
             }
@@ -71,7 +70,7 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     }
 
     @OnError
-    public void onError(Session session, Throwable cause) {
+    public void onError(Throwable cause) {
         Logger.getInstance().log(cause.getMessage(), LogLevel.ERROR);
     }
 
@@ -88,8 +87,8 @@ public class ClientWebSocket extends WebSocketBase implements IClientWebSocket {
     private void sendMessageToServer(String message) {
         try {
             session.getBasicRemote().sendText(message);
-        } catch (IOException ex) {
-            Logger.getInstance().log(ex);
+        } catch (Exception exc) {
+            Logger.getInstance().log(exc);
         }
     }
 }

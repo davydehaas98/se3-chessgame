@@ -19,6 +19,6 @@ public class ServerMessageProcessor extends MessageProcessorBase implements ISer
 
     @Override
     public void handleDisconnect(String sessionId) {
-        getGame().processPlayerDisconnect(sessionId);
+        getGame().logoutPlayer(sessionId);
     }
 }

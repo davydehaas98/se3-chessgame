@@ -13,7 +13,7 @@ public interface IGame {
 
     void startGame();
 
-    void processPlayerDisconnect(String sessionId);
+    void logoutPlayer(String sessionId);
 
     Tile[][] getBoard();
 

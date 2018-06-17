@@ -5,7 +5,7 @@ import chessgameshared.MessageHandler;
 import chessgameshared.messages.EndGameMessage;
 
 public class EndGameMessageHandler extends MessageHandler<EndGameMessage> {
-    public EndGameMessageHandler(IGameClient igameClient) {
+    EndGameMessageHandler(IGameClient igameClient) {
         super(igameClient);
     }
 

@@ -2,7 +2,8 @@ package tests;
 
 import model.Game;
 import model.interfaces.IGame;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import stubs.ServerMessageGeneratorStub;
 
 import static org.junit.Assert.*;
@@ -32,9 +33,10 @@ public class GameTest {
     }
 
     @Test
-    public void CurrentTurnTest(){
+    public void CurrentTurnTest() {
         game.startGame();
     }
+
     @Test
     public void validMoveTest() {
         assertTrue(game.makeMove("a2", "a4", null));

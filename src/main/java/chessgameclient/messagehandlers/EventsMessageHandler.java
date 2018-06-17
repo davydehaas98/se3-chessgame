@@ -5,10 +5,11 @@ import chessgameshared.MessageHandler;
 import chessgameshared.messages.EventsMessage;
 
 public class EventsMessageHandler extends MessageHandler<EventsMessage> {
-    public EventsMessageHandler(IGameClient iGameClient) {
+    EventsMessageHandler(IGameClient iGameClient) {
         super(iGameClient);
     }
 
+    @Override
     public void handleMessageInternal(EventsMessage message, String sessionId) {
         getGameClient().handleNewEvent(message.getEvents());
     }

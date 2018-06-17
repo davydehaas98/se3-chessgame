@@ -9,6 +9,7 @@ public class LoginPlayerMessageHandler extends MessageHandler<LoginPlayerMessage
         super(game);
     }
 
+    @Override
     public void handleMessageInternal(LoginPlayerMessage message, String sessionId) {
         getGame().loginPlayer(message.getName(), message.getPassword(), sessionId);
     }
