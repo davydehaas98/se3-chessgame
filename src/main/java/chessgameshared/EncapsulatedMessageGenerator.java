@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.pieces.*;
 
-public class EncapsulatedMessageGenerator implements IEncapsulatedMessageGenerator {
-    RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
+public final class EncapsulatedMessageGenerator implements IEncapsulatedMessageGenerator {
+    private RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
             .registerSubtype(Pawn.class, "Pawn")
             .registerSubtype(Rook.class, "Rook")
             .registerSubtype(Knight.class, "Knight")

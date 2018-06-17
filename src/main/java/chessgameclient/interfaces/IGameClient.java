@@ -10,9 +10,9 @@ import model.enums.TeamColor;
 import java.util.List;
 
 public interface IGameClient {
-    void registerChessgameController(IChessGameController chessGameController);
+    void setChessGameController(IChessGameController chessGameController);
 
-    void registerLoginController(ILoginController loginController);
+    void setLoginController(ILoginController loginController);
 
     void registerPlayer(String name, String password, String confirmPassword);
 
@@ -24,7 +24,7 @@ public interface IGameClient {
 
     void handleRequestPasswordResult(String password);
 
-    void handleRegistrationResult(boolean result);
+    void handleRegisterPlayerResult(boolean result);
 
     void handleLoginPlayerResult(Player player);
 

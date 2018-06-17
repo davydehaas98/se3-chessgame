@@ -21,11 +21,11 @@ public class GameClient implements IGameClient {
         this.messageGenerator = messageGenerator;
     }
 
-    public void registerChessgameController(IChessGameController chessGameController) {
+    public void setChessGameController(IChessGameController chessGameController) {
         this.chessGameController = chessGameController;
     }
 
-    public void registerLoginController(ILoginController loginController) {
+    public void setLoginController(ILoginController loginController) {
         this.loginController = loginController;
     }
 
@@ -50,10 +50,13 @@ public class GameClient implements IGameClient {
         if (!name.isEmpty() && !name.contains(" ") && name.length() < 65) {
             if (!password.isEmpty() && !password.contains(" ") && password.length() < 65) {
                 //Request the Password from the Player
-                messageGenerator.requestPassword(name);
+               messageGenerator.requestPassword(name);
             } else {
-
+                loginController.showAlert("Password", "Password is invalid");
             }
+        }
+        else {
+            loginController.showAlert("Name", "Name is invalid");
         }
     }
 
@@ -62,14 +65,21 @@ public class GameClient implements IGameClient {
             //Log the player in on the Game
             messageGenerator.loginPlayer(name, passwordToken);
         }
+        else{
+            loginController.showAlert("Password","Password was not correct");
+        }
+    }
+
+    public void makeMove(String from, String to) {
+        messageGenerator.makeMove(from, to);
     }
 
     public void handleRequestPasswordResult(String password) {
         loginController.processRequestPasswordResult(password);
     }
 
-    public void handleRegistrationResult(boolean result) {
-        loginController.processRegistrationResult(result);
+    public void handleRegisterPlayerResult(boolean result) {
+        loginController.processRegisterPlayerResult(result);
     }
 
     public void handleLoginPlayerResult(Player player) {
@@ -87,10 +97,6 @@ public class GameClient implements IGameClient {
 
     public void handleUpdateBoard(Tile[][] board) {
         chessGameController.processUpdateBoard(board);
-    }
-
-    public void makeMove(String from, String to) {
-        messageGenerator.makeMove(from, to);
     }
 
     public void handleNextTurn(int turn, TeamColor turnTeamColor) {

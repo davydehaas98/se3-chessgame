@@ -23,7 +23,7 @@ public class LoginController extends BaseController implements ILoginController 
 
     public LoginController(IGameClient gameClient) {
         super(gameClient);
-        getGameClient().registerLoginController(this);
+        getGameClient().setLoginController(this);
     }
 
     public void login() {
@@ -34,7 +34,7 @@ public class LoginController extends BaseController implements ILoginController 
         getGameClient().registerPlayer(tbRegisterName.getText(), tbRegisterPassword.getText(), tbRegisterPasswordConfirm.getText());
     }
 
-    public void processRegistrationResult(boolean result) {
+    public void processRegisterPlayerResult(boolean result) {
         if (result) {
             showAlert("Registration", "Registration successful");
         } else {

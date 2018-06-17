@@ -35,7 +35,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
 
     public ChessGameController(IGameClient gameClient) {
         super(gameClient);
-        getGameClient().registerChessgameController(this);
+        getGameClient().setChessGameController(this);
         Platform.runLater(this::loadTiles);
     }
 

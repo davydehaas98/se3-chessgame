@@ -5,7 +5,7 @@ import model.Player;
 public interface ILoginController extends IController {
     void processRequestPasswordResult(String password);
 
-    void processRegistrationResult(boolean result);
+    void processRegisterPlayerResult(boolean result);
 
     void processLoginPlayerResult(Player player);
 }

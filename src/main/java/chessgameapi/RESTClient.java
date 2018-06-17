@@ -11,8 +11,7 @@ public class RESTClient extends RESTClientBase implements IRESTClient {
     }
 
     public boolean registerPlayer(String name, String password) {
-        RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO(name, password);
-        return executeQueryPost(registerRequestDTO, "/player/register", RegisterResultDTO.class).isSuccess();
+        return executeQueryPost(new RegisterRequestDTO(name, password), "/player/register", RegisterResultDTO.class).isSuccess();
     }
 
     public String requestPassword(String name) {

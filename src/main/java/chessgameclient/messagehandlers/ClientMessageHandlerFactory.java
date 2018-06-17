@@ -13,7 +13,7 @@ public class ClientMessageHandlerFactory implements IMessageHandlerFactory {
         IGameClient gameClient = (IGameClient) gc;
         switch (MessageType.valueOf(type)) {
             case RegisterPlayerResultMessage:
-                return new RegistrationResultMessageHandler(gameClient);
+                return new RegisterPlayerResultMessageHandler(gameClient);
             case RequestPasswordResultMessage:
                 return new RequestPasswordResultMessageHandler(gameClient);
             case LoginPlayerResultMessage:
