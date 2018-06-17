@@ -1,5 +1,5 @@
 package chessgameapi.dto;
 
-public class BaseRequestDTO {
+public abstract class BaseRequestDTO {
 
 }

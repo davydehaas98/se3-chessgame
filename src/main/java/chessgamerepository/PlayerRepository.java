@@ -1,6 +1,6 @@
 package chessgamerepository;
 
-import chessgamedal.MySQLContext.MySQLPlayerContext;
+import chessgamedal.mysqlcontext.MySQLPlayerContext;
 import chessgamedal.interfaces.IPlayerContext;
 import chessgamerepository.interfaces.IPlayerRepository;
 import model.Player;

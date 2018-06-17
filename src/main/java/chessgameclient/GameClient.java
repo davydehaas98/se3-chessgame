@@ -36,10 +36,10 @@ public class GameClient implements IGameClient {
                     //Register a Player on the database
                     messageGenerator.registerPlayer(name, new Crypto().hash(password.toCharArray()));
                 } else {
-                    loginController.showAlert("Password", "Passwords do not match");
+                    loginController.showAlert("", "Passwords do not match");
                 }
             } else {
-                loginController.showAlert("Password", "Password is invalid");
+                loginController.showAlert("", "Password is invalid");
             }
         } else {
             loginController.showAlert("Name", "Name is invalid");
@@ -52,7 +52,7 @@ public class GameClient implements IGameClient {
                 //Request the Password from the Player
                 messageGenerator.requestPassword(name);
             } else {
-                loginController.showAlert("Password", "Password is invalid");
+                loginController.showAlert("", "Password is invalid");
             }
         } else {
             loginController.showAlert("Name", "Name is invalid");
@@ -64,7 +64,7 @@ public class GameClient implements IGameClient {
             //Log the player in on the Game
             messageGenerator.loginPlayer(name, passwordToken);
         } else {
-            loginController.showAlert("Password", "Password was not correct");
+            loginController.showAlert("", "Password was not correct");
         }
     }
 

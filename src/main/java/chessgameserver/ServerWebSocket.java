@@ -11,6 +11,7 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Singleton
 @ServerEndpoint(value = "/chessgame/")
@@ -55,7 +56,7 @@ public class ServerWebSocket extends WebSocketBase implements IServerWebSocket {
     public void sendTo(String sessionId, Object object) {
         String EncapMessage = getEncapsulatedMessageGenerator().generateEncapsulatedMessageString(object);
         try {
-            getSessionFromId(sessionId).getBasicRemote().sendText(EncapMessage);
+            Objects.requireNonNull(getSessionFromId(sessionId)).getBasicRemote().sendText(EncapMessage);
         } catch (IOException exc) {
             Logger.getInstance().log(exc);
         }

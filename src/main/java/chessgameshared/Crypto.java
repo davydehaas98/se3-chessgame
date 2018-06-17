@@ -11,21 +11,10 @@ import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Hash passwords for storage, and test passwords against password tokens.
- * <p>
- * Instances of this class can be used concurrently by multiple threads.
- *
- * @author erickson
- * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
- */
 public final class Crypto {
-    public static final String ID = "$31$";
+    private static final String ID = "$31$";
 
-    /**
-     * The minimum recommended cost, used by default
-     */
-    public static final int DEFAULT_COST = 16;
+    private static final int DEFAULT_COST = 16;
 
     private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 
@@ -103,30 +92,5 @@ public final class Crypto {
         for (int idx = 0; idx < check.length; ++idx)
             zero |= hash[salt.length + idx] ^ check[idx];
         return zero == 0;
-    }
-
-    /**
-     * Hash a password in an immutable {@code String}.
-     *
-     * <p>Passwords should be stored in a {@code char[]} so that it can be filled
-     * with zeros after use instead of lingering on the heap and elsewhere.
-     *
-     * @deprecated Use {@link #hash(char[])} instead
-     */
-    @Deprecated
-    public String hash(String password) {
-        return hash(password.toCharArray());
-    }
-
-    /**
-     * Authenticate with a password in an immutable {@code String} and a stored
-     * password token.
-     *
-     * @see #hash(String)
-     * @deprecated Use {@link #authenticate(char[], String)} instead.
-     */
-    @Deprecated
-    public boolean authenticate(String password, String token) {
-        return authenticate(password.toCharArray(), token);
     }
 }

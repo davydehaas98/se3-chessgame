@@ -1,11 +1,12 @@
 package chessgameshared.logging;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Logger implements ILogger {
 
     private static ILogger instance = null;
-    private ArrayList<LogMessage> messages = new ArrayList<>();
+    private List<LogMessage> messages = new ArrayList<>();
 
     public static ILogger getInstance() {
         if (instance == null) {
@@ -29,7 +30,7 @@ public class Logger implements ILogger {
             return new LogMessage("", LogLevel.DEBUG);
     }
 
-    public ArrayList<LogMessage> getMessages() {
+    public List<LogMessage> getMessages() {
         return messages;
     }
 }

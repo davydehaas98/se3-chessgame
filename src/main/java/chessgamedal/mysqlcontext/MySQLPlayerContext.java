@@ -1,4 +1,4 @@
-package chessgamedal.MySQLContext;
+package chessgamedal.mysqlcontext;
 
 import chessgamedal.DatabaseConnection;
 import chessgamedal.interfaces.IPlayerContext;

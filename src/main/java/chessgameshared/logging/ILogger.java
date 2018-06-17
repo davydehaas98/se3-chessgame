@@ -1,6 +1,6 @@
 package chessgameshared.logging;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ILogger {
 
@@ -10,6 +10,6 @@ public interface ILogger {
 
     LogMessage getLastLog();
 
-    ArrayList<LogMessage> getMessages();
+    List<LogMessage> getMessages();
 
 }

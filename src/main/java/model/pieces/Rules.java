@@ -185,40 +185,35 @@ final class Rules {
         //Check if the move checks the King
         legalMovesToCheck.forEach(checkingMove -> {
             //Pawn legal moves aren't generated when the tile is empty so we have to know if a Pawn can move there on the next turn
-            int xcheck = checkingMove.x;
-            int ycheck = checkingMove.y;
-            switch (piece.getTeamColor()) {
+            int checkX = checkingMove.x;
+            int checkY = checkingMove.y;
+            if (piece.getTeamColor().equals(TeamColor.BLACK)) {
                 //Remove the currently checked move from the legal moves list if a Pawn can attack the tile the next turn
-                case BLACK:
-                    if (xcheck > 0 && board[xcheck - 1][ycheck + 1].getPiece() != null && board[xcheck - 1][ycheck + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                        legalMoves.remove(checkingMove);
-                    } else if (xcheck < 7 && board[xcheck + 1][ycheck + 1].getPiece() != null && board[xcheck + 1][ycheck + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                        legalMoves.remove(checkingMove);
-                    }
-                    break;
-                case WHITE:
-                    if (xcheck > 0 && board[xcheck - 1][ycheck - 1].getPiece() != null && board[xcheck - 1][ycheck - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                        legalMoves.remove(checkingMove);
-                    } else if (xcheck < 7 && board[xcheck + 1][ycheck - 1].getPiece() != null && board[xcheck + 1][ycheck - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                        legalMoves.remove(checkingMove);
-                    }
-                    break;
+                if (checkX > 0 && board[checkX - 1][checkY + 1].getPiece() != null && board[checkX - 1][checkY + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
+                    legalMoves.remove(checkingMove);
+                } else if (checkX < 7 && board[checkX + 1][checkY + 1].getPiece() != null && board[checkX + 1][checkY + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
+                    legalMoves.remove(checkingMove);
+                }
+            } else {
+                if (checkX > 0 && board[checkX - 1][checkY - 1].getPiece() != null && board[checkX - 1][checkY - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
+                    legalMoves.remove(checkingMove);
+                } else if (checkX < 7 && board[checkX + 1][checkY - 1].getPiece() != null && board[checkX + 1][checkY - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
+                    legalMoves.remove(checkingMove);
+                }
             }
             //Check if the move currently checked is still in the legal moves list
             if (legalMoves.contains(checkingMove)) {
                 for (Tile[] tileRow : board) {
                     for (Tile tile : tileRow) {
                         Piece pieceOnTile = tile.getPiece();
-                        if (pieceOnTile != null && !pieceOnTile.getPieceType().equals(PieceType.PAWN) && !pieceOnTile.getPieceType().equals(PieceType.KING)) {
-                            if (!pieceOnTile.getTeamColor().equals(piece.getTeamColor()) && pieceOnTile.getLegalMoves(board).contains(checkingMove)) {
-                                legalMoves.remove(checkingMove);
-                            }
+                        if (pieceOnTile != null && !pieceOnTile.getPieceType().equals(PieceType.PAWN) && !pieceOnTile.getPieceType().equals(PieceType.KING) &&
+                                !pieceOnTile.getTeamColor().equals(piece.getTeamColor()) && pieceOnTile.getLegalMoves(board).contains(checkingMove)) {
+                            legalMoves.remove(checkingMove);
                         }
                     }
                 }
             }
         });
-
         return legalMoves;
     }
 

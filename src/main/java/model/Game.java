@@ -85,7 +85,6 @@ public class Game implements IGame {
     public void registerPlayer(String name, String password, String sessionId) {
         boolean result = restClient.registerPlayer(name, password);
         messageGenerator.notifyRegisterPlayerResult(result, sessionId);
-        //TODO connect to Database
     }
 
     public void requestPassword(String name, String sessionId) {

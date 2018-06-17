@@ -5,7 +5,7 @@ public class LogMessage {
     private String messageText;
     private LogLevel logLevel;
 
-    public LogMessage(String messageText, LogLevel logLevel) {
+    LogMessage(String messageText, LogLevel logLevel) {
         this.messageText = messageText;
         this.logLevel = logLevel;
     }
