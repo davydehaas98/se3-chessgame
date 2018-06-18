@@ -68,7 +68,7 @@ public class GameClient implements IGameClient {
         }
     }
 
-    public void logoutPlayer(){
+    public void logoutPlayer() {
         messageGenerator.logoutPlayer();
     }
 

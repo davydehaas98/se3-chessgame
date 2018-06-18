@@ -5,8 +5,8 @@ import chessgameclient.interfaces.IClientWebSocket;
 import chessgameshared.WebSocketBase;
 import chessgameshared.logging.LogLevel;
 import chessgameshared.logging.Logger;
-import chessgameshared.messages.LogoutPlayerMessage;
 import chessgameshared.messages.EncapsulatedMessage;
+import chessgameshared.messages.LogoutPlayerMessage;
 
 import javax.websocket.*;
 import java.net.URI;

@@ -16,11 +16,11 @@ import java.util.List;
 public class Game implements IGame {
     private IServerMessageGenerator messageGenerator;
     private IRESTClient restClient;
+
     private HashMap<String, Player> players;
     private GameState gameState;
-    private int turn;
-
     private Tile[][] board;
+    private int turn;
     private List<Event> events;
 
     public Game(IServerMessageGenerator messageGenerator) {

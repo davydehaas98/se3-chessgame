@@ -1,6 +1,6 @@
 package chessgameapi.dto;
 
-public abstract class BaseResultDTO {
+public class BaseResultDTO {
     private boolean success;
 
     public boolean isSuccess() {
