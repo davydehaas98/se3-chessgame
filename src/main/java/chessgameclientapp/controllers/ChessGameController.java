@@ -3,6 +3,8 @@ package chessgameclientapp.controllers;
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -18,6 +20,7 @@ import model.enums.TeamColor;
 import model.pieces.Piece;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChessGameController extends BaseController implements IChessGameController {
@@ -62,10 +65,8 @@ public class ChessGameController extends BaseController implements IChessGameCon
     }
 
     public void processEvents(List<Event> events) {
-            lvMadeMoves.getItems().clear();
-            for (Event event : events) {
-                Platform.runLater(()-> lvMadeMoves.getItems().add(event.getInfo()));
-            }
+        lvMadeMoves.getItems().clear();
+        lvMadeMoves.setItems(FXCollections.observableArrayList(events));
     }
 
     private void resetStrokes() {
