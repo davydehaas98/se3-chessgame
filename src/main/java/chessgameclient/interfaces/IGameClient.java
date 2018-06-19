@@ -7,6 +7,7 @@ import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
 
+import java.awt.*;
 import java.util.List;
 
 public interface IGameClient {
@@ -20,7 +21,7 @@ public interface IGameClient {
 
     void loginPlayer(String name, String password, String passwordToken);
 
-    void makeMove(String from, String to);
+    void makeMove(Point from, Point to);
 
     void handleRequestPasswordResult(String password);
 

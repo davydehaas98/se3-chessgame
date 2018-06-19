@@ -2,6 +2,8 @@ package model.interfaces;
 
 import model.Tile;
 
+import java.awt.*;
+
 public interface IGame {
     void registerPlayer(String name, String password, String sessionId);
 
@@ -9,7 +11,7 @@ public interface IGame {
 
     void loginPlayer(String name, String password, String sessionId);
 
-    boolean makeMove(String from, String to, String sessionId);
+    boolean makeMove(Point from, Point to, String sessionId);
 
     void startGame();
 

@@ -1,4 +1,4 @@
-package tests;
+package unit;
 
 import model.Game;
 import model.interfaces.IGame;
@@ -6,9 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import stubs.ServerMessageGeneratorStub;
 
+import java.awt.*;
+
 import static org.junit.Assert.*;
 
-public class GameTest {
+public class GameUnitTest {
     private IGame game;
 
     @Before
@@ -39,12 +41,11 @@ public class GameTest {
 
     @Test
     public void validMoveTest() {
-        assertTrue(game.makeMove("a2", "a4", null));
-        assertNotNull(game.getBoard()[3][1].getPiece());
+        assertTrue(game.makeMove(new Point(1, 1), new Point(1, 3), null));
     }
 
     @Test
     public void invalidMoveTest() {
-        assertFalse(game.makeMove("a7", "a9", null));
+        assertFalse(game.makeMove(new Point(8, 8), new Point(8, 9), null));
     }
 }

@@ -10,6 +10,7 @@ import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
 
+import java.awt.*;
 import java.util.List;
 
 public class GameClient implements IGameClient {
@@ -72,7 +73,7 @@ public class GameClient implements IGameClient {
         messageGenerator.logoutPlayer();
     }
 
-    public void makeMove(String from, String to) {
+    public void makeMove(Point from, Point to) {
         messageGenerator.makeMove(from, to);
     }
 

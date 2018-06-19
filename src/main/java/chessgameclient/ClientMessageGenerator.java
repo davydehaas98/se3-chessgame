@@ -4,6 +4,8 @@ import chessgameclient.interfaces.IClientMessageGenerator;
 import chessgameclient.interfaces.IClientWebSocket;
 import chessgameshared.messages.*;
 
+import java.awt.*;
+
 public class ClientMessageGenerator implements IClientMessageGenerator {
     private IClientWebSocket clientWebSocket;
 
@@ -23,7 +25,7 @@ public class ClientMessageGenerator implements IClientMessageGenerator {
         clientWebSocket.onMessageSend(new LoginPlayerMessage(name, password));
     }
 
-    public void makeMove(String from, String to) {
+    public void makeMove(Point from, Point to) {
         clientWebSocket.onMessageSend(new MakeMoveMessage(from, to));
     }
 

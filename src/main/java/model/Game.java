@@ -3,6 +3,7 @@ package model;
 import chessgameapi.IRESTClient;
 import chessgameapi.RESTClient;
 import chessgameserver.interfaces.IServerMessageGenerator;
+import chessgameshared.logging.Logger;
 import model.enums.GameState;
 import model.enums.TeamColor;
 import model.interfaces.IGame;
@@ -158,19 +159,10 @@ public class Game implements IGame {
         gameState = GameState.ROUNDACTIVE;
     }
 
-    public boolean makeMove(String from, String to, String sessionId) {
-        Tile tileFrom = null;
-        Tile tileTo = null;
-        for (Tile[] tilesRow : board) {
-            for (Tile tile : tilesRow) {
-                if (Objects.equals(tile.getName(), from)) {
-                    tileFrom = tile;
-                } else if (Objects.equals(tile.getName(), to)) {
-                    tileTo = tile;
-                }
-            }
-        }
-        if (tileFrom != null && tileTo != null) {
+    public boolean makeMove(Point from, Point to, String sessionId) {
+        try {
+            Tile tileFrom = board[from.x][from.y];
+            Tile tileTo = board[to.x][to.y];
             tileTo.placePiece(tileFrom.getPiece());
             tileFrom.removePiece();
             events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
@@ -179,8 +171,10 @@ public class Game implements IGame {
             sendCurrentTurn();
             messageGenerator.notifyUpdateBoard(board);
             return true;
+        } catch (Exception exc) {
+            Logger.getInstance().log(exc);
+            return false;
         }
-        return false;
     }
 
     private void sendCurrentTurn() {
@@ -192,7 +186,7 @@ public class Game implements IGame {
     }
 
     private void endGame() {
-        gameState = GameState.FINISHED;
+        gameState = GameState.ROUNDFINISHED;
         messageGenerator.notifyEndGame();
     }
 }

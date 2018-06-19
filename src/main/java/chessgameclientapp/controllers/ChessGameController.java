@@ -2,6 +2,7 @@ package chessgameclientapp.controllers;
 
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
+import com.mysql.cj.result.Row;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,11 +34,13 @@ public class ChessGameController extends BaseController implements IChessGameCon
     private ListView lvMadeMoves;
     private Player player;
     private TeamColor turnTeamColor;
+    private Rectangle[][] rectangles;
+    private ImageView[][] imageViews;
 
     public ChessGameController(IGameClient gameClient) {
         super(gameClient);
         getGameClient().setChessGameController(this);
-        Platform.runLater(this::loadTiles);
+        Platform.runLater(this::createTiles);
     }
 
     public void setPlayer(Player player) {
@@ -70,94 +74,82 @@ public class ChessGameController extends BaseController implements IChessGameCon
     }
 
     private void resetStrokes() {
-        chessBoard.getChildren().forEach(node -> {
-            if (node instanceof Rectangle) {
-                node.setStyle("-fx-stroke: black; -fx-stroke-width: 2");
-            }
-        });
-    }
-
-    private void resetClickableRectangles() {
-        chessBoard.getChildren().forEach(node -> {
-            if (node instanceof Rectangle) {
-                node.setOnMouseClicked(null);
-            }
-        });
-    }
-
-    public void processUpdateBoard(Tile[][] board) {
-        for (Tile[] tileRow : board) {
-            for (Tile tile : tileRow) {
-                Piece pieceOnTile = tile.getPiece();
-                chessBoard.getChildren().forEach(node -> {
-                    //Loop through each childnode
-                    if (node instanceof Rectangle && node.getId().equals(tile.getName()) && pieceOnTile != null && pieceOnTile.getTeamColor() == player.getTeamColor() && turnTeamColor == player.getTeamColor()) {
-                        //Set all legal moves of the corresponding rectangle that contains a piece
-                        setClickEventLegalMove(node, pieceOnTile, board);
-                    } else if (node instanceof ImageView && node.getId().equals(tile.getName())) {
-                        //Set the pieceImage on the corresponding Rectangle
-                        if (pieceOnTile != null) {
-                            Platform.runLater(() -> {
-                                ((ImageView) node).setImage(new Image(pieceOnTile.getImage()));
-                            });
-                        } else {
-                            ((ImageView) node).setImage(null);
-                        }
-                    }
-                });
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                rectangles[row][column].setStyle("-fx-stroke: black; -fx-stroke-width: 2");
             }
         }
     }
 
-    private void setClickEventLegalMove(Node selectedRectangle, Piece selectedPiece, Tile[][] board) {
-        selectedRectangle.setOnMouseClicked(event -> {
-            resetStrokes();
-            for (Point legalMove : selectedPiece.getLegalMoves(board)) {
-                //Loop through every legal move
-                for (Node node : chessBoard.getChildren()) {
-                    //Match the node column and row with the x and the y of the legal move
-                    if (node instanceof Rectangle && chessBoard.getColumnIndex(node) == legalMove.x && chessBoard.getRowIndex(node) == legalMove.y) {
-                        //Create a MouseClick event on the Rectangle
-                        node.setOnMouseClicked(event1 -> Platform.runLater(() -> {
-                            //Reset all Rectangle click events
-                            resetClickableRectangles();
-                            //Reset all the strokes to black
-                            resetStrokes();
-                            //Send the move of the selected piece with the node where it will be placed to the server
-                            getGameClient().makeMove(selectedRectangle.getId(), node.getId());
-                        }));
-                        //Show all the legal moves options in color
-                        node.setStyle("-fx-stroke: limegreen;");
+    private void resetClickableRectangles() {
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                rectangles[row][column].setOnMouseClicked(null);
+            }
+        }
+    }
+
+    private void setImage(Point point, Image image){
+        Platform.runLater(()-> imageViews[point.x][point.y].setImage(image));
+    }
+
+    public void processUpdateBoard(Tile[][] board) {
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                Piece piece = board[row][column].getPiece();
+                if (piece != null) {
+                    setImage(new Point(row, column), new Image(piece.getImage()));
+                    if (piece.getTeamColor().equals(player.getTeamColor()) && turnTeamColor.equals(player.getTeamColor())) {
+                        setClickable(rectangles[row][column], piece, board);
                     }
+                } else {
+                    setImage(new Point(row, column), null);
                 }
+            }
+        }
+    }
+
+    private void setClickable(Rectangle rectangle, Piece piece, Tile[][] board) {
+        rectangle.setOnMouseClicked(event -> {
+            resetStrokes();
+            for (Point legalMove : piece.getLegalMoves(board)) {
+                rectangles[legalMove.x][legalMove.y].setOnMouseClicked(event1 -> {
+                    //Reset all Rectangle click events
+                    resetClickableRectangles();
+                    //Reset all strokes
+                    resetStrokes();
+                    //Send the move of the selected piece with the node where it will be placed to the server
+                    getGameClient().makeMove(piece.getCurrentPosition(), legalMove);
+                });
+                rectangles[legalMove.x][legalMove.y].setStyle("-fx-stroke: limegreen;");
             }
         });
     }
 
-    private void loadTiles() {
+    private void createTiles() {
         boolean darkTile = true;
-        String files = "abcdefgh";
         chessBoard.getChildren().clear();
-        for (int column = 0; column < 8; column++) {
-            chessBoard.addColumn(column);
-            for (int row = 0; row < 8; row++) {
-                chessBoard.addRow(row);
-                Rectangle rec = new Rectangle(46, 46);
-                rec.setId(String.format("%s%d", files.charAt(column), 8 - row));
-                rec.setStyle("-fx-stroke: black; -fx-stroke-width: 2");
-                if (darkTile) {
-                    rec.setFill(Color.BROWN);
-                    darkTile = false;
-                } else {
-                    rec.setFill(Color.LIGHTGRAY);
-                    darkTile = true;
-                }
-                chessBoard.add(rec, column, row);
+        rectangles = new Rectangle[8][8];
+        imageViews = new ImageView[8][8];
 
-                ImageView imageView = new ImageView();
-                imageView.setId(String.format("%s%d", files.charAt(column), 8 - row));
-                imageView.setMouseTransparent(true);
-                chessBoard.add(imageView, column, row);
+        for (int row = 0; row < 8; row++) {
+            chessBoard.addRow(row);
+            for (int column = 0; column < 8; column++) {
+                chessBoard.addColumn(column);
+                //Rectangle
+                rectangles[row][column] = new Rectangle(46, 46);
+                rectangles[row][column].setStyle("-fx-stroke: black; -fx-stroke-width: 2");
+                if (darkTile) {
+                    rectangles[row][column].setFill(Color.BROWN);
+                } else {
+                    rectangles[row][column].setFill(Color.WHITESMOKE);
+                }
+                chessBoard.add(rectangles[row][column], row, column);
+                darkTile = !darkTile;
+                //ImageView
+                imageViews[row][column] = new ImageView();
+                imageViews[row][column].setMouseTransparent(true);
+                chessBoard.add(imageViews[row][column], row, column);
             }
             darkTile = !darkTile;
         }

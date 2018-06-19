@@ -1,19 +1,21 @@
 package chessgameshared.messages;
 
-public class MakeMoveMessage {
-    private String from;
-    private String to;
+import java.awt.*;
 
-    public MakeMoveMessage(String from, String to) {
+public class MakeMoveMessage {
+    private Point from;
+    private Point to;
+
+    public MakeMoveMessage(Point from, Point to) {
         this.from = from;
         this.to = to;
     }
 
-    public String getFrom() {
+    public Point getFrom() {
         return from;
     }
 
-    public String getTo() {
+    public Point getTo() {
         return to;
     }
 }

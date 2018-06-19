@@ -1,2 +1,2 @@
-# ChessGameSE3
+# SE3 ChessGame
 

@@ -1,5 +1,7 @@
 package chessgameclient.interfaces;
 
+import java.awt.*;
+
 public interface IClientMessageGenerator {
     void registerPlayer(String name, String hash);
 
@@ -7,7 +9,7 @@ public interface IClientMessageGenerator {
 
     void loginPlayer(String name, String password);
 
-    void makeMove(String from, String to);
+    void makeMove(Point from, Point to);
 
     void logoutPlayer();
 }

@@ -3,6 +3,7 @@ package chessgameapi;
 import chessgameapi.dto.LoginRequestDTO;
 import chessgameapi.dto.RegisterRequestDTO;
 import chessgameapi.dto.RequestPasswordRequestDTO;
+import chessgamedal.interfaces.IPlayerContext;
 import chessgamerepository.PlayerRepository;
 import chessgamerepository.interfaces.IPlayerRepository;
 import com.google.gson.Gson;
@@ -21,6 +22,10 @@ public class RESTService {
 
     public RESTService() {
         playerRepository = new PlayerRepository();
+        gson = new Gson();
+    }
+    public RESTService(IPlayerContext context){
+        playerRepository = new PlayerRepository(context);
         gson = new Gson();
     }
 
