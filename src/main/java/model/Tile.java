@@ -4,7 +4,7 @@ import model.pieces.Piece;
 
 import java.awt.*;
 
-public class Tile {
+public class Tile implements Cloneable{
     private String name;
     private Point position;
     private Piece piece;

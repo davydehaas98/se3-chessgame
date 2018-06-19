@@ -7,20 +7,18 @@ import model.enums.TeamColor;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Piece {
+public abstract class Piece{
     private final PieceType pieceType;
     private final TeamColor teamColor;
     private Point currentPosition;
     private ArrayList<Point> moveHistory;
     private String image;
-    private ArrayList<Point> legalMoves;
 
     public Piece(PieceType pieceType, TeamColor teamColor, Point currentPosition) {
         this.pieceType = pieceType;
         this.teamColor = teamColor;
         this.currentPosition = currentPosition;
         this.moveHistory = new ArrayList<>();
-        this.legalMoves = new ArrayList<>();
     }
 
     public PieceType getPieceType() {
@@ -45,10 +43,6 @@ public abstract class Piece {
 
     void setImage(String image) {
         this.image = image;
-    }
-
-    public boolean hasMoved() {
-        return moveHistory.size() > 1;
     }
 
     public void addMoveToHistory(Point point) {

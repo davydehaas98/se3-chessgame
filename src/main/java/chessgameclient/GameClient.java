@@ -9,8 +9,11 @@ import model.Event;
 import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+import model.pieces.Piece;
 
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameClient implements IGameClient {
@@ -73,6 +76,10 @@ public class GameClient implements IGameClient {
         messageGenerator.logoutPlayer();
     }
 
+    public void requestLegalMoves(Piece piece) {
+        messageGenerator.requestLegalMoves(piece);
+    }
+
     public void makeMove(Point from, Point to) {
         messageGenerator.makeMove(from, to);
     }
@@ -96,6 +103,10 @@ public class GameClient implements IGameClient {
 
     public void handleGameEnded() {
         chessGameController.processGameEnded();
+    }
+
+    public void handleRequestLegalMovesResult(Piece piece, ArrayList<Point> legalMoves) {
+        chessGameController.processRequestLegalMovesResult(piece, legalMoves);
     }
 
     public void handleUpdateBoard(Tile[][] board) {

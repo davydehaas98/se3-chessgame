@@ -3,6 +3,7 @@ package chessgameclient;
 import chessgameclient.interfaces.IClientMessageGenerator;
 import chessgameclient.interfaces.IClientWebSocket;
 import chessgameshared.messages.*;
+import model.pieces.Piece;
 
 import java.awt.*;
 
@@ -23,6 +24,10 @@ public class ClientMessageGenerator implements IClientMessageGenerator {
 
     public void loginPlayer(String name, String password) {
         clientWebSocket.onMessageSend(new LoginPlayerMessage(name, password));
+    }
+
+    public void requestLegalMoves(Piece piece) {
+        clientWebSocket.onMessageSend(new RequestLegalMovesMessage(piece));
     }
 
     public void makeMove(Point from, Point to) {

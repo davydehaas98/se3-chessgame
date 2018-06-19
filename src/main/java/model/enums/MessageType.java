@@ -10,6 +10,8 @@ public enum MessageType {
     UpdateBoardMessage,
     StartGameMessage,
     EndGameMessage,
+    RequestLegalMovesMessage,
+    RequestLegalMovesResultMessage,
     MakeMoveMessage,
     NextTurnMessage,
     LogoutPlayerMessage,

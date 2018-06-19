@@ -1,5 +1,7 @@
 package chessgameclient.interfaces;
 
+import model.pieces.Piece;
+
 import java.awt.*;
 
 public interface IClientMessageGenerator {
@@ -8,6 +10,8 @@ public interface IClientMessageGenerator {
     void requestPassword(String name);
 
     void loginPlayer(String name, String password);
+
+    void requestLegalMoves(Piece piece);
 
     void makeMove(Point from, Point to);
 

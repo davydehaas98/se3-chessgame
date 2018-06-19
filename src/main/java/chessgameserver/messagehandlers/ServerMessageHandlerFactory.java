@@ -17,6 +17,8 @@ public class ServerMessageHandlerFactory implements IMessageHandlerFactory {
                 return new LoginPlayerMessageHandler(igame);
             case LogoutPlayerMessage:
                 return new LogoutPlayerMessageHandler(igame);
+            case RequestLegalMovesMessage:
+                return new RequestLegalMovesMessageHandler(igame);
             case MakeMoveMessage:
                 return new MakeMoveMessageHandler(igame);
             default:

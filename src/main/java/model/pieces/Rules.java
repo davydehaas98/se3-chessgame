@@ -18,7 +18,7 @@ final class Rules {
                 if (board[x][y + 1].getPiece() == null) {
                     moves.add(new Point(x, y + 1));
                     //Can make two moves at once if the piece has not yet been moved
-                    if (!piece.hasMoved()) {
+                    if (piece.getMoveHistory().size() < 2) {
                         moves.add(new Point(x, y + 2));
                     }
                 }
@@ -35,7 +35,7 @@ final class Rules {
                 if (board[x][y - 1].getPiece() == null) {
                     moves.add(new Point(x, y - 1));
                     //Can make two moves at once if the piece has not yet been moved
-                    if (!piece.hasMoved()) {
+                    if (piece.getMoveHistory().size() < 2) {
                         moves.add(new Point(x, y - 2));
                     }
                 }

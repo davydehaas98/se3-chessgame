@@ -4,6 +4,7 @@ import chessgameapi.IRESTClient;
 import chessgameapi.RESTClient;
 import chessgameserver.interfaces.IServerMessageGenerator;
 import chessgameshared.logging.Logger;
+import com.sun.javafx.tk.DummyToolkit;
 import model.enums.GameState;
 import model.enums.PieceType;
 import model.enums.TeamColor;
@@ -144,29 +145,49 @@ public class Game implements IGame {
         gameState = GameState.ROUNDACTIVE;
     }
 
-    public boolean makeMove(Point from, Point to, String sessionId) {
+    private Tile[][] cloneBoard(Tile[][] board){
+        Tile[][] newBoard = board.clone();
+        for (int i = 0; i < board.length; i++) {
+            newBoard[i] = board[i].clone();
+        }
+        return newBoard;
+    }
+
+    public void requestLegalMoves(Piece piece, String sessionId) {
+        ArrayList<Point> confirmedLegalMove = new ArrayList<>();
+        ArrayList<Point> legalMoves = piece.getLegalMoves(board);
         try {
-            Tile[][] newBoard = board.clone();
-            for (int i = 0; i < board.length; i++) {
-                newBoard[i] = board[i].clone();
-            }
-            Tile tileFrom = newBoard[from.x][from.y];
-            Tile tileTo = newBoard[to.x][to.y];
-            if (tileFrom.getPiece().getLegalMoves(newBoard).contains(tileTo.getPosition())) {
+            for (Point move : legalMoves) {
+                Point legalMove = (Point) move.clone();
+                Point pointFrom = piece.getCurrentPosition();
+                Tile[][] tempBoard = cloneBoard(board);
+                Tile tileFrom = tempBoard[pointFrom.x][pointFrom.y];
+                Tile tileTo = tempBoard[legalMove.x][legalMove.y];
                 tileTo.placePiece(tileFrom.getPiece());
                 tileFrom.removePiece();
-                if (!isCheck(newBoard) || !isCheckmate(newBoard)) {
-                    this.board = newBoard;
-                    turn++;
-                    sendCurrentTurn();
-                    messageGenerator.notifyUpdateBoard(this.board);
-                    events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
-                    messageGenerator.notifyEvents(events);
-                    return true;
+                if (!isCheck(tempBoard) && !isCheckmate(tempBoard)) {
+                    confirmedLegalMove.add(legalMove);
                 }
             }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        messageGenerator.notifyRequestLegalMovesResult(piece, confirmedLegalMove, sessionId);
+    }
+
+    public boolean makeMove(Point from, Point to, String sessionId) {
+        try {
+            Tile tileFrom = board[to.x][to.y];
+            Tile tileTo = board[to.x][to.y];
+            tileFrom.placePiece(tileTo.getPiece());
+            tileFrom.removePiece();
+            turn++;
+            sendCurrentTurn();
             messageGenerator.notifyUpdateBoard(this.board);
-            return false;
+            events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
+            messageGenerator.notifyEvents(events);
+            messageGenerator.notifyUpdateBoard(this.board);
+            return true;
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
             messageGenerator.notifyUpdateBoard(this.board);

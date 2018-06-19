@@ -4,7 +4,10 @@ import model.Event;
 import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+import model.pieces.Piece;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IServerMessageGenerator {
@@ -17,6 +20,8 @@ public interface IServerMessageGenerator {
     void notifyStartGame();
 
     void notifyEndGame();
+
+    void notifyRequestLegalMovesResult(Piece piece, ArrayList<Point> confirmedLegalMoves, String sessionId);
 
     void notifyUpdateBoard(Tile[][] board);
 

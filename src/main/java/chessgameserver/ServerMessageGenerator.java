@@ -7,7 +7,10 @@ import model.Event;
 import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+import model.pieces.Piece;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerMessageGenerator implements IServerMessageGenerator {
@@ -35,6 +38,10 @@ public class ServerMessageGenerator implements IServerMessageGenerator {
 
     public void notifyEndGame() {
         serverWebSocket.broadcast(new EndGameMessage());
+    }
+
+    public void notifyRequestLegalMovesResult(Piece piece, ArrayList<Point> confirmedLegalMoves, String sessionId) {
+        serverWebSocket.sendTo(sessionId, new RequestLegalMovesResultMessage(piece, confirmedLegalMoves));
     }
 
     public void notifyUpdateBoard(Tile[][] board) {

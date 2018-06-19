@@ -5,7 +5,10 @@ import model.Event;
 import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+import model.pieces.Piece;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerMessageGeneratorStub implements IServerMessageGenerator {
@@ -31,6 +34,11 @@ public class ServerMessageGeneratorStub implements IServerMessageGenerator {
 
     @Override
     public void notifyEndGame() {
+
+    }
+
+    @Override
+    public void notifyRequestLegalMovesResult(Piece piece, ArrayList<Point> confirmedLegalMoves, String sessionId) {
 
     }
 

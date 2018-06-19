@@ -3,6 +3,7 @@ package chessgameclientapp.controllers;
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -42,8 +43,11 @@ public class ChessGameController extends BaseController implements IChessGameCon
 
     public void setPlayer(Player player) {
         this.player = player;
-        Platform.runLater(() ->
-                lblPlayerTeamColor.setText("You are: " + player.getTeamColor().toString()));
+        Platform.runLater(() -> lblPlayerTeamColor.setText("You are: " + player.getTeamColor().toString()));
+    }
+
+    private void setImage(Point point, Image image) {
+        Platform.runLater(() -> imageViews[point.x][point.y].setImage(image));
     }
 
     public void processGameStarted() {
@@ -62,10 +66,47 @@ public class ChessGameController extends BaseController implements IChessGameCon
     }
 
     public void processEvents(List<Event> events) {
-            lvMadeMoves.getItems().clear();
-            for (Event event : events) {
-                Platform.runLater(()-> lvMadeMoves.getItems().add(event.getInfo()));
+        lvMadeMoves.getItems().clear();
+            lvMadeMoves.setItems((ObservableList<Event>) events);
+    }
+
+    public void processUpdateBoard(Tile[][] board) {
+        //Reset all Rectangle click events
+        resetClickableRectangles();
+        for (int row = 0; row < 8; row++) {
+            for (int column = 0; column < 8; column++) {
+                Piece piece = board[row][column].getPiece();
+                if (piece != null) {
+                    setImage(new Point(row, column), new Image(piece.getImage()));
+                    if (piece.getTeamColor().equals(player.getTeamColor()) && turnTeamColor.equals(player.getTeamColor())) {
+                        setClickable(rectangles[row][column], piece);
+                    }
+                } else {
+                    setImage(new Point(row, column), null);
+                }
             }
+        }
+    }
+
+    private void setClickable(Rectangle rectangle, Piece piece) {
+        rectangle.setOnMouseClicked(event -> {
+            getGameClient().requestLegalMoves(piece);
+        });
+    }
+
+    public void processRequestLegalMovesResult(Piece piece, List<Point> legalMoves) {
+        resetClickableRectangles();
+        resetStrokes();
+        for (Point legalMove : legalMoves) {
+            Platform.runLater(() -> {
+                rectangles[legalMove.x][legalMove.y].setOnMouseClicked(event -> {
+                    getGameClient().makeMove(piece.getCurrentPosition(), legalMove);
+                    resetStrokes();
+                    resetClickableRectangles();
+                });
+                rectangles[legalMove.x][legalMove.y].setStyle("-fx-stroke: blue; -fx-stroke-width: 2");
+            });
+        }
     }
 
     private void resetStrokes() {
@@ -82,44 +123,6 @@ public class ChessGameController extends BaseController implements IChessGameCon
                 rectangles[row][column].setOnMouseClicked(null);
             }
         }
-    }
-
-    private void setImage(Point point, Image image) {
-        Platform.runLater(() -> imageViews[point.x][point.y].setImage(image));
-    }
-
-    public void processUpdateBoard(Tile[][] board) {
-        //Reset all Rectangle click events
-        resetClickableRectangles();
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                Piece piece = board[row][column].getPiece();
-                if (piece != null) {
-                    setImage(new Point(row, column), new Image(piece.getImage()));
-                    if (piece.getTeamColor().equals(player.getTeamColor()) && turnTeamColor.equals(player.getTeamColor())) {
-                        setClickable(rectangles[row][column], piece, board);
-                    }
-                } else {
-                    setImage(new Point(row, column), null);
-                }
-            }
-        }
-    }
-
-    private void setClickable(Rectangle rectangle, Piece piece, Tile[][] board) {
-        rectangle.setOnMouseClicked(event -> {
-            for (int row = 0; row < 8; row++) {
-                for (int column = 0; column < 8; column++) {
-                    if (board[row][column].getPiece() == null || !board[row][column].getPiece().getTeamColor().equals(player.getTeamColor())) {
-                        tryMove(new Point(row, column), piece);
-                    }
-                }
-            }
-        });
-    }
-
-    private void tryMove(Point point, Piece piece) {
-        Platform.runLater(() -> rectangles[point.x][point.y].setOnMouseClicked(event1 -> getGameClient().makeMove(piece.getCurrentPosition(), new Point(point.x, point.y))));
     }
 
     private void loadTiles() {

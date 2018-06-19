@@ -9,7 +9,7 @@ import org.glassfish.jersey.servlet.ServletContainer;
 public class RESTServer {
     private static final int PORT = 8095;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.setContextPath("/");
         Server server = new Server(PORT);

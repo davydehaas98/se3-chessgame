@@ -6,8 +6,10 @@ import model.Event;
 import model.Player;
 import model.Tile;
 import model.enums.TeamColor;
+import model.pieces.Piece;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IGameClient {
@@ -21,6 +23,8 @@ public interface IGameClient {
 
     void loginPlayer(String name, String password, String passwordToken);
 
+    void requestLegalMoves(Piece piece);
+
     void makeMove(Point from, Point to);
 
     void handleRequestPasswordResult(String password);
@@ -32,6 +36,8 @@ public interface IGameClient {
     void handleRoundStarted();
 
     void handleGameEnded();
+
+    void handleRequestLegalMovesResult(Piece piece, ArrayList<Point> legalMoves);
 
     void handleUpdateBoard(Tile[][] board);
 
