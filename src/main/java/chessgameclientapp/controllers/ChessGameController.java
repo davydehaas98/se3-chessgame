@@ -2,15 +2,12 @@ package chessgameclientapp.controllers;
 
 import chessgameclient.interfaces.IGameClient;
 import chessgameclientapp.interfaces.IChessGameController;
-import com.mysql.cj.result.Row;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -40,7 +37,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
     public ChessGameController(IGameClient gameClient) {
         super(gameClient);
         getGameClient().setChessGameController(this);
-        Platform.runLater(this::createTiles);
+        Platform.runLater(this::loadTiles);
     }
 
     public void setPlayer(Player player) {
@@ -65,12 +62,10 @@ public class ChessGameController extends BaseController implements IChessGameCon
     }
 
     public void processEvents(List<Event> events) {
-//            lvMadeMoves.getItems().clear();
-//            for (Event event : events) {
-//                Platform.runLater(()->{
-//                    lvMadeMoves.getItems().add(event.getInfo());
-//                });
-//            }
+            lvMadeMoves.getItems().clear();
+            for (Event event : events) {
+                Platform.runLater(()-> lvMadeMoves.getItems().add(event.getInfo()));
+            }
     }
 
     private void resetStrokes() {
@@ -89,11 +84,13 @@ public class ChessGameController extends BaseController implements IChessGameCon
         }
     }
 
-    private void setImage(Point point, Image image){
-        Platform.runLater(()-> imageViews[point.x][point.y].setImage(image));
+    private void setImage(Point point, Image image) {
+        Platform.runLater(() -> imageViews[point.x][point.y].setImage(image));
     }
 
     public void processUpdateBoard(Tile[][] board) {
+        //Reset all Rectangle click events
+        resetClickableRectangles();
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
                 Piece piece = board[row][column].getPiece();
@@ -111,22 +108,21 @@ public class ChessGameController extends BaseController implements IChessGameCon
 
     private void setClickable(Rectangle rectangle, Piece piece, Tile[][] board) {
         rectangle.setOnMouseClicked(event -> {
-            resetStrokes();
-            for (Point legalMove : piece.getLegalMoves(board)) {
-                rectangles[legalMove.x][legalMove.y].setOnMouseClicked(event1 -> {
-                    //Reset all Rectangle click events
-                    resetClickableRectangles();
-                    //Reset all strokes
-                    resetStrokes();
-                    //Send the move of the selected piece with the node where it will be placed to the server
-                    getGameClient().makeMove(piece.getCurrentPosition(), legalMove);
-                });
-                rectangles[legalMove.x][legalMove.y].setStyle("-fx-stroke: limegreen;");
+            for (int row = 0; row < 8; row++) {
+                for (int column = 0; column < 8; column++) {
+                    if (board[row][column].getPiece() == null || !board[row][column].getPiece().getTeamColor().equals(player.getTeamColor())) {
+                        tryMove(new Point(row, column), piece);
+                    }
+                }
             }
         });
     }
 
-    private void createTiles() {
+    private void tryMove(Point point, Piece piece) {
+        Platform.runLater(() -> rectangles[point.x][point.y].setOnMouseClicked(event1 -> getGameClient().makeMove(piece.getCurrentPosition(), new Point(point.x, point.y))));
+    }
+
+    private void loadTiles() {
         boolean darkTile = true;
         chessBoard.getChildren().clear();
         rectangles = new Rectangle[8][8];
@@ -138,11 +134,10 @@ public class ChessGameController extends BaseController implements IChessGameCon
                 chessBoard.addColumn(column);
                 //Rectangle
                 rectangles[row][column] = new Rectangle(46, 46);
-                rectangles[row][column].setStyle("-fx-stroke: black; -fx-stroke-width: 2");
                 if (darkTile) {
                     rectangles[row][column].setFill(Color.BROWN);
                 } else {
-                    rectangles[row][column].setFill(Color.WHITESMOKE);
+                    rectangles[row][column].setFill(Color.LIGHTGRAY);
                 }
                 chessBoard.add(rectangles[row][column], row, column);
                 darkTile = !darkTile;
@@ -153,5 +148,7 @@ public class ChessGameController extends BaseController implements IChessGameCon
             }
             darkTile = !darkTile;
         }
+        resetStrokes();
+        resetClickableRectangles();
     }
 }

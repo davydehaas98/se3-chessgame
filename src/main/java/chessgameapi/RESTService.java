@@ -24,7 +24,8 @@ public class RESTService {
         playerRepository = new PlayerRepository();
         gson = new Gson();
     }
-    public RESTService(IPlayerContext context){
+
+    public RESTService(IPlayerContext context) {
         playerRepository = new PlayerRepository(context);
         gson = new Gson();
     }

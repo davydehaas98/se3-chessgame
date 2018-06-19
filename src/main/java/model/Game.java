@@ -5,6 +5,7 @@ import chessgameapi.RESTClient;
 import chessgameserver.interfaces.IServerMessageGenerator;
 import chessgameshared.logging.Logger;
 import model.enums.GameState;
+import model.enums.PieceType;
 import model.enums.TeamColor;
 import model.interfaces.IGame;
 import model.pieces.*;
@@ -32,20 +33,8 @@ public class Game implements IGame {
         gameState = GameState.WAITINGFORPLAYERS;
     }
 
-    private boolean isCheck(Tile[][] board) {
-        return false;
-    }
-
-    private boolean isCheckmate(Tile[][] board) {
-//        for(Tile [] tilesRow : board){
-//            for(Tile tile : tilesRow){
-//                Piece piece = tile.getPiece();
-//                if(piece.getPieceType() == PieceType.KING && piece.getTeamColor() == TeamColor.BLACK){
-//                    return piece.getLegalMoves(board).size() < 1;
-//                }
-//            }
-//        }
-        return false;
+    public Tile[][] getBoard() {
+        return board;
     }
 
     public void setBoard() {
@@ -68,11 +57,7 @@ public class Game implements IGame {
         setPiecesOnBoard(TeamColor.WHITE, 7);
     }
 
-    public Tile[][] getBoard() {
-        return board;
-    }
-
-    public void setPiecesOnBoard(TeamColor teamColor, int y) {
+    private void setPiecesOnBoard(TeamColor teamColor, int y) {
         board[0][y].placePiece(new Rook(teamColor, new Point(0, y)));
         board[1][y].placePiece(new Knight(teamColor, new Point(1, y)));
         board[2][y].placePiece(new Bishop(teamColor, new Point(2, y)));
@@ -161,20 +146,75 @@ public class Game implements IGame {
 
     public boolean makeMove(Point from, Point to, String sessionId) {
         try {
-            Tile tileFrom = board[from.x][from.y];
-            Tile tileTo = board[to.x][to.y];
-            tileTo.placePiece(tileFrom.getPiece());
-            tileFrom.removePiece();
-            events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
-            messageGenerator.notifyEvents(events);
-            turn++;
-            sendCurrentTurn();
-            messageGenerator.notifyUpdateBoard(board);
-            return true;
+            Tile[][] newBoard = board.clone();
+            for (int i = 0; i < board.length; i++) {
+                newBoard[i] = board[i].clone();
+            }
+            Tile tileFrom = newBoard[from.x][from.y];
+            Tile tileTo = newBoard[to.x][to.y];
+            if (tileFrom.getPiece().getLegalMoves(newBoard).contains(tileTo.getPosition())) {
+                tileTo.placePiece(tileFrom.getPiece());
+                tileFrom.removePiece();
+                if (!isCheck(newBoard) || !isCheckmate(newBoard)) {
+                    this.board = newBoard;
+                    turn++;
+                    sendCurrentTurn();
+                    messageGenerator.notifyUpdateBoard(this.board);
+                    events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
+                    messageGenerator.notifyEvents(events);
+                    return true;
+                }
+            }
+            messageGenerator.notifyUpdateBoard(this.board);
+            return false;
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
+            messageGenerator.notifyUpdateBoard(this.board);
             return false;
         }
+    }
+
+    private boolean isKingAttacked(Tile[][] board, Piece king){
+        for(Tile[] tilesRow : board){
+            for (Tile tile : tilesRow){
+                if(tile.getPiece() != null && !tile.getPiece().getPieceType().equals(PieceType.KING) && tile.getPiece().getLegalMoves(board).contains(king.getCurrentPosition())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isCheck(Tile[][] board) {
+        for (Tile[] tilesRow : board) {
+            for (Tile tile : tilesRow) {
+                Piece piece = tile.getPiece();
+                if (piece != null && piece.getPieceType().equals(PieceType.KING) && piece.getTeamColor().equals(TeamColor.WHITE)) {
+                    if (isKingAttacked(board, piece)) {
+                        return true;
+                    }
+                }
+                if (piece != null && piece.getPieceType().equals(PieceType.KING) && piece.getTeamColor().equals(TeamColor.BLACK)) {
+                    if (isKingAttacked(board, piece)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isCheckmate(Tile[][] board) {
+        for (Tile[] tilesRow : board) {
+            for (Tile tile : tilesRow) {
+                Piece piece = tile.getPiece();
+                if (piece != null && piece.getPieceType().equals(PieceType.KING) && isKingAttacked(board, piece) && piece.getLegalMoves(board).size() < 1) {
+                    messageGenerator.notifyEndGame();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void sendCurrentTurn() {

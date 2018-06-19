@@ -31,7 +31,7 @@ public class LoginController extends BaseController implements ILoginController 
         getGameClient().setLoginController(this);
     }
 
-    private void setDisableAll(boolean bool){
+    private void setDisableAll(boolean bool) {
         tbLoginName.setDisable(bool);
         tbLoginPassword.setDisable(bool);
         btnLogin.setDisable(bool);
