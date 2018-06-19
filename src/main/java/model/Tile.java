@@ -15,6 +15,17 @@ public class Tile implements Cloneable{
         this.piece = piece;
     }
 
+    public Tile(Tile tile){
+        this.name = tile.name;
+        this.position = tile.position;
+        this.piece = tile.piece;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     public Piece getPiece() {
         return piece;
     }

@@ -67,7 +67,9 @@ public class ChessGameController extends BaseController implements IChessGameCon
 
     public void processEvents(List<Event> events) {
         lvMadeMoves.getItems().clear();
+        Platform.runLater(() -> {
             lvMadeMoves.setItems((ObservableList<Event>) events);
+        });
     }
 
     public void processUpdateBoard(Tile[][] board) {
@@ -95,14 +97,12 @@ public class ChessGameController extends BaseController implements IChessGameCon
     }
 
     public void processRequestLegalMovesResult(Piece piece, List<Point> legalMoves) {
-        resetClickableRectangles();
         resetStrokes();
         for (Point legalMove : legalMoves) {
             Platform.runLater(() -> {
                 rectangles[legalMove.x][legalMove.y].setOnMouseClicked(event -> {
                     getGameClient().makeMove(piece.getCurrentPosition(), legalMove);
                     resetStrokes();
-                    resetClickableRectangles();
                 });
                 rectangles[legalMove.x][legalMove.y].setStyle("-fx-stroke: blue; -fx-stroke-width: 2");
             });

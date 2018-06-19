@@ -7,7 +7,7 @@ import model.enums.TeamColor;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Piece{
+public abstract class Piece implements Cloneable{
     private final PieceType pieceType;
     private final TeamColor teamColor;
     private Point currentPosition;
@@ -19,6 +19,15 @@ public abstract class Piece{
         this.teamColor = teamColor;
         this.currentPosition = currentPosition;
         this.moveHistory = new ArrayList<>();
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        }catch (Exception exc){
+            return null;
+        }
     }
 
     public PieceType getPieceType() {

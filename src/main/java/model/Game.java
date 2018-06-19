@@ -12,6 +12,7 @@ import model.interfaces.IGame;
 import model.pieces.*;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.*;
 import java.util.List;
@@ -145,28 +146,29 @@ public class Game implements IGame {
         gameState = GameState.ROUNDACTIVE;
     }
 
-    private Tile[][] cloneBoard(Tile[][] board){
-        Tile[][] newBoard = board.clone();
-        for (int i = 0; i < board.length; i++) {
-            newBoard[i] = board[i].clone();
+    private static <T> T[][] clone2DArray(T[][] array){
+        T[][] newArray = array.clone();
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = array[i].clone();
         }
-        return newBoard;
+        return newArray;
     }
 
     public void requestLegalMoves(Piece piece, String sessionId) {
         ArrayList<Point> confirmedLegalMove = new ArrayList<>();
-        ArrayList<Point> legalMoves = piece.getLegalMoves(board);
+        Tile[][] tempBoard = clone2DArray(board);
+        Piece newPiece = (Piece) piece.clone();
+        ArrayList<Point> legalMoves = piece.getLegalMoves(tempBoard);
         try {
-            for (Point move : legalMoves) {
-                Point legalMove = (Point) move.clone();
-                Point pointFrom = piece.getCurrentPosition();
-                Tile[][] tempBoard = cloneBoard(board);
-                Tile tileFrom = tempBoard[pointFrom.x][pointFrom.y];
-                Tile tileTo = tempBoard[legalMove.x][legalMove.y];
+            for (Point legalMove : legalMoves) {
+                tempBoard = clone2DArray(tempBoard);
+                Point pointFrom = (Point) piece.getCurrentPosition().clone();
+                Tile tileFrom = (Tile) tempBoard[pointFrom.x][pointFrom.y].clone();
+                Tile tileTo = (Tile) tempBoard[legalMove.x][legalMove.y].clone();
                 tileTo.placePiece(tileFrom.getPiece());
                 tileFrom.removePiece();
                 if (!isCheck(tempBoard) && !isCheckmate(tempBoard)) {
-                    confirmedLegalMove.add(legalMove);
+                    confirmedLegalMove.add(new Point(tileTo.getPosition()));
                 }
             }
         } catch (Exception exc) {
@@ -179,18 +181,16 @@ public class Game implements IGame {
         try {
             Tile tileFrom = board[to.x][to.y];
             Tile tileTo = board[to.x][to.y];
-            tileFrom.placePiece(tileTo.getPiece());
+            tileTo.placePiece(tileFrom.getPiece());
             tileFrom.removePiece();
             turn++;
             sendCurrentTurn();
-            messageGenerator.notifyUpdateBoard(this.board);
+            messageGenerator.notifyUpdateBoard(board);
             events.add(new Event(players.get(sessionId), tileFrom, tileTo, turn, Date.from(Instant.now())));
             messageGenerator.notifyEvents(events);
-            messageGenerator.notifyUpdateBoard(this.board);
             return true;
         } catch (Exception exc) {
             Logger.getInstance().log(exc);
-            messageGenerator.notifyUpdateBoard(this.board);
             return false;
         }
     }
