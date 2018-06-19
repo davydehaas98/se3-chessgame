@@ -1,6 +1,6 @@
 package integration;
 
-import memorycontext.PlayerMemoryContext;
+import dal.PlayerMemoryContext;
 import chessgameapi.RESTService;
 import chessgameapi.ResponseHelper;
 import chessgameapi.dto.LoginRequestDTO;

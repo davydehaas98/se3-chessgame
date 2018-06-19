@@ -1,4 +1,4 @@
-package memorycontext;
+package dal;
 
 import chessgamedal.interfaces.IPlayerContext;
 import model.Player;

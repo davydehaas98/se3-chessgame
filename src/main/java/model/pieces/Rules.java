@@ -181,39 +181,47 @@ final class Rules {
     static ArrayList<Point> kingRules(Tile[][] board, Piece piece) {
         int[][] offsets = {{-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, +1}, {0, +1}, {-1, +1}, {-1, 0}};
         ArrayList<Point> legalMoves = offsetsIterator(board, piece, offsets);
-        ArrayList<Point> legalMovesToCheck = legalMoves;
+        ArrayList<Point> illegalMoves = new ArrayList<>();
         //Check if the move checks the King
-        legalMovesToCheck.forEach(checkingMove -> {
+        for (Point checkingMove : legalMoves) {
             //Pawn legal moves aren't generated when the tile is empty so we have to know if a Pawn can move there on the next turn
             int checkX = checkingMove.x;
             int checkY = checkingMove.y;
+            Piece checkingPiece;
             if (piece.getTeamColor().equals(TeamColor.BLACK)) {
                 //Remove the currently checked move from the legal moves list if a Pawn can attack the tile the next turn
-                if (checkX > 0 && board[checkX - 1][checkY + 1].getPiece() != null && board[checkX - 1][checkY + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                    legalMoves.remove(checkingMove);
-                } else if (checkX < 7 && board[checkX + 1][checkY + 1].getPiece() != null && board[checkX + 1][checkY + 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                    legalMoves.remove(checkingMove);
+                checkingPiece = board[checkX - 1][checkY + 1].getPiece();
+                if (checkX > 0 && checkingPiece != null && checkingPiece.getPieceType().equals(PieceType.PAWN) && !checkingPiece.getTeamColor().equals(piece.getTeamColor())) {
+                    illegalMoves.add(checkingMove);
+                }
+                checkingPiece = board[checkX + 1][checkY + 1].getPiece();
+                if (checkX < 7 && checkingPiece != null && checkingPiece.getPieceType().equals(PieceType.PAWN) && !checkingPiece.getTeamColor().equals(piece.getTeamColor())) {
+                    illegalMoves.add(checkingMove);
                 }
             } else {
-                if (checkX > 0 && board[checkX - 1][checkY - 1].getPiece() != null && board[checkX - 1][checkY - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                    legalMoves.remove(checkingMove);
-                } else if (checkX < 7 && board[checkX + 1][checkY - 1].getPiece() != null && board[checkX + 1][checkY - 1].getPiece().getPieceType().equals(PieceType.PAWN)) {
-                    legalMoves.remove(checkingMove);
+                checkingPiece = board[checkX - 1][checkY - 1].getPiece();
+                if (checkX > 0 && checkingPiece != null && checkingPiece.getPieceType().equals(PieceType.PAWN) && !checkingPiece.getTeamColor().equals(piece.getTeamColor())) {
+                    illegalMoves.add(checkingMove);
+                }
+                checkingPiece = board[checkX + 1][checkY - 1].getPiece();
+                if (checkX < 7 && checkingPiece != null && checkingPiece.getPieceType().equals(PieceType.PAWN) && !checkingPiece.getTeamColor().equals(piece.getTeamColor())) {
+                    illegalMoves.add(checkingMove);
                 }
             }
             //Check if the move currently checked is still in the legal moves list
-            if (legalMoves.contains(checkingMove)) {
+            if (!illegalMoves.contains(checkingMove)) {
                 for (Tile[] tileRow : board) {
                     for (Tile tile : tileRow) {
                         Piece pieceOnTile = tile.getPiece();
                         if (pieceOnTile != null && !pieceOnTile.getPieceType().equals(PieceType.PAWN) && !pieceOnTile.getPieceType().equals(PieceType.KING) &&
                                 !pieceOnTile.getTeamColor().equals(piece.getTeamColor()) && pieceOnTile.getLegalMoves(board).contains(checkingMove)) {
-                            legalMoves.remove(checkingMove);
+                            illegalMoves.add(checkingMove);
                         }
                     }
                 }
             }
-        });
+        }
+        legalMoves.removeAll(illegalMoves);
         return legalMoves;
     }
 
