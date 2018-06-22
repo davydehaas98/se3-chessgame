@@ -10,11 +10,11 @@ import model.pieces.*;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public abstract class MessageHandler<T> implements IMessageHandler {
+public  abstract class MessageHandler<T> implements IMessageHandler {
     private Gson gson;
     private IGame game;
     private IGameClient gameClient;
-    private RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
+    private static final RuntimeTypeAdapterFactory<Piece> PIECE_ADAPTER_FACTORY = RuntimeTypeAdapterFactory.of(Piece.class, "type")
             .registerSubtype(Pawn.class, "Pawn")
             .registerSubtype(Rook.class, "Rook")
             .registerSubtype(Knight.class, "Knight")
@@ -24,12 +24,12 @@ public abstract class MessageHandler<T> implements IMessageHandler {
 
     public MessageHandler(IGameClient gameClient) {
         this.gameClient = gameClient;
-        gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
+        gson = new GsonBuilder().registerTypeAdapterFactory(PIECE_ADAPTER_FACTORY).create();
     }
 
     public MessageHandler(IGame game) {
         this.game = game;
-        gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
+        gson = new GsonBuilder().registerTypeAdapterFactory(PIECE_ADAPTER_FACTORY).create();
     }
 
     public IGame getGame() {

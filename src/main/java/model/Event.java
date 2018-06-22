@@ -37,7 +37,9 @@ public class Event extends Entity {
         return time;
     }
 
-    public String getInfo() {
-        return String.format("[%s]:[%s] player: %s played %s from %s to %s.", turn, time.toString(), player.getName(), from.getPiece().getPieceType().toString(), from.getName(), to.getName());
+    @Override
+    public String toString() {
+        //return String.format("[%s]:[%s] player: %s played %s from %s to %s.", this.turn, this.time.toString(), this.player.getName(), this.from.getPiece().getPieceType().toString(), this.from.getName(), this.to.getName());
+        return this.player.getName();
     }
 }

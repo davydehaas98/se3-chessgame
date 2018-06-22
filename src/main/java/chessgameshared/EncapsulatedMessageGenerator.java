@@ -7,14 +7,14 @@ import com.google.gson.GsonBuilder;
 import model.pieces.*;
 
 public final class EncapsulatedMessageGenerator implements IEncapsulatedMessageGenerator {
-    private RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
+    private static final RuntimeTypeAdapterFactory<Piece> PIECE_ADAPTER_FACTORY = RuntimeTypeAdapterFactory.of(Piece.class, "type")
             .registerSubtype(Pawn.class, "Pawn")
             .registerSubtype(Rook.class, "Rook")
             .registerSubtype(Knight.class, "Knight")
             .registerSubtype(Bishop.class, "Bishop")
             .registerSubtype(King.class, "King")
             .registerSubtype(Queen.class, "Queen");
-    private Gson gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
+    private Gson gson = new GsonBuilder().registerTypeAdapterFactory(PIECE_ADAPTER_FACTORY).create();
 
 
     public EncapsulatedMessage generateEncapsulatedMessage(Object content) {

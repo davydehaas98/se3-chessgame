@@ -15,14 +15,7 @@ public abstract class WebSocketBase implements IWebSocket {
 
     public WebSocketBase() {
         encapsulatedMessageGenerator = new EncapsulatedMessageGenerator();
-        RuntimeTypeAdapterFactory<Piece> pieceAdapterFactory = RuntimeTypeAdapterFactory.of(Piece.class, "type")
-                .registerSubtype(Pawn.class, "Pawn")
-                .registerSubtype(Rook.class, "Rook")
-                .registerSubtype(Knight.class, "Knight")
-                .registerSubtype(Bishop.class, "Bishop")
-                .registerSubtype(King.class, "King")
-                .registerSubtype(Queen.class, "Queen");
-        gson = new GsonBuilder().registerTypeAdapterFactory(pieceAdapterFactory).create();
+        gson = new Gson();
     }
 
     protected IEncapsulatedMessageGenerator getEncapsulatedMessageGenerator() {

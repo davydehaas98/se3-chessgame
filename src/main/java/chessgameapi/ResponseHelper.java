@@ -7,7 +7,7 @@ import chessgameapi.dto.RequestPasswordResultDTO;
 import com.google.gson.Gson;
 import model.Player;
 
-public class ResponseHelper {
+public final class ResponseHelper {
     private static final Gson gson = new Gson();
 
     public static String getErrorResponse() {
